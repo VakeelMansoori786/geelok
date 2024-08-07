@@ -114,11 +114,8 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
   
   let p_brand_id = req.body.p_brand_id;
   let p_name = req.body.p_name;
-  let p_is_active = req.body.p_is_active;
-  let p_create_date = req.body.p_create_date;
-  let p_update_date = req.body.p_update_date;
   let p_create_by = req.body.p_create_by;
-  await connection.query("call pr_save_brand(?,?,?,?,?,?)", [p_brand_id, p_name,p_is_active,p_create_date,p_update_date,p_create_by], function (error, results, fields) {
+  await connection.query("call pr_save_brand(?,?,?)", [p_brand_id, p_name,p_create_by], function (error, results, fields) {
    
      if (error) return res.send(error);
      return res.send(results[0]);
@@ -126,30 +123,21 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
   
  })
 
- app.get('/api/global/GetCompany',  async function (req, res) {
-  await connection.query('SELECT * FROM `Company`', function (error, results, fields) {
+ app.get('/api/global/GetCountry',  async function (req, res) {
+  await connection.query('SELECT * FROM `country`', function (error, results, fields) {
  
      if (error) return res.send(error);
      return res.send(results);
      });
   
  })
- app.post('/api/global/SaveCompany',  async function (req, res) {
+ app.post('/api/global/SaveCountry',  async function (req, res) {
    
-   let p_company_id = req.body.p_company_id;
-   let p_company_name = req.body.p_company_name;
-   let p_company_short_name = req.body.p_company_short_name;
-   let p_company_ar_name = req.body.p_company_ar_name;
-   let p_company_logo = req.body.p_company_logo;
-   let p_TRN = req.body.p_TRN;
-   let p_is_tax_applicable = req.body.p_is_tax_applicable;
-   let p_tax_amount = req.body.p_tax_amount;
-   let p_color = req.body.p_color;
-   let p_is_active = req.body.p_is_active;
-  //  let p_create_date = req.body.p_create_date;
-  //  let p_update_date = req.body.p_update_date;
-  //  let p_create_by = req.body.p_create_by;
-   await connection.query("call pr_save_company(?,?,?,?,?,?,?,?,?,?)", [p_company_id, p_company_name,p_company_short_name,p_company_ar_name,p_company_logo,p_TRN,p_is_tax_applicable,p_tax_amount,p_color,p_is_active], function (error, results, fields) {
+   let p_country_id = req.body.p_country_id;
+   let p_name = req.body.p_name;
+   let p_tax_percent = req.body.p_tax_percent;
+   let p_create_by = req.body.p_create_by;
+   await connection.query("call pr_save_country(?,?,?,?)", [p_country_id, p_name,p_tax_percent,p_create_by], function (error, results, fields) {
     
       if (error) return res.send(error);
       return res.send(results[0]);
@@ -157,6 +145,34 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
    
   })
 
+
+  app.get('/api/global/GetCompany',  async function (req, res) {
+    await connection.query('SELECT * FROM `Company`', function (error, results, fields) {
+   
+       if (error) return res.send(error);
+       return res.send(results);
+       });
+    
+   })
+   app.post('/api/global/SaveCompany',  async function (req, res) {
+     
+     let p_company_id = req.body.p_company_id;
+     let p_company_name = req.body.p_company_name;
+     let p_company_short_name = req.body.p_company_short_name;
+     let p_company_ar_name = req.body.p_company_ar_name;
+     let p_company_logo = req.body.p_company_logo;
+     let p_TRN = req.body.p_TRN;
+     let p_is_tax_applicable = req.body.p_is_tax_applicable;
+     let p_tax_amount = req.body.p_tax_amount;
+     let p_color = req.body.p_color;
+     let p_is_head_office = req.body.p_is_head_office;
+     await connection.query("call pr_save_company(?,?,?,?,?,?,?,?,?,?)", [p_company_id, p_company_name,p_company_short_name,p_company_ar_name,p_company_logo,p_TRN,p_is_tax_applicable,p_tax_amount,p_color,p_is_head_office], function (error, results, fields) {
+      
+        if (error) return res.send(error);
+        return res.send(results[0]);
+        });
+     
+    })
 
 
 
