@@ -102,6 +102,45 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
  })
 //#endregion
  //#region Category API
+
+
+ app.post('/api/global/GetLogin',  async function (req, res) {
+  
+  let p_user_id = req.body.p_user_id;
+  let p_password = req.body.p_password;
+  let p_company_id = req.body.p_company_id;
+  await connection.query("call pr_login(?,?,?)", [p_user_id,p_password,p_company_id], function (error, results, fields) {
+   
+     if (error) return res.send(error);
+     return res.send(results[0]);
+     });
+  
+ })
+
+
+
+ app.post('/api/global/GetCompanyUser',  async function (req, res) {
+  
+  let p_user_id = req.body.p_user_id;
+  await connection.query("call pr_get_company_user(?)", [p_user_id], function (error, results, fields) {
+   
+     if (error) return res.send(error);
+     return res.send(results[0]);
+     });
+  
+ })
+
+
+
+
+
+
+
+
+
+
+
+
 app.get('/api/global/GetBrand',  async function (req, res) {
  await connection.query('SELECT * FROM `brand`', function (error, results, fields) {
 
