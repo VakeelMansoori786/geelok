@@ -1,5 +1,9 @@
 var config = {};
 
+config.JWT_SERECT_KEY="123";
+config.JWT_OPTION={ expiresIn: '10h' };
+
+config.routename='/api'
 // config.connectionStrings = {
 //   connectionLimit : 100, //important
 //   acquireTimeout: 30000,

@@ -11,6 +11,8 @@ const fs = require("fs");
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotallySecretKey');
 const request = require('request');
+let authMiddleware = require('./utility/authMiddleware');
+const jwt = require('jsonwebtoken');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 extended: true
@@ -111,9 +113,17 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let p_company_id = req.body.p_company_id;
  
   await connection.query("call pr_login(?,?,?)", [p_username,p_password,p_company_id], function (error, results, fields) {
-    console.log(results)
+   
      if (error) return res.send(error);
-     return res.send(results);
+     if (results.length > 0) {
+    
+       const rows = results;
+       console.log(rows);
+       const token = jwt.sign({ userId: rows[0].user_id }, config.JWT_SERECT_KEY, config.JWT_OPTION);
+       res.json({ token: token, user: rows[0],menu:rows[1] });
+     } else {
+       return res.json({ message: 'Invalid username or password' });
+     }
      });
   
  })
