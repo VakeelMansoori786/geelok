@@ -1,0 +1,47 @@
+<p-toast key="tst"></p-toast>
+<div class="col-12"  [formGroup]="mainForm">
+    <div class="card">
+        <h5>News & Topic</h5>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-6">
+                <input hidden  formControlName="id">
+                <label htmlFor="state">Category <span style="color: red;">*</span></label>
+                <p-dropdown [options]="category_type" optionLabel="name" formControlName="HealthTipCategoryId" placeholder="--select--"
+                [ngClass]="{'ng-invalid ng-dirty': mainForm.get('HealthTipCategoryId').invalid && (mainForm.get('HealthTipCategoryId').dirty || mainForm.get('HealthTipCategoryId').touched)}" 
+                ></p-dropdown>
+            </div>   
+             <div class="field col-12 md:col-6">
+                <label htmlFor="state">Upload File<span style="color: red;">*</span></label>
+                <p-fileUpload mode="basic" chooseLabel="Upload Image"  accept="image/*" [maxFileSize]="1000000" (onSelect)="onUpload($event)"></p-fileUpload>
+
+            </div>
+        
+        
+          
+      
+            <div class="field col-12 md:col-12">
+                <label htmlFor="Topic">Topic<span style="color: red;">*</span></label>
+                <input pInputText id="Topic" type="text"   formControlName="Topic" id="Topic" />
+            </div>
+        
+      
+            <div class="field col-12 md:col-12">
+                <label htmlFor="Topic">Short Desc<span style="color: red;">*</span></label>
+                
+                <textarea rows="5" cols="100" pInputTextarea formControlName="ShortDesc" id="ShortDesc"></textarea>
+            </div>
+      
+            <div class="field col-12 md:col-12">
+                <label htmlFor="Topic">Long Desc</label>
+                <textarea rows="10" cols="100" pInputTextarea formControlName="LongDesc" id="LongDesc"></textarea>
+            </div>
+            
+        </div>
+        <div class="field col-12 md:col-3">
+            <div class="flex gap-2">
+                <button pButton pRipple type="button" label="Save" (click)="SaveHealthTipDetails(mainForm.value)"></button>
+                <button pButton pRipple type="button" label="Clear"  (click)="Clear()"></button>
+            </div>
+        </div>
+    </div>
+</div>
