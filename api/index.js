@@ -143,6 +143,64 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
 
 
+ app.get('/api/item/GetItem',  async function (req, res) {
+  let p_item_id = req.body.p_item_id;
+  await connection.query("call pr_get_item(?)", [p_item_id], function (error, results, fields) {
+   
+     if (error) return res.send(error);
+     return res.send(results);
+     });
+  
+ })
+ app.post('/api/item/SaveItem',  async function (req, res) {
+  let p_item_id = req.body.p_item_id;
+  let p_item_group_id = req.body.p_item_group_id;
+  let p_brand_id = req.body.p_brand_id;
+  let p_unit_id = req.body.p_unit_id;
+  let p_country_id = req.body.p_country_id;
+  let p_item_type = req.body.p_item_type;
+  let p_name = req.body.p_name;
+  let p_image = req.body.p_image;
+  let p_model_no = req.body.p_model_no;
+  let p_hs_code = req.body.p_hs_code;
+  let p_cost_price = req.body.p_cost_price;
+  let p_dimensions = req.body.p_dimensions;
+  let p_weight = req.body.p_weight;
+  let p_is_taxable = req.body.p_is_taxable;
+  let p_is_active = req.body.p_is_active;
+  let p_create_date = req.body.p_create_date;
+  let p_update_date = req.body.p_update_date;
+  let p_create_by = req.body.p_create_by;
+
+  await connection.query(
+      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+          p_item_id,
+          p_item_group_id,
+          p_brand_id,
+          p_unit_id,
+          p_country_id,
+          p_item_type,
+          p_name,
+          p_image,
+          p_model_no,
+          p_hs_code,
+          p_cost_price,
+          p_dimensions,
+          p_weight,
+          p_is_taxable,
+          p_is_active,
+          p_create_date,
+          p_update_date,
+          p_create_by
+      ],
+      function (error, results, fields) {
+          if (error) return res.send(error);
+          return res.send(results[0]);
+      }
+  );
+});
+
 
 
 
