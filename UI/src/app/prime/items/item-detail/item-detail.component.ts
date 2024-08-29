@@ -14,9 +14,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class ItemDetailComponent implements OnInit {
   loading = false;
   mainForm :any;
-  slider_type = [
-    { name: 'Doctor App', code: 'D' },
-    { name: 'Patient App', code: 'P' }
+  itemTypeList: any[] = [
+    { name: 'Service', key: 'Service' },
+    { name: 'Goods', key: 'Goods' }
 ];
 uploadedFiles: any[] = [];
   constructor(
@@ -30,41 +30,26 @@ uploadedFiles: any[] = [];
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      id:['0'],
-      image_url:[''],
-      flg_type:['',Validators.required],
-      redirect_url:[''],
-      flg_click:[false]
+      p_item_id:['0'],
+      p_item_group_id:[''],
+      p_brand_id:['',Validators.required],
+      p_unit_id:['',Validators.required],
+      p_country_id:['',Validators.required],
+      p_item_type:['',Validators.required],
+      p_name:['',Validators.required],
+      p_image:[''],
+      p_model_no:[''],
+      p_hs_code:['']
     
     });
 
     
     if(this.route.snapshot.paramMap.get('id')){
       let id = atob(this.route.snapshot.paramMap.get('id')!);
-this.GetCarousel(id);
+//this.GetCarousel(id);
      }
   }
-  GetCarousel(id:any) {
-    this.loading=true;
-
-    this.sliderService.GetCarousel().subscribe((data:any) => {
-      let ab=data.carousel.filter((x:any)=>x.id==id);
-      if(ab.length>0){
-        const formData = {
-          id: ab[0].id,
-          image_url: ab[0].image_url,
-          flg_type:  this.slider_type.find((x:any)=>x.code==ab[0].flg_type),
-          redirect_url: ab[0].redirect_url,
-          flg_click:  ab[0].flg_click==null?false:ab[0].flg_click
-        };
-        this.mainForm.patchValue(formData);
-      }
-     
-    this.loading=false;
-
-
-    });
-  }
+ 
 
   onUpload(event: any) {
     debugger

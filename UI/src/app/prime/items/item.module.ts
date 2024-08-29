@@ -19,6 +19,7 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { ItemListComponent } from './item-list/item-list.component';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
 	imports: [
@@ -40,7 +41,8 @@ import { ItemListComponent } from './item-list/item-list.component';
 		CheckboxModule,
 		FileUploadModule,
 		MessageModule,
-		ConfirmDialogModule
+		ConfirmDialogModule,
+		RadioButtonModule
 	],
 	declarations: [ItemDetailComponent,ItemListComponent]
 })

@@ -1,15 +1,28 @@
 <p-toast key="tst"></p-toast>
 <div class="col-12"  [formGroup]="mainForm">
     <div class="card">
-        <h5>Slider</h5>
+        <h5>Item</h5>
         <div class="p-fluid p-formgrid grid">
-            <div class="field col-12 md:col-6">
-                <input hidden  formControlName="id">
-                <label htmlFor="state">Type <span style="color: red;">*</span></label>
-                <p-dropdown [options]="slider_type" optionLabel="name" formControlName="flg_type" placeholder="--select--"
-                [ngClass]="{'ng-invalid ng-dirty': mainForm.get('flg_type').invalid && (mainForm.get('flg_type').dirty || mainForm.get('flg_type').touched)}" 
-                ></p-dropdown>
-            </div>   
+            <div class="flex flex-wrap gap-3">
+                <input hidden  p_item_id="id">
+                <div *ngFor="let item of itemTypeList" class="field-checkbox">
+                    <p-radioButton 
+                        [inputId]="item.key" 
+                        [value]="item"
+                        formControlName="p_item_type" />
+                    <label [for]="item.key" class="ml-2">
+                        {{ item.name }}
+                    </label>
+                </div>
+            
+            </div>  
+            <div class="field col-12 ">
+                
+                <label htmlFor="state">Name<span style="color: red;">*</span></label>
+                    <input type="text" pInputText formControlName="p_name" />
+                
+            
+            </div>  
              <div class="field col-12 md:col-6">
                 <label htmlFor="state">Upload File<span style="color: red;">*</span></label>
                 <p-fileUpload mode="basic" chooseLabel="Upload Image"  accept="image/*" [maxFileSize]="1000000" (onSelect)="onUpload($event)"></p-fileUpload>
@@ -17,17 +30,7 @@
             </div>
         
         
-            <div class="col-12 md:col-12">
-                <div class="field-checkbox">
-                    <p-checkbox [binary]="true"  formControlName="flg_click" id="chkIsClickable"></p-checkbox>
-                    <label for="chkIsClickable">Is Clickable </label>
-                </div>
-            </div>
       
-            <div class="field col-12 md:col-12" *ngIf="mainForm.get('flg_click').value==true">
-                <label htmlFor="redirect_url">Redirect URL<span style="color: red;">*</span></label>
-                <input pInputText id="redirect_url" type="text"   formControlName="redirect_url" id="redirect_url" />
-            </div>
         
             
         </div>
