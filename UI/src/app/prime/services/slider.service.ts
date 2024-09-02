@@ -43,6 +43,15 @@ export class SliderService {
     return this.httpClient.get(`${baseApiUrl}/api/slider/GetHealthTipCategory`)
    }
 
+   
+   GetItem(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/GetItem`,model)
+   }
+
+   
+   SaveItem(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/SaveItem`,model)
+   }
    GetCarouselItem(){
 
     return this.carouselItem;

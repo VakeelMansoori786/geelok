@@ -13,6 +13,10 @@ const cryptr = new Cryptr('myTotallySecretKey');
 const request = require('request');
 let authMiddleware = require('./utility/authMiddleware');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+// Allow all origins
+app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 extended: true
@@ -143,7 +147,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
 
 
- app.get('/api/item/GetItem',  async function (req, res) {
+ app.post('/api/item/GetItem', authMiddleware , async function (req, res) {
   let p_item_id = req.body.p_item_id;
   await connection.query("call pr_get_item(?)", [p_item_id], function (error, results, fields) {
    
@@ -152,7 +156,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
      });
   
  })
- app.post('/api/item/SaveItem',  async function (req, res) {
+ app.post('/api/item/SaveItem', authMiddleware ,async function (req, res) {
   let p_item_id = req.body.p_item_id;
   let p_item_group_id = req.body.p_item_group_id;
   let p_brand_id = req.body.p_brand_id;
@@ -167,13 +171,10 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let p_dimensions = req.body.p_dimensions;
   let p_weight = req.body.p_weight;
   let p_is_taxable = req.body.p_is_taxable;
-  let p_is_active = req.body.p_is_active;
-  let p_create_date = req.body.p_create_date;
-  let p_update_date = req.body.p_update_date;
   let p_create_by = req.body.p_create_by;
 
   await connection.query(
-      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
           p_item_id,
           p_item_group_id,
@@ -189,9 +190,6 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
           p_dimensions,
           p_weight,
           p_is_taxable,
-          p_is_active,
-          p_create_date,
-          p_update_date,
           p_create_by
       ],
       function (error, results, fields) {
@@ -211,8 +209,8 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
 
 app.get('/api/global/GetBrand',  async function (req, res) {
- await connection.query('SELECT * FROM `brand`', function (error, results, fields) {
-
+ await connection.query('SELECT * FROM `brand` where is_active=1', function (error, results, fields) {
+  console.log(error)
     if (error) return res.send(error);
     return res.send(results);
     });

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStoreService } from '../../services/local-store.service';
-import { SliderService } from '../../services/slider.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { APIService } from '../../services/api.service';
 
 @Component({
   selector: 'app-item-detail',
@@ -19,12 +19,13 @@ export class ItemDetailComponent implements OnInit {
     { name: 'Goods', key: 'Goods' }
 ];
 uploadedFiles: any[] = [];
+brandList: any;
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
       private router: Router,
       private ls:LocalStoreService,
-      private sliderService:SliderService,
+      private apiService:APIService,
       private service: MessageService
       ) { }
   ngOnInit() {
@@ -39,10 +40,14 @@ uploadedFiles: any[] = [];
       p_name:['',Validators.required],
       p_image:[''],
       p_model_no:[''],
-      p_hs_code:['']
+      p_hs_code:[''],
+      p_cost_price:[''],
+      p_dimensions:[''],
+      p_weight:[''],
+      p_is_taxable:['']
     
     });
-
+this.GetBrand();
     
     if(this.route.snapshot.paramMap.get('id')){
       let id = atob(this.route.snapshot.paramMap.get('id')!);
@@ -59,9 +64,14 @@ uploadedFiles: any[] = [];
 
   }
 
+GetBrand(){
+  this.apiService.GetBrand().subscribe((data:any) => {
+    debugger
+this.brandList=data;
+  })
+}
 
-
-  SaveCarousel(model:any) {
+  SaveItem(model:any) {
     debugger
     if(!this.mainForm.valid)
     {
@@ -74,21 +84,37 @@ uploadedFiles: any[] = [];
     else{
       this.loading = true;
       let req={
-        id:model.id,
-        image_url:model.image_url,
-        redirect_url:model.redirect_url,
-        flg_click:model.flg_click,
-        flg_type:model.flg_type.code,
+        p_item_id:model.p_item_id,
+        p_item_group_id:model.p_item_group_id,
+        p_brand_id:model.p_brand_id,
+        p_unit_id:model.p_unit_id,
+        p_country_id:model.p_country_id,
+        p_item_type:model.p_item_type,
+        p_name:model.p_name,
+        p_model_no:model.p_model_no,
+        p_hs_code:model.p_hs_code,
+        p_cost_price:model.p_cost_price,
+        p_dimensions:model.p_dimensions,
+        p_weight:model.p_weight,
+        p_is_taxable:model.p_is_taxable,
          file: this.uploadedFiles.length>0?this.uploadedFiles[0]:null
       }
       let formData = new FormData();
-      formData.append('id', model.id);
-      formData.append('image_url', model.image_url);
-      formData.append('redirect_url', model.redirect_url);
-      formData.append('flg_click', model.flg_click);
-      formData.append('flg_type', model.flg_type.code);
-      formData.append('files',  this.uploadedFiles.length>0?this.uploadedFiles[0]:null);
-      this.sliderService.SaveCarousel(formData).subscribe((data:any) => {
+      formData.append('p_item_id', model.p_item_id);
+      formData.append('p_item_group_id', model.p_item_group_id);
+      formData.append('p_brand_id', model.p_brand_id);
+      formData.append('p_unit_id', model.p_unit_id);
+      formData.append('p_country_id', model.p_country_id);
+      formData.append('p_item_type', model.p_item_type);
+      formData.append('p_name', model.p_name);
+      formData.append('p_model_no', model.p_model_no);
+      formData.append('p_hs_code', model.p_hs_code);
+      formData.append('p_cost_price', model.p_cost_price);
+      formData.append('p_dimensions', model.p_dimensions);
+      formData.append('p_weight', model.p_weight);
+      formData.append('p_is_taxable', model.p_is_taxable);
+      formData.append('p_image',  this.uploadedFiles.length>0?this.uploadedFiles[0]:null);
+      this.apiService.SaveItem(formData).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data['carousel'][0].Msg });
         this.router.navigate(['/slider/list']);

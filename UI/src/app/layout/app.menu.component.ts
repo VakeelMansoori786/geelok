@@ -17,7 +17,7 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
 
     let menuData=this.ls.getItem('menu');
-debugger
+
     if(menuData){
         this.model = menuData
         .filter(menu => menu.parent_menu_id === 0) // Filter top-level menus

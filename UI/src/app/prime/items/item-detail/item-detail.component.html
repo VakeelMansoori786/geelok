@@ -23,6 +23,15 @@
                 
             
             </div>  
+            <div class="field col-12 ">
+                
+                <p-dropdown 
+                formControlName="p_brand_id" 
+                [options]="brandList"
+                optionLabel="name"
+                placeholder="Select a Brand" />
+            
+            </div>  
              <div class="field col-12 md:col-6">
                 <label htmlFor="state">Upload File<span style="color: red;">*</span></label>
                 <p-fileUpload mode="basic" chooseLabel="Upload Image"  accept="image/*" [maxFileSize]="1000000" (onSelect)="onUpload($event)"></p-fileUpload>
@@ -36,7 +45,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <div class="flex gap-2">
-                <button pButton pRipple type="button" label="Save" (click)="SaveCarousel(mainForm.value)"></button>
+                <button pButton pRipple type="button" label="Save" (click)="SaveItem(mainForm.value)"></button>
                 <button pButton pRipple type="button" label="Clear"  (click)="Clear()"></button>
             </div>
         </div>
