@@ -19,6 +19,15 @@ export class APIService {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetBrand`)
    }
    
+   GetUnit() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetUnit`)
+   }
+   
+   GetCountry() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetCountry`)
+   }
+   
+   
    SaveItem(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/SaveItem`,model)
    }

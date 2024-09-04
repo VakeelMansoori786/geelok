@@ -3,8 +3,10 @@
     <div class="card">
         <h5>Item</h5>
         <div class="p-fluid p-formgrid grid">
+            <div class="col-12">
+                <div class="col-6">
             <div class="flex flex-wrap gap-3">
-                <input hidden  p_item_id="id">
+                <input hidden  formControlName="p_item_id">
                 <div *ngFor="let item of itemTypeList" class="field-checkbox">
                     <p-radioButton 
                         [inputId]="item.key" 
@@ -32,11 +34,33 @@
                 placeholder="Select a Brand" />
             
             </div>  
+            <div class="field col-12 ">
+                
+                <p-dropdown 
+                formControlName="p_unit_id" 
+                [options]="unitList"
+                optionLabel="name"
+                placeholder="Select a Unit" />
+            
+            </div>  
+            <div class="field col-12 ">
+                
+                <p-dropdown 
+                formControlName="p_country_id" 
+                [options]="countryList"
+                optionLabel="name"
+                placeholder="Select a Country" />
+            
+            </div>  
+        </div>
+        <div class="col-6">
              <div class="field col-12 md:col-6">
                 <label htmlFor="state">Upload File<span style="color: red;">*</span></label>
                 <p-fileUpload mode="basic" chooseLabel="Upload Image"  accept="image/*" [maxFileSize]="1000000" (onSelect)="onUpload($event)"></p-fileUpload>
 
             </div>
+        </div>
+        </div>
         
         
       

@@ -15,11 +15,14 @@ export class ItemDetailComponent implements OnInit {
   loading = false;
   mainForm :any;
   itemTypeList: any[] = [
-    { name: 'Service', key: 'Service' },
-    { name: 'Goods', key: 'Goods' }
+    
+    { name: 'Goods', key: 'Goods' },
+    { name: 'Service', key: 'Service' }
 ];
 uploadedFiles: any[] = [];
 brandList: any;
+unitList: any;
+countryList: any;
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -36,7 +39,7 @@ brandList: any;
       p_brand_id:['',Validators.required],
       p_unit_id:['',Validators.required],
       p_country_id:['',Validators.required],
-      p_item_type:['',Validators.required],
+      p_item_type:[this.itemTypeList[0],Validators.required],
       p_name:['',Validators.required],
       p_image:[''],
       p_model_no:[''],
@@ -48,6 +51,8 @@ brandList: any;
     
     });
 this.GetBrand();
+this.GetUnit();
+this.GetCountry();
     
     if(this.route.snapshot.paramMap.get('id')){
       let id = atob(this.route.snapshot.paramMap.get('id')!);
@@ -71,6 +76,18 @@ this.brandList=data;
   })
 }
 
+GetUnit(){
+  this.apiService.GetUnit().subscribe((data:any) => {
+    
+this.unitList=data;
+  })
+}
+GetCountry(){
+  this.apiService.GetCountry().subscribe((data:any) => {
+    
+this.countryList=data;
+  })
+}
   SaveItem(model:any) {
     debugger
     if(!this.mainForm.valid)

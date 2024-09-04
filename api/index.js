@@ -202,14 +202,24 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
 
 
-
-
-
-
-
-
 app.get('/api/global/GetBrand',  async function (req, res) {
  await connection.query('SELECT * FROM `brand` where is_active=1', function (error, results, fields) {
+  console.log(error)
+    if (error) return res.send(error);
+    return res.send(results);
+    });
+ 
+})
+app.get('/api/global/GetUnit',  async function (req, res) {
+ await connection.query('SELECT * FROM `unit` where is_active=1', function (error, results, fields) {
+  console.log(error)
+    if (error) return res.send(error);
+    return res.send(results);
+    });
+ 
+})
+app.get('/api/global/GetCountry',  async function (req, res) {
+ await connection.query('SELECT * FROM `country` where is_active=1', function (error, results, fields) {
   console.log(error)
     if (error) return res.send(error);
     return res.send(results);
