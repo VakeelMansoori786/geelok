@@ -23,6 +23,8 @@ uploadedFiles: any[] = [];
 brandList: any;
 unitList: any;
 countryList: any;
+itemGroupList: any;
+taxList: any;
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -50,13 +52,16 @@ countryList: any;
       p_is_taxable:['']
     
     });
-this.GetBrand();
-this.GetUnit();
-this.GetCountry();
-    
+  
     if(this.route.snapshot.paramMap.get('id')){
       let id = atob(this.route.snapshot.paramMap.get('id')!);
 //this.GetCarousel(id);
+     }
+     else{
+      this.GetBrand();
+this.GetUnit();
+this.GetCountry();
+this.GetItemGroup();  
      }
   }
  
@@ -86,6 +91,12 @@ GetCountry(){
   this.apiService.GetCountry().subscribe((data:any) => {
     
 this.countryList=data;
+  })
+}
+GetItemGroup(){
+  this.apiService.GetItemGroup().subscribe((data:any) => {
+    
+this.itemGroupList=data;
   })
 }
   SaveItem(model:any) {

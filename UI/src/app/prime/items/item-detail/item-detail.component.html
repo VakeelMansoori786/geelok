@@ -46,10 +46,48 @@
             <div class="field col-12 ">
                 
                 <p-dropdown 
+                formControlName="p_item_group_id" 
+                [options]="itemGroupList"
+                optionLabel="name"
+                placeholder="Select a Group" />
+            
+            </div>  
+            <div class="field col-12 ">
+                
+                <p-dropdown 
                 formControlName="p_country_id" 
                 [options]="countryList"
                 optionLabel="name"
                 placeholder="Select a Country" />
+            
+            </div>   
+            <div class="field col-12 ">
+                <label htmlFor="state">Model No.<span style="color: red;">*</span></label>
+                    <input type="text" pInputText formControlName="p_model_no" />
+            </div>  
+            <div class="field col-12 ">
+                <label htmlFor="state">Dimensions</label>
+                    <input type="text" pInputText formControlName="p_dimensions" />
+            </div>  
+            <div class="field col-12 ">
+                <label htmlFor="state">Weight</label>
+                    <input type="text" pInputText formControlName="p_weight" />
+            </div>  
+            <div class="field col-12 ">
+                <label htmlFor="state">HS Code<span style="color: red;">*</span></label>
+                    <input type="text" pInputText formControlName="p_hs_code" />
+            </div>  
+            <div class="field col-12 ">
+                <label htmlFor="state">Cost Price<span style="color: red;">*</span></label>
+                    <input type="text" pInputText formControlName="p_cost_price" />
+            </div>  
+            <div class="field col-12 ">
+                
+                <p-dropdown 
+                formControlName="p_is_taxable" 
+                [options]="taxList"
+                optionLabel="name"
+                placeholder="Select a Tax" />
             
             </div>  
         </div>

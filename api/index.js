@@ -226,6 +226,14 @@ app.get('/api/global/GetCountry',  async function (req, res) {
     });
  
 })
+app.get('/api/global/GetItemGroup',  async function (req, res) {
+ await connection.query('SELECT * FROM `item_group` where is_active=1', function (error, results, fields) {
+  console.log(error)
+    if (error) return res.send(error);
+    return res.send(results);
+    });
+ 
+})
 app.post('/api/global/SaveBrand',  async function (req, res) {
   
   let p_brand_id = req.body.p_brand_id;

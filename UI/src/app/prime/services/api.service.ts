@@ -23,9 +23,13 @@ export class APIService {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetUnit`)
    }
    
+   GetItemGroup() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetItemGroup`)
+   }
    GetCountry() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCountry`)
    }
+   
    
    
    SaveItem(model:any) {
