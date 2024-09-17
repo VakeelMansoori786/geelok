@@ -42,7 +42,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 		FileUploadModule,
 		MessageModule,
 		ConfirmDialogModule,
-		RadioButtonModule
+		RadioButtonModule,
+		
 	],
 	declarations: [ItemDetailComponent,ItemListComponent]
 })
