@@ -152,7 +152,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   await connection.query("call pr_get_item(?)", [p_item_id], function (error, results, fields) {
    
      if (error) return res.send(error);
-     return res.send(results);
+     return res.send(results[0]);
      });
   
  })
