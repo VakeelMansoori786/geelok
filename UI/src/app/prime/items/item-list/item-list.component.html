@@ -18,31 +18,33 @@
 					<tr>
 						<th>	
 							Name</th>
-						<th>Product Type
-						</th>
-						<th>Stock On Hand</th>
+							<th>Stock On Hand</th>
+						<th>Product Type</th>
+						<th>Model No.</th>
 						<th>Rate</th>
-						<th>Account</th>
-						<th>Type</th>
+						<th>Group</th>
+						<th>Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-mainList>
 					<tr>
 						<td>
-							{{mainList.HealthTipCategory}}
+							<img [src]="mainList.url" [alt]="mainList.name" width="100" class="shadow-4" />
+							{{mainList.name}}
 						</td>
 						<td>
-							{{mainList.Topic}}
+							{{mainList.item_type}}
 						</td>
 						<td>
-							{{mainList.ShortDesc}}
+							{{mainList.model_no}}
 						</td>
-						<td><img [src]="mainList.HealthTipPhoto"  width="100" class="shadow-4" /></td>
+						<td>{{mainList.cost_price}}</td>
+						<td>{{mainList.group}}</td>
 						
 					<td>	
 						<div class="flex flex-wrap gap-2">
-						<button pButton pRipple type="button" label="Edit" (click)="GetDetail(mainList.HealthTipId)"></button>
-						<button pButton pRipple type="button" label="Delete" (click)="Delete($event,mainList.HealthTipId)"></button>
+						<button pButton pRipple type="button" label="Edit" (click)="GetDetail(mainList.item_id)"></button>
+						<button pButton pRipple type="button" label="Delete" (click)="Delete($event,mainList.item_id)"></button>
 					</div>
 					</td>
 					

@@ -44,7 +44,7 @@ export class ItemListComponent implements OnInit {
     this.loading=true;
 
     this.apiService.GetItem(id).subscribe((data:any) => {
-        this.mainList=data.data;
+        this.mainList=data;
        
      
     this.loading=false;
