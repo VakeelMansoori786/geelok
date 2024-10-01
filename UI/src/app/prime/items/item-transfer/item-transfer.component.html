@@ -1,0 +1,57 @@
+<p-toast key="tst"></p-toast>
+<div class="col-12" [formGroup]="mainForm">
+    <div class="card">
+        <h5>Transfer Order</h5>
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12">
+                <input hidden formControlName="p_transfer_order_id">
+                <div class="flex flex-wrap gap-3">
+                    <div *ngFor="let item of itemTypeList" class="field-checkbox">
+                        <p-radioButton 
+                            [inputId]="item.key" 
+                            [value]="item"
+                            formControlName="p_item_type" />
+                        <label [for]="item.key" class="ml-2">{{ item.name }}</label>
+                    </div>
+                </div>
+
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <label htmlFor="ref_no">Reference No.<span style="color: red;">*</span></label>
+                        <input type="text" pInputText formControlName="p_ref_no" />
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <label htmlFor="reason">Reason<span style="color: red;">*</span></label>
+                        <input type="text" pInputText formControlName="p_reason" />
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <label htmlFor="from_company">From Company<span style="color: red;">*</span></label>
+                        <p-dropdown 
+                            formControlName="p_from_company_id" 
+                            [options]="companyList" 
+                            optionLabel="name" 
+                            placeholder="Select a Company" />
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4">
+                        <label htmlFor="to_company">To Company<span style="color: red;">*</span></label>
+                        <p-dropdown 
+                            formControlName="p_to_company_id" 
+                            [options]="companyList" 
+                            optionLabel="name" 
+                            placeholder="Select a Company" />
+                    </div>
+
+               
+                </div>
+            </div>
+        </div>
+
+        <div class="field col-12 md:col-3">
+            <div class="flex gap-2">
+                <button pButton pRipple type="button" label="Save" (click)="SaveTransferOrder()"></button>
+                <button pButton pRipple type="button" label="Clear" (click)="Clear()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+

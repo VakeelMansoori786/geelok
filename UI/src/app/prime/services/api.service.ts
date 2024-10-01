@@ -35,6 +35,12 @@ export class APIService {
    SaveItem(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/SaveItem`,model)
    }
+
+   
+   SaveTransferOrder(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/SaveTransferOrder`,model)
+   }
+
    GetCarouselItem(){
 
     return this.carouselItem;

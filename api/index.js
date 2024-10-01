@@ -199,6 +199,40 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   );
 });
 
+app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res) {
+  const p_transfer_order_id = req.body.p_transfer_order_id;
+  const p_ref_no = req.body.p_ref_no;
+  const p_reason = req.body.p_reason;
+  const p_from_company_id = req.body.p_from_company_id;
+  const p_to_company_id = req.body.p_to_company_id;
+  const p_is_active = req.body.p_is_active;
+  const p_create_by = req.body.p_create_by;
+  const p_order_details = req.body.p_order_details; // Expecting this to be an array of items
+
+  // Ensure p_order_details is a valid JSON string
+  const orderDetailsJson = JSON.stringify(p_order_details);
+
+  try {
+      const results = await connection.query(
+          "CALL sp_transfer_order(?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+              p_transfer_order_id,
+              p_ref_no,
+              p_reason,
+              p_from_company_id,
+              p_to_company_id,
+              p_is_active,
+              p_create_by,
+              orderDetailsJson
+          ]
+      );
+
+      return res.send(results[0]);
+  } catch (error) {
+      console.error("Error saving transfer order:", error);
+      return res.status(500).send({ error: 'Failed to save transfer order' });
+  }
+});
 
 
 

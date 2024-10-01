@@ -20,6 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ItemTransferComponent } from './item-transfer/item-transfer.component';
 
 @NgModule({
 	imports: [
@@ -45,6 +46,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 		RadioButtonModule,
 		
 	],
-	declarations: [ItemDetailComponent,ItemListComponent]
+	declarations: [ItemDetailComponent,ItemListComponent,ItemTransferComponent]
 })
 export class ItemModule { }
