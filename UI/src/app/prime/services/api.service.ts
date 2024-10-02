@@ -41,6 +41,12 @@ export class APIService {
     return this.httpClient.post(`${baseApiUrl}/api/item/SaveTransferOrder`,model)
    }
 
+
+   GetCompany() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetCompany`)
+   }
+   
+
    GetCarouselItem(){
 
     return this.carouselItem;

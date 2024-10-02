@@ -16,28 +16,28 @@
                 </div>
 
                 <div class="grid p-fluid">
-                    <div class="col-12 md:col-6 lg:col-4">
+                    <div class="col-12 md:col-6 lg:col-2">
                         <label htmlFor="ref_no">Reference No.<span style="color: red;">*</span></label>
                         <input type="text" pInputText formControlName="p_ref_no" />
                     </div>
-                    <div class="col-12 md:col-6 lg:col-4">
+                    <div class="col-12 md:col-6 lg:col-10">
                         <label htmlFor="reason">Reason<span style="color: red;">*</span></label>
                         <input type="text" pInputText formControlName="p_reason" />
                     </div>
-                    <div class="col-12 md:col-6 lg:col-4">
+                    <div class="col-12 md:col-6 lg:col-6">
                         <label htmlFor="from_company">From Company<span style="color: red;">*</span></label>
                         <p-dropdown 
                             formControlName="p_from_company_id" 
                             [options]="companyList" 
-                            optionLabel="name" 
+                            optionLabel="company_name" 
                             placeholder="Select a Company" />
                     </div>
-                    <div class="col-12 md:col-6 lg:col-4">
+                    <div class="col-12 md:col-6 lg:col-6">
                         <label htmlFor="to_company">To Company<span style="color: red;">*</span></label>
                         <p-dropdown 
                             formControlName="p_to_company_id" 
                             [options]="companyList" 
-                            optionLabel="name" 
+                            optionLabel="company_name" 
                             placeholder="Select a Company" />
                     </div>
 

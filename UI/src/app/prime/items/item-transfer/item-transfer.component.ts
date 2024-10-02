@@ -42,7 +42,7 @@ totalSizePercent : number = 0;
       p_create_by: [1], // Assuming a default user ID
       p_order_details: [[], Validators.required], // Expecting an array for order details
     });
-  
+  this.GetCompany();
     if(this.route.snapshot.paramMap.get('id')){
       let id = atob(this.route.snapshot.paramMap.get('id')!);
 //this.GetCarousel(id);
@@ -113,6 +113,20 @@ totalSizePercent : number = 0;
   Clear(){
     this.mainForm.reset();
 
+  }
+
+  
+  GetCompany() {
+    this.loading=true;
+
+    this.apiService.GetCompany().subscribe((data:any) => {
+        this.companyList=data;
+       
+     
+    this.loading=false;
+
+
+    });
   }
 }
 
