@@ -205,7 +205,6 @@ app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res
   const p_reason = req.body.p_reason;
   const p_from_company_id = req.body.p_from_company_id;
   const p_to_company_id = req.body.p_to_company_id;
-  const p_is_active = req.body.p_is_active;
   const p_create_by = req.body.p_create_by;
   const p_order_details = req.body.p_order_details; // Expecting this to be an array of items
 
@@ -214,7 +213,7 @@ app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res
 
   try {
       const results = await connection.query(
-          "CALL sp_transfer_order(?, ?, ?, ?, ?, ?, ?, ?)",
+          "CALL pr_save_transfer_order(?, ?, ?, ?, ?, ?, ?)",
           [
               p_transfer_order_id,
               p_ref_no,
