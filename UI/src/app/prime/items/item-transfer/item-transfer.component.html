@@ -44,6 +44,32 @@
                
                 </div>
             </div>
+
+            <!-- table.component.html -->
+            <div class="col-12">
+    <button (click)="addRow()">&#43; Add Row</button>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Qty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row.id }}</td>
+          <td>{{ row.description }}</td>
+          <td>{{ row.qty }}</td>
+          <td>
+            <button (click)="removeRow(row.id)">&#10006;</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
         </div>
 
         <div class="field col-12 md:col-3">

@@ -22,7 +22,9 @@ itemTypeList: any;
 totalSize : number = 0;
 
 totalSizePercent : number = 0;
-
+rows = [
+  { id: 0,item_id: '', description: '',qty:'' }
+];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -40,7 +42,7 @@ totalSizePercent : number = 0;
       p_to_company_id: ['', Validators.required],
       p_is_active: [1], // Default active
       p_create_by: [1], // Assuming a default user ID
-      p_order_details: [[], Validators.required], // Expecting an array for order details
+      p_order_details: [this.rows, Validators.required], // Expecting an array for order details
     });
   this.GetCompany();
     if(this.route.snapshot.paramMap.get('id')){
@@ -127,6 +129,30 @@ totalSizePercent : number = 0;
 
 
     });
+  }
+  GetItem(id:any) {
+    this.loading=true;
+let model={
+  p_item_id:id
+}
+    this.apiService.GetItem(model).subscribe((data:any) => {
+        this.companyList=data;
+       
+     
+    this.loading=false;
+
+
+    });
+  }
+
+  addRow() {
+    const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 1;
+    this.rows.push({ id: newId,item_id:'' ,description: `New User ${newId}`,qty:'' });
+   
+  }
+
+  removeRow(id: number) {
+    this.rows = this.rows.filter(row => row.id !== id);
   }
 }
 
