@@ -58,9 +58,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of rows">
+        <tr *ngFor="let row of rows; let i = index">
           <td>{{ row.id }}</td>
-          <td>{{ row.description }}</td>
+          <td><p-autoComplete 
+            [(ngModel)]="selectedItem[i]" 
+            [suggestions]="suggestions" 
+            (completeMethod)="search($event)" /></td>
           <td>{{ row.qty }}</td>
           <td>
             <button (click)="removeRow(row.id)">&#10006;</button>

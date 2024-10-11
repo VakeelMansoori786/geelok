@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-item-transfer',
@@ -17,8 +18,8 @@ export class ItemTransferComponent implements OnInit {
   
 companyList: any;
 itemTypeList: any;
-
-
+selectedItem:any={};
+suggestions: any=[] ;
 totalSize : number = 0;
 
 totalSizePercent : number = 0;
@@ -154,5 +155,10 @@ let model={
   removeRow(id: number) {
     this.rows = this.rows.filter(row => row.id !== id);
   }
+
+  
+  search(event: AutoCompleteCompleteEvent) {
+    this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
+}
 }
 

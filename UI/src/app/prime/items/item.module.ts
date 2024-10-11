@@ -21,6 +21,7 @@ import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ItemTransferComponent } from './item-transfer/item-transfer.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
 	imports: [
@@ -44,7 +45,7 @@ import { ItemTransferComponent } from './item-transfer/item-transfer.component';
 		MessageModule,
 		ConfirmDialogModule,
 		RadioButtonModule,
-		
+		AutoCompleteModule 
 	],
 	declarations: [ItemDetailComponent,ItemListComponent,ItemTransferComponent]
 })
