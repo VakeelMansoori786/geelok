@@ -91,5 +91,8 @@ Delete(event:any,id:any){
 
  
 }
+Add(){
+  this.router.navigate(['/items/detail']);
+}
 }
 
