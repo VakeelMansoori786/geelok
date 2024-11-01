@@ -141,13 +141,13 @@ this.itemGroupList=data;
       formData.append('p_country_id', model.p_country_id);
       formData.append('p_item_type', model.p_item_type);
       formData.append('p_name', model.p_name);
+      formData.append('p_image',  '');
       formData.append('p_model_no', model.p_model_no);
       formData.append('p_hs_code', model.p_hs_code);
       formData.append('p_cost_price', model.p_cost_price);
       formData.append('p_dimensions', model.p_dimensions);
       formData.append('p_weight', model.p_weight);
       formData.append('p_is_taxable', model.p_is_taxable);
-      formData.append('p_image',  this.uploadedFiles.length>0?this.uploadedFiles[0]:null);
       this.apiService.SaveItem(formData).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data['carousel'][0].Msg });
