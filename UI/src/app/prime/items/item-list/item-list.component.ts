@@ -41,9 +41,13 @@ export class ItemListComponent implements OnInit {
   }
 
   GetItem(id:any) {
+    let req={
+
+      p_item_id:id
+    }
     this.loading=true;
 
-    this.apiService.GetItem(id).subscribe((data:any) => {
+    this.apiService.GetItem(req).subscribe((data:any) => {
         this.mainList=data;
        
      
@@ -63,7 +67,7 @@ clear(table: Table) {
     this.filter.nativeElement.value = '';
 }
 GetDetail(id:any){
-  this.router.navigate(['/news/detail',{ id: btoa(id) },]);
+  this.router.navigate(['/items/detail',{ id: btoa(id) },]);
 
 }
 Delete(event:any,id:any){
@@ -93,6 +97,9 @@ Delete(event:any,id:any){
 }
 Add(){
   this.router.navigate(['/items/detail']);
+}
+onImageError(event: any): void {
+  event.target.src = 'assets/layout/images/not_found_img.png';  // Set the source to default image
 }
 }
 

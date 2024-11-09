@@ -6,7 +6,7 @@ import { baseApiUrl } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ItemService {
-  private carouselItem:any;
+  private ItemData:any;
   constructor(private httpClient:HttpClient) { }
 
   GetItem(model:any) {
@@ -17,5 +17,11 @@ export class ItemService {
     return this.httpClient.post(`${baseApiUrl}/api/item/SaveItem`,model)
    }
 
-   
+   GetItemData(){
+return this.ItemData;
+   }
+
+   SetItemData(model:any){
+ this.ItemData=model;
+   }
 }

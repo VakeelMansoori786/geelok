@@ -44,8 +44,11 @@
 				<ng-template pTemplate="body" let-mainList>
 					<tr>
 						<td>
-							<img [src]="mainList.url" [alt]="mainList.name" width="100" class="shadow-4" />
+							<img [src]="mainList.url" [alt]="mainList.name"  (error)="onImageError($event)"  width="25" class="shadow-4" />
 							{{mainList.name}}
+						</td>
+						<td>
+							0
 						</td>
 						<td>
 							{{mainList.item_type}}

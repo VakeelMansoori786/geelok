@@ -4,7 +4,8 @@ var mysql = require('mysql');
 let config = require('./config');
 let smsConfig = require('./Integration/sms');
 var bodyParser = require('body-parser');
-var multer = require('multer');
+const multer = require('multer');
+const upload = multer(); // You can configure storage if needed
 const path = require("path");
 var axios = require('axios')
 const fs = require("fs");
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 extended: true
 }));
-app.use(express.static('uploads'));
+app.use(express.json());
 //app.use(subdomain('uploads', express.static('uploads')));
 app.use('/uploads', express.static(process.cwd() + '/uploads'))
 const apiKey = config.sms.smsApiKey;
@@ -38,7 +39,6 @@ var storage = multer.diskStorage({
       
    }
 });
-var upload = multer({ storage: storage });
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -106,6 +106,8 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
      return res.send(results);
      });
  })
+
+ 
 //#endregion
  //#region Category API
 
@@ -156,7 +158,9 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
      });
   
  })
- app.post('/api/item/SaveItem', authMiddleware ,async function (req, res) {
+
+ app.post('/api/item/SaveItem', authMiddleware, upload.none(), async function (req, res) {
+  console.log(req.user);
   let p_item_id = req.body.p_item_id;
   let p_item_group_id = req.body.p_item_group_id;
   let p_brand_id = req.body.p_brand_id;
@@ -171,10 +175,11 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let p_dimensions = req.body.p_dimensions;
   let p_weight = req.body.p_weight;
   let p_is_taxable = req.body.p_is_taxable;
-  let p_create_by = req.body.p_create_by;
-
+  let p_create_by = 1;
+  let p_description = req.body.p_description;
+    
   await connection.query(
-      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
           p_item_id,
           p_item_group_id,
@@ -190,7 +195,8 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
           p_dimensions,
           p_weight,
           p_is_taxable,
-          p_create_by
+          p_create_by,
+          p_description
       ],
       function (error, results, fields) {
           if (error) return res.send(error);
@@ -251,6 +257,13 @@ app.get('/api/global/GetUnit',  async function (req, res) {
     });
  
 })
+app.get('/api/global/GetTax',  async function (req, res) {
+  await connection.query('SELECT * FROM `tax_treatment` where is_active=1', function (error, results, fields) {
+   console.log(error)
+     if (error) return res.send(error);
+     return res.send(results);
+     });
+    })
 app.get('/api/global/GetCountry',  async function (req, res) {
  await connection.query('SELECT * FROM `country` where is_active=1', function (error, results, fields) {
   console.log(error)

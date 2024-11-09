@@ -19,6 +19,10 @@ export class APIService {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetBrand`)
    }
    
+   GetTax() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetTax`)
+   }
+   
    GetUnit() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetUnit`)
    }

@@ -49,6 +49,7 @@ totalSizePercent : number = 0;
       p_country_id:['',Validators.required],
       p_item_type:[this.itemTypeList[0],Validators.required],
       p_name:['',Validators.required],
+      p_description:[''  ],
       p_image:[''],
       p_model_no:[''],
       p_hs_code:[''],
@@ -66,6 +67,7 @@ totalSizePercent : number = 0;
      else{
       this.GetBrand();
 this.GetUnit();
+this.GetTax();
 this.GetCountry();
 this.GetItemGroup();  
      }
@@ -73,7 +75,7 @@ this.GetItemGroup();
  
 
   onUpload(event: any) {
-    debugger
+    
     for (const file of event.files) {
         this.uploadedFiles.push(file);
     }
@@ -82,11 +84,17 @@ this.GetItemGroup();
 
 GetBrand(){
   this.apiService.GetBrand().subscribe((data:any) => {
-    debugger
+    
 this.brandList=data;
   })
 }
 
+GetTax(){
+  this.apiService.GetTax().subscribe((data:any) => {
+    
+this.taxList=data;
+  })
+}
 GetUnit(){
   this.apiService.GetUnit().subscribe((data:any) => {
     
@@ -106,7 +114,7 @@ this.itemGroupList=data;
   })
 }
   SaveItem(model:any) {
-    debugger
+    
     if(!this.mainForm.valid)
     {
       this.mainForm.markAllAsTouched();
@@ -119,38 +127,40 @@ this.itemGroupList=data;
       this.loading = true;
       let req={
         p_item_id:model.p_item_id,
-        p_item_group_id:model.p_item_group_id,
-        p_brand_id:model.p_brand_id,
-        p_unit_id:model.p_unit_id,
-        p_country_id:model.p_country_id,
-        p_item_type:model.p_item_type,
+        p_item_group_id:model.p_item_group_id.item_group_id,
+        p_brand_id:model.p_brand_id.brand_id,
+        p_unit_id:model.p_unit_id.unit_id,
+        p_country_id:model.p_country_id.country_id,
+        p_item_type:model.p_item_type.key,
         p_name:model.p_name,
         p_model_no:model.p_model_no,
         p_hs_code:model.p_hs_code,
         p_cost_price:model.p_cost_price,
         p_dimensions:model.p_dimensions,
         p_weight:model.p_weight,
-        p_is_taxable:model.p_is_taxable,
+        p_is_taxable:model.p_is_taxable.tax_treatment_id,
+        p_description:model.p_description,
          file: this.uploadedFiles.length>0?this.uploadedFiles[0]:null
       }
       let formData = new FormData();
-      formData.append('p_item_id', model.p_item_id);
-      formData.append('p_item_group_id', model.p_item_group_id);
-      formData.append('p_brand_id', model.p_brand_id);
-      formData.append('p_unit_id', model.p_unit_id);
-      formData.append('p_country_id', model.p_country_id);
-      formData.append('p_item_type', model.p_item_type);
-      formData.append('p_name', model.p_name);
+      formData.append('p_item_id', req.p_item_id);
+      formData.append('p_item_group_id', req.p_item_group_id);
+      formData.append('p_brand_id', req.p_brand_id);
+      formData.append('p_unit_id', req.p_unit_id);
+      formData.append('p_country_id', req.p_country_id);
+      formData.append('p_item_type', req.p_item_type);
+      formData.append('p_name', req.p_name);
       formData.append('p_image',  '');
-      formData.append('p_model_no', model.p_model_no);
-      formData.append('p_hs_code', model.p_hs_code);
-      formData.append('p_cost_price', model.p_cost_price);
-      formData.append('p_dimensions', model.p_dimensions);
-      formData.append('p_weight', model.p_weight);
-      formData.append('p_is_taxable', model.p_is_taxable);
+      formData.append('p_model_no', req.p_model_no);
+      formData.append('p_hs_code', req.p_hs_code);
+      formData.append('p_cost_price', req.p_cost_price);
+      formData.append('p_dimensions', req.p_dimensions);
+      formData.append('p_weight', req.p_weight);
+      formData.append('p_is_taxable', req.p_is_taxable);
+      formData.append('p_description', req.p_description);
       this.apiService.SaveItem(formData).subscribe((data:any) => {
         
-        this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data['carousel'][0].Msg });
+        this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
         this.router.navigate(['/slider/list']);
       });
             }

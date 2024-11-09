@@ -20,35 +20,42 @@
 
             <div class="col-12">
                 <div class="grid p-fluid">
-                    <div class="col-12 md:col-6 lg:col-4">
+                    <div class="col-12 md:col-6 lg:col-6">
                 
                 <label htmlFor="state">Name<span style="color: red;">*</span></label>
                     <input type="text" pInputText formControlName="p_name" />
                 
             
             </div>  
+                <div class="col-12 md:col-6 lg:col-6">
+            
+            <label htmlFor="state">Description</label>
+                <input type="text" pInputText formControlName="p_description" />
+            
+        
+        </div>  
 
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 <label htmlFor="state">Model No.<span style="color: red;">*</span></label>
                     <input type="text" pInputText formControlName="p_model_no" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 <label htmlFor="state">Dimensions</label>
                     <input type="text" pInputText formControlName="p_dimensions" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 <label htmlFor="state">Weight</label>
                     <input type="text" pInputText formControlName="p_weight" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 <label htmlFor="state">HS Code<span style="color: red;">*</span></label>
                     <input type="text" pInputText formControlName="p_hs_code" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 <label htmlFor="state">Cost Price<span style="color: red;">*</span></label>
                     <input type="text" pInputText formControlName="p_cost_price" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 
                 <p-dropdown 
                 formControlName="p_brand_id" 
@@ -57,7 +64,7 @@
                 placeholder="Select a Brand" />
             
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-3">
                 
                 <p-dropdown 
                 formControlName="p_unit_id" 
@@ -66,7 +73,7 @@
                 placeholder="Select a Unit" />
             
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 
                 <p-dropdown 
                 formControlName="p_item_group_id" 
@@ -75,7 +82,7 @@
                 placeholder="Select a Group" />
             
             </div>  
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 <p-dropdown 
                 formControlName="p_country_id" 
                 [options]="countryList"
@@ -85,7 +92,7 @@
             </div>   
             
           
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-2">
                 
                 <p-dropdown 
                 formControlName="p_is_taxable" 
