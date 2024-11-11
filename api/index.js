@@ -177,9 +177,10 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let p_is_taxable = req.body.p_is_taxable;
   let p_create_by = 1;
   let p_description = req.body.p_description;
+  let p_item_stock = req.body.p_item_stock;
     
   await connection.query(
-      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
+      "CALL pr_save_item(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)",
       [
           p_item_id,
           p_item_group_id,
@@ -196,7 +197,8 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
           p_weight,
           p_is_taxable,
           p_create_by,
-          p_description
+          p_description,
+          p_item_stock
       ],
       function (error, results, fields) {
           if (error) return res.send(error);

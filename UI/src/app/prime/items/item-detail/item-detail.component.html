@@ -160,7 +160,37 @@
     </div>
 
         </div>
-        
+              <!-- table.component.html -->
+              <div class="col-12">
+                <button (click)="addRow()">&#43; Add Row</button>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Branch</th>
+                      <th>Opening Stock</th>
+                      <th>Opening Stock Value</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of rows; let i = index">
+                      <td><p-dropdown  
+                        [(ngModel)]="rows[i].branch_id" [ngModelOptions]="{standalone: true}"
+                        [options]="companyList"
+                        optionLabel="company_name"
+                        placeholder="Select a branch" /></td>
+                      <td>  <input type="text" pInputText [(ngModel)]="rows[i].stock"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td><input type="text" pInputText [(ngModel)]="rows[i].stock_value" [ngModelOptions]="{standalone: true}" /></td>
+                      <td>
+                        <button class="icon-button action" (click)="removeRow(row.id)">
+                         X
+                        </button>
+                      </td>
+                      
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
         
       
         

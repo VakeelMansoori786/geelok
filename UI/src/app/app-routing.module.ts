@@ -15,9 +15,6 @@ import { AuthInterceptor } from './prime/shared/interceptor/auth.interceptor';
                 canActivate: [AuthGuard], // Applying AuthGuard to the main layout component
                 children: [
                   { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
-                  { path: 'slider', loadChildren: () => import('./prime/slider/slider.module').then(m => m.SliderDemoModule) },
-                  { path: 'video', loadChildren: () => import('./prime/video/video.module').then(m => m.VideoDemoModule) },
-                  { path: 'news', loadChildren: () => import('./prime/news/news.module').then(m => m.NewsDemoModule) },
                   { path: 'user', loadChildren: () => import('./prime/user/user.module').then(m => m.UserModule) },
                   { path: 'items', loadChildren: () => import('./prime/items/item.module').then(m => m.ItemModule) },
                   { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
