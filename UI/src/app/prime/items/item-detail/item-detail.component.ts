@@ -33,7 +33,7 @@ totalSize : number = 0;
 
 totalSizePercent : number = 0;
 rows = [
-  {id:0, branch_id: '',stock: '', stock_value: '' }
+  {id:0, branch_id: null,stock: '', stock_value: '' }
 ];
   constructor(
     private formBuilder:FormBuilder,
@@ -78,7 +78,8 @@ rows = [
     this.loading=true;
 
     this.apiService.GetItem(req).subscribe((data:any) => {
-      const item = data[0];  // Assuming the response structure is correct
+      if(data.length>0){
+      const item = data[0][0];  // Assuming the response structure is correct
       debugger
       // Populate the form with the fetched data
       this.mainForm.patchValue({
@@ -97,16 +98,23 @@ rows = [
         p_weight: item.weight,
         p_is_taxable:  this.taxList.find(x=>x.tax_treatment_id==item.is_taxable) ,
       });
-
-      // If there is an image, set it (optional)
       if (item.p_image) {
         this.uploadedFiles.push(item.p_image);
       }
-
-      // If the item has stock rows, populate the rows array
-      if (item.p_item_stock) {
-        this.rows = item.p_item_stock;  // Assuming p_item_stock is an array of rows
-      }
+if(data.length>2){
+  const mappedData = data[1].map((item, index) => ({
+    id: index,                         // Use the index as the id (starting from 0)
+    branch_id: item.branch_id || null,    // branch_id will be set to item.branch_id or default to an empty string
+    stock: item.stock || '',            // stock will be set to item.stock or default to an empty string
+    stock_value: item.stock_value || '' // stock_value will be set to item.stock_value or default to an empty string
+}));
+  
+ 
+  this.rows = mappedData // Assuming p_item_stock is an array of rows
+}
+    }
+   
+      
     });
   }
 
@@ -210,6 +218,13 @@ loadDropdowns() {
         p_description:model.p_description,
          file: this.uploadedFiles.length>0?this.uploadedFiles[0]:null
       }
+      const item_stock = this.rows.map(item => ({
+        id: item.id,  // Keep the id as is
+        branch_id: item.branch_id.company_id, // Just get the company_id from the branch_id object
+        company_name: item.branch_id.company_name, // Add company_name from branch_id
+        stock: item.stock,   // Keep stock value
+        stock_value: item.stock_value  // Keep stock_value
+      }));
       let formData = new FormData();
       formData.append('p_item_id', req.p_item_id);
       formData.append('p_item_group_id', req.p_item_group_id);
@@ -226,7 +241,7 @@ loadDropdowns() {
       formData.append('p_weight', req.p_weight);
       formData.append('p_is_taxable', req.p_is_taxable);
       formData.append('p_description', req.p_description);
-      formData.append('p_item_stock',JSON.stringify(this.rows));
+      formData.append('p_item_stock',JSON.stringify(item_stock));
       this.apiService.SaveItem(formData).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
