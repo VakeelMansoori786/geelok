@@ -18,7 +18,7 @@ export class ItemTransferComponent implements OnInit {
   
 companyList: any;
 itemTypeList: any;
-selectedItem:any={};
+selectedItem: any={};
 suggestions: any=[] ;
 totalSize : number = 0;
 
@@ -37,8 +37,8 @@ rows = [
   ngOnInit() {
     this.mainForm = this.formBuilder.group({
       p_transfer_order_id: ['0'], // Assuming similar structure as item
-      p_ref_no: ['', Validators.required],
-      p_reason: ['', Validators.required],
+      p_ref_no: [''],
+      p_reason: [''],
       p_from_company_id: ['', Validators.required],
       p_to_company_id: ['', Validators.required],
       p_is_active: [1], // Default active
@@ -55,6 +55,7 @@ rows = [
      }
   }
   SaveTransferOrder() {
+    debugger
     if (!this.mainForm.valid) {
       this.mainForm.markAllAsTouched();
       // Optionally show a warning message
@@ -69,8 +70,8 @@ rows = [
         p_transfer_order_id: model.p_transfer_order_id,
         p_ref_no: model.p_ref_no,
         p_reason: model.p_reason,
-        p_from_company_id: model.p_from_company_id,
-        p_to_company_id: model.p_to_company_id,
+        p_from_company_id: model.p_from_company_id.company_id,
+        p_to_company_id: model.p_to_company_id.company_id,
         p_is_active: model.p_is_active,
         p_create_by: model.p_create_by,
         p_order_details: model.p_order_details, // Assuming this is already structured
@@ -78,11 +79,11 @@ rows = [
 
       // Prepare form data if needed for file uploads (if applicable)
       let formData = new FormData();
-      formData.append('p_transfer_order_id', model.p_transfer_order_id);
-      formData.append('p_ref_no', model.p_ref_no);
-      formData.append('p_reason', model.p_reason);
-      formData.append('p_from_company_id', model.p_from_company_id);
-      formData.append('p_to_company_id', model.p_to_company_id);
+      formData.append('p_transfer_order_id', req.p_transfer_order_id);
+      formData.append('p_ref_no', req.p_ref_no);
+      formData.append('p_reason', req.p_reason);
+      formData.append('p_from_company_id', req.p_from_company_id);
+      formData.append('p_to_company_id', req.p_to_company_id);
       formData.append('p_is_active', model.p_is_active);
       formData.append('p_create_by', model.p_create_by);
       formData.append('p_order_details', JSON.stringify(model.p_order_details)); // JSON string if needed
@@ -164,9 +165,16 @@ let model={
   name:event.query
 }
     this.apiService.GetItemByName(model).subscribe((data:any) => {
-        
-      this.suggestions =data.map(item=>item.name)
+      this.selectedItem=data;
+      this.suggestions =data.map(row => row.name );;
+      
     });
+}
+onSelect(event: any, index: number) {
+  debugger
+  const ab=this.selectedItem.find(x=>x.name==event);
+  this.rows[index].item_id=ab.item_id
+  this.rows[index].item_name=event
 }
 }
 

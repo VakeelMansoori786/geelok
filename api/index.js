@@ -164,8 +164,8 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let name = req.body.name;
   await connection.query("SELECT  * FROM `item` WHERE name like '%"+name+"%'", function (error, results, fields) {
    
-     if (error) return res.send(error);
-     return res.send(results[0]);
+    if (error) return res.send(error);
+    return res.send(results);
      });
   
  })

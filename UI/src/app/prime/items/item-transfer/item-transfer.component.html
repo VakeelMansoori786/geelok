@@ -55,12 +55,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of rows; let i = index">
-          <td><p-autoComplete 
-            [(ngModel)]="rows[i].name"  [ngModelOptions]="{standalone: true}"
-            [suggestions]="suggestions" 
-            (completeMethod)="search($event)" 
-            optionLabel="name" 
-            /></td>
+          <td>
+            <p-autoComplete 
+            [(ngModel)]="rows[i].item_name"  
+            [ngModelOptions]="{standalone: true}"
+        [suggestions]="suggestions" 
+        (completeMethod)="search($event)" 
+        (onSelect)="onSelect($event, i)"
+        optionLabel="name"></p-autoComplete>
+          </td>
           <td style="width: 10%;"><input type="text" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
           <td style="width: 10%;">
             <button class="icon-button action" (click)="removeRow(row.id)">
