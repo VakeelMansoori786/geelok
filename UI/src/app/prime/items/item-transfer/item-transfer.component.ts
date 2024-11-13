@@ -24,7 +24,7 @@ totalSize : number = 0;
 
 totalSizePercent : number = 0;
 rows = [
-  { id: 0,item_id: '', description: '',qty:'' }
+  { id:0,item_id: 0,item_name: '', qty: '' }
 ];
   constructor(
     private formBuilder:FormBuilder,
@@ -148,7 +148,7 @@ let model={
 
   addRow() {
     const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 1;
-    this.rows.push({ id: newId,item_id:'' ,description: `New User ${newId}`,qty:'' });
+    this.rows.push({ id: newId,item_id:0 ,item_name: '',qty:'' });
    
   }
 
@@ -158,7 +158,15 @@ let model={
 
   
   search(event: AutoCompleteCompleteEvent) {
-    this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
+  
+    //this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
+let model={
+  name:event.query
+}
+    this.apiService.GetItemByName(model).subscribe((data:any) => {
+        
+      this.suggestions =data.map(item=>item.name)
+    });
 }
 }
 

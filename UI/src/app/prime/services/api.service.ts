@@ -15,6 +15,11 @@ export class APIService {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetItem`,model)
    }
 
+   
+   GetItemByName(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/GetItemByName`,model)
+   }
+
    GetBrand() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetBrand`)
    }

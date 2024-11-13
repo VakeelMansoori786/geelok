@@ -36,3 +36,11 @@ table {
     background-color: #e53935; /* Darker red */
   }
   
+  .icon-button:not(.btn,.btn-primary,.btn-secondary,.pagetips-icon) {
+    background: 0 0;
+    border: 1px solid red;
+    box-shadow: none;
+    color: red;
+    padding: 5px;
+    border-radius: 2.5em;
+}

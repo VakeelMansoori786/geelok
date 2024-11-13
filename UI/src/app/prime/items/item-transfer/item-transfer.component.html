@@ -48,22 +48,24 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
+          <th>Item</th>
           <th>Qty</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of rows; let i = index">
-          <td>{{ row.id }}</td>
           <td><p-autoComplete 
-            [(ngModel)]="selectedItem[i]" 
+            [(ngModel)]="rows[i].name"  [ngModelOptions]="{standalone: true}"
             [suggestions]="suggestions" 
-            (completeMethod)="search($event)" /></td>
-          <td>{{ row.qty }}</td>
-          <td>
-            <button (click)="removeRow(row.id)">&#10006;</button>
+            (completeMethod)="search($event)" 
+            optionLabel="name" 
+            /></td>
+          <td style="width: 10%;"><input type="text" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
+          <td style="width: 10%;">
+            <button class="icon-button action" (click)="removeRow(row.id)">
+             X
+            </button>
           </td>
         </tr>
       </tbody>
