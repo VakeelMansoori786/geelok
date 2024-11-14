@@ -124,7 +124,6 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
      if (results.length > 0) {
     
        const rows = results;
-       console.log(rows);
        const token = jwt.sign({ userId: rows[0].user_id }, config.JWT_SERECT_KEY, config.JWT_OPTION);
        res.json({ token: token, user: rows[0],menu:rows[1] });
      } else {
@@ -975,7 +974,6 @@ app.post('/api/payment/nipayment', async (req, res) => {
       headers: headers
     })
     .then((response) => {
-      console.log(response.data._links.payment)
      return res.send(response.data._links.payment);
     })
     .catch((error) => {
@@ -1011,7 +1009,6 @@ app.post('/api/payment/create-order', async (req, res) => {
       headers: headers
     })
     .then((response) => {
-      console.log(response.data)
      return res.send(response.data);
     })
     .catch((error) => {
@@ -1031,12 +1028,11 @@ app.post('/api/payment/retrieve-order', async (req, res) => {
  let url=config.payment.RetrieveOrder;
  url= url.replace("{outletId}",config.payment.PaymentOutletId);
  url= url.replace("{ref}",req.body.ref);
- console.log(url)
+
   await axios.get(url, {
       headers: headers
     })
     .then((response) => {
-     console.log(response)
      return res.send(response.data);
     })
     .catch((error) => {
