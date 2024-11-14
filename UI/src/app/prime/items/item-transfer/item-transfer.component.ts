@@ -55,7 +55,7 @@ rows = [
      }
   }
   SaveTransferOrder() {
-    debugger
+    
     if (!this.mainForm.valid) {
       this.mainForm.markAllAsTouched();
       // Optionally show a warning message
@@ -68,30 +68,22 @@ rows = [
       // Construct the request object
       let req = {
         p_transfer_order_id: model.p_transfer_order_id,
-        p_ref_no: model.p_ref_no,
         p_reason: model.p_reason,
         p_from_company_id: model.p_from_company_id.company_id,
         p_to_company_id: model.p_to_company_id.company_id,
-        p_is_active: model.p_is_active,
-        p_create_by: model.p_create_by,
-        p_order_details: model.p_order_details, // Assuming this is already structured
+        p_order_details:JSON.stringify(this.rows.map(item => ({
+          id: item.id,  
+          item_id: item.item_id, 
+          qty: item.qty
+        })))
       };
-
-      // Prepare form data if needed for file uploads (if applicable)
-      let formData = new FormData();
-      formData.append('p_transfer_order_id', req.p_transfer_order_id);
-      formData.append('p_ref_no', req.p_ref_no);
-      formData.append('p_reason', req.p_reason);
-      formData.append('p_from_company_id', req.p_from_company_id);
-      formData.append('p_to_company_id', req.p_to_company_id);
-      formData.append('p_is_active', model.p_is_active);
-      formData.append('p_create_by', model.p_create_by);
-      formData.append('p_order_details', JSON.stringify(model.p_order_details)); // JSON string if needed
+ 
+      
 
       
       // Make the API call
-      this.apiService.SaveTransferOrder(formData).subscribe(
-        (data: any) => {
+      this.apiService.SaveTransferOrder(req).subscribe((data:any) => {
+        debugger
           this.service.add({
             key: 'tst',
             severity: 'success',
@@ -100,18 +92,8 @@ rows = [
           });
           this.router.navigate(['/transfer-order/list']); // Adjust route as needed
           this.loading = false; // Reset loading state
-        },
-        (error) => {
-          console.error('Error saving transfer order:', error);
-          this.service.add({
-            key: 'tst',
-            severity: 'error',
-            summary: 'Error Message',
-            detail: 'Failed to save transfer order.',
-          });
-          this.loading = false; // Reset loading state
-        }
-      );
+        });
+      
     }
   }
   Clear(){
@@ -171,7 +153,7 @@ let model={
     });
 }
 onSelect(event: any, index: number) {
-  debugger
+  
   const ab=this.selectedItem.find(x=>x.name==event);
   this.rows[index].item_id=ab.item_id
   this.rows[index].item_name=event
