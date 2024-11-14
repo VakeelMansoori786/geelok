@@ -5,6 +5,7 @@ import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-item-transfer',
@@ -21,7 +22,7 @@ itemTypeList: any;
 selectedItem: any={};
 suggestions: any=[] ;
 totalSize : number = 0;
-
+Id:any='0'
 totalSizePercent : number = 0;
 rows = [
   { id:0,item_id: 0,item_name: '', qty: '' }
@@ -37,7 +38,6 @@ rows = [
   ngOnInit() {
     this.mainForm = this.formBuilder.group({
       p_transfer_order_id: ['0'], // Assuming similar structure as item
-      p_ref_no: [''],
       p_reason: [''],
       p_from_company_id: ['', Validators.required],
       p_to_company_id: ['', Validators.required],
@@ -45,15 +45,64 @@ rows = [
       p_create_by: [1], // Assuming a default user ID
       p_order_details: [this.rows, Validators.required], // Expecting an array for order details
     });
-  this.GetCompany();
+
     if(this.route.snapshot.paramMap.get('id')){
-      let id = atob(this.route.snapshot.paramMap.get('id')!);
-//this.GetCarousel(id);
+      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
+
      }
-     else{
-      
-     }
+    this.loadDropdowns()
+
   }
+
+  loadDropdowns() {
+    forkJoin({
+      companies: this.apiService.GetCompany()
+    }).subscribe(({ companies }) => {
+      this.companyList = companies;
+  
+      // If editing, update the form after loading data
+      if (this.Id!=0) {
+        this.fetchItemDetails(this.Id);
+      }
+    });
+  }
+  fetchItemDetails(id: any) {
+    let req={
+
+      p_transfer_order_id:id
+    }
+    this.loading=true;
+
+    this.apiService.GetTransferOrder(req).subscribe((data:any) => {
+      
+      if(data.length>0){
+      const item = data[0][0];  // Assuming the response structure is correct
+      
+      // Populate the form with the fetched data
+      this.mainForm.patchValue({
+        p_transfer_order_id: item.transfer_order_id,
+        p_reason: item.reason,
+        p_from_company_id:this.companyList.find(x=>x.company_id==item.to_company_id) ,
+        p_to_company_id: this.companyList.find(x=>x.company_id==item.from_company_id) ,
+         });
+     
+if(data.length>2){
+  const mappedData = data[1].map((item, index) => ({
+    id: index,                        
+    item_id: item.item_id || null,    
+    item_name: item.item_name || '',  
+    qty: item.qty || '' 
+}));
+  
+ 
+  this.rows = mappedData // Assuming p_item_stock is an array of rows
+}
+    }
+   
+      
+    });
+  }
+
   SaveTransferOrder() {
     
     if (!this.mainForm.valid) {
@@ -83,14 +132,14 @@ rows = [
       
       // Make the API call
       this.apiService.SaveTransferOrder(req).subscribe((data:any) => {
-        debugger
+        
           this.service.add({
             key: 'tst',
             severity: 'success',
             summary: 'Success Message',
             detail: data['msg'], // Adjust based on the API response structure
           });
-          this.router.navigate(['/transfer-order/list']); // Adjust route as needed
+          this.router.navigate(['/item/transfer']); // Adjust route as needed
           this.loading = false; // Reset loading state
         });
       

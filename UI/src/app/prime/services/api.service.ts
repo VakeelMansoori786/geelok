@@ -50,6 +50,10 @@ export class APIService {
     return this.httpClient.post(`${baseApiUrl}/api/item/SaveTransferOrder`,model)
    }
 
+   GetTransferOrder(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/GetTransferOrder`,model)
+   }
+
 
    GetCompany() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCompany`)

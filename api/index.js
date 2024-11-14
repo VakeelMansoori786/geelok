@@ -218,17 +218,16 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 });
 
 app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res) {
-  const p_transfer_order_id = req.body.p_transfer_order_id;
-  const p_reason = req.body.p_reason;
-  const p_from_company_id = req.body.p_from_company_id;
-  const p_to_company_id = req.body.p_to_company_id;
-  const p_create_by = 1;
-  const p_order_details = req.body.p_order_details; // Expecting this to be an array of items
+  let p_transfer_order_id = req.body.p_transfer_order_id;
+  let p_reason = req.body.p_reason;
+  let p_from_company_id = req.body.p_from_company_id;
+  let p_to_company_id = req.body.p_to_company_id;
+  let p_create_by = 1;
+  let p_order_details = req.body.p_order_details; // Expecting this to be an array of items
 
 
 
-  try {
-      const results = await connection.query(
+    await connection.query(
           "CALL pr_save_transfer_order(?, ?, ?, ?, ?, ?)",
           [
               p_transfer_order_id,
@@ -237,17 +236,33 @@ app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res
               p_to_company_id,
               p_create_by,
               p_order_details
-          ]
-      );
-console.log(results)
-      return res.send(results[0]);
-  } catch (error) {
-      console.error("Error saving transfer order:", error);
-      return res.status(500).send({ error: error });
-  }
-});
+            ],
+            function (error, results, fields) {
+                if (error) return res.send(error);
+                return res.send(results[0]);
+            }
+        );
+      });
 
+      app.post('/api/item/GetTransferOrder', authMiddleware, async function (req, res) {
+        let p_transfer_order_id = req.body.p_transfer_order_id;
 
+      
+      
+      
+          await connection.query(
+                "CALL pr_get_transferOrderDetails(?)",
+                [
+                    p_transfer_order_id
+                  ],
+                  function (error, results, fields) {
+                      if (error) return res.send(error);
+                    if(p_transfer_order_id!='0') return res.send(results);
+                      return res.send(results[0]);
+                  }
+              );
+            });
+      
 
 app.get('/api/global/GetBrand',  async function (req, res) {
  await connection.query('SELECT * FROM `brand` where is_active=1', function (error, results, fields) {
