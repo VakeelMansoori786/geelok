@@ -366,7 +366,77 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
      
     })
 
+//#region Purchase
 
+//#region Bill
+
+
+app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
+  let p_purchase_bill_id = req.body.p_purchase_bill_id;
+  let p_customer_id = req.body.p_customer_id;
+  let p_brand_id = req.body.p_brand_id;
+  let p_bill_no = req.body.p_bill_no;
+  let p_order_no = req.body.p_order_no;
+  let p_permit_no = req.body.p_permit_no;
+  let p_bill_date = req.body.p_bill_date;
+  let p_notes = req.body.p_notes; 
+  let p_sub_total = req.body.p_sub_total; 
+  let p_vat = req.body.p_vat; 
+  let p_discount = req.body.p_discount; 
+  let p_total = req.body.p_total; 
+  let p_create_by = 1;
+  let p_order_details = req.body.p_order_details; 
+
+
+
+    await connection.query(
+          "CALL pr_save_purchase_bill(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ? )",
+          [
+            p_purchase_bill_id,
+            p_customer_id,
+            p_brand_id,
+            p_bill_no,
+            p_order_no,
+            p_bill_no,
+            p_permit_no,
+            p_bill_date,
+            p_notes,
+            p_sub_total,
+            p_vat,
+            p_discount,
+            p_total,
+              p_create_by,
+              p_order_details
+            ],
+            function (error, results, fields) {
+                if (error) return res.send(error);
+                return res.send(results[0]);
+            }
+        );
+      });
+
+      app.post('/api/purchase/GetBill', authMiddleware, async function (req, res) {
+        let p_purchase_bill_id = req.body.p_purchase_bill_id;
+
+      
+      
+      
+          await connection.query(
+                "CALL pr_get_transferOrderDetails(?)",
+                [
+                  p_purchase_bill_id
+                  ],
+                  function (error, results, fields) {
+                      if (error) return res.send(error);
+                    if(p_purchase_bill_id!='0') return res.send(results);
+                      return res.send(results[0]);
+                  }
+              );
+            });
+
+//#endregion
+
+//#endregion
 
 
 
@@ -615,8 +685,8 @@ app.get('/api/Customer/CheckCustomer/:p_phone',  async function (req, res) {
      });
   
  })
- app.get('/api/Customer/GetCustomer/:p_customer_id',  async function (req, res) {
-  let p_customer_id = req.params.p_customer_id;
+ app.post('/api/Customer/GetCustomer',  async function (req, res) {
+  let p_customer_id = req.body.p_customer_id;
   await connection.query('SELECT * FROM `customer`  where id='+p_customer_id, function (error, results, fields) {
      if (error) return res.send(error);
      return res.send(results);

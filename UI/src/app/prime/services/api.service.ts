@@ -10,6 +10,16 @@ export class APIService {
   constructor(private httpClient:HttpClient) { }
 
   
+//#region Customer
+GetCustomer(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/Customer/GetCustomer`,model)
+ }
+ DeleteCustomer(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/Customer/DeleteCustomer`,model)
+ }
+
+//#endregion
+
    
    GetItem(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetItem`,model)
@@ -60,15 +70,18 @@ export class APIService {
    }
    
 
-   GetCarouselItem(){
+ //#region Purchase
 
-    return this.carouselItem;
-   }
-   
-   SetCarouselItem(model:any){
-    this.carouselItem = model;
-   }
+//#region Bill
+SaveBill(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveBill`,model)
+ }
+ GetBill(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/GetBill`,model)
+ }
 
+   //#endregion
 
-   
+//#endregion
+
 }

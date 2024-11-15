@@ -14,18 +14,10 @@ import { forkJoin } from 'rxjs';
 export class BillComponent implements OnInit {
   loading = false;
   mainForm :any;
-  itemTypeList: any[] = [
-    
-    { name: 'Goods', key: 'Goods' },
-    { name: 'Service', key: 'Service' }
-];
-uploadedFiles: any[] = [];
+ 
 brandList: any;
-companyList:any;
-unitList: any;
-countryList: any;
-itemGroupList: any;
-taxList: any;
+
+customerList: any;
 files = [];
 Id:any='0'
 totalSize : number = 0;
@@ -45,21 +37,18 @@ rows = [
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_item_id:['0'],
-      p_item_group_id:[''],
-      p_brand_id:['',Validators.required],
-      p_unit_id:['',Validators.required],
-      p_country_id:['',Validators.required],
-      p_item_type:[this.itemTypeList[0],Validators.required],
-      p_name:['',Validators.required],
-      p_description:[''  ],
-      p_image:[''],
-      p_model_no:[''],
-      p_hs_code:[''],
-      p_cost_price:[''],
-      p_dimensions:[''],
-      p_weight:[''],
-      p_is_taxable:['']
+      p_purchase_bill_id:['0'],
+      p_customer_id:[''],
+      p_brand_id:[''],
+      p_bill_no:[''],
+      p_order_no:[''],
+      p_permit_no:[''],
+      p_bill_date:[''],
+      p_notes:[''],
+      p_sub_total:[''],
+      p_vat:[''],
+      p_discount:[''],
+      p_total:['']
     
     });
   
@@ -69,37 +58,32 @@ rows = [
     }
   this.loadDropdowns();
   }
-  fetchItemDetails(id: string) {
+  fetchData(id: string) {
     let req={
 
       p_item_id:id
     }
     this.loading=true;
 
-    this.apiService.GetItem(req).subscribe((data:any) => {
+    this.apiService.GetBill(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
       debugger
       // Populate the form with the fetched data
       this.mainForm.patchValue({
-        p_item_id: item.item_id,
-        p_item_group_id: this.itemGroupList.find(x=>x.item_group_id==item.item_group_id),
+        p_purchase_bill_id: item.p_purchase_bill_id,
+        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_brand_id:this.brandList.find(x=>x.brand_id==item.brand_id) ,
-        p_unit_id: this.unitList.find(x=>x.unit_id==item.unit_id) ,
-        p_country_id:this.countryList.find(x=>x.country_id==item.country_id) ,
-        p_item_type: this.itemTypeList.find(x=>x.key==item.item_type) ,
-        p_name: item.name,
-        p_description: item.description,
-        p_model_no: item.model_no,
-        p_hs_code: item.hs_code,
-        p_cost_price: item.cost_price,
-        p_dimensions: item.dimensions,
-        p_weight: item.weight,
-        p_is_taxable:  this.taxList.find(x=>x.tax_treatment_id==item.is_taxable) ,
-      });
-      if (item.p_image) {
-        this.uploadedFiles.push(item.p_image);
-      }
+        p_bill_no: item.bill_no,
+        p_order_no: item.order_no,
+        p_permit_no: item.permit_no,
+        p_bill_date: item.bill_date,
+        p_notes: item.notes,
+        p_sub_total: item.sub_total,
+        p_vat: item.vat,
+        p_discount: item.discount,
+        p_total: item.total
+       });
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
     id: index,                         // Use the index as the id (starting from 0)
@@ -117,71 +101,18 @@ if(data.length>2){
     });
   }
 
-  onUpload(event: any) {
-    
-    for (const file of event.files) {
-        this.uploadedFiles.push(file);
-    }
 
-  }
-
-// GetBrand(){
-//   this.apiService.GetBrand().subscribe((data:any) => {
-    
-// this.brandList=data;
-//   })
-// }
-
-// GetCompany(){
-//   this.apiService.GetCompany().subscribe((data:any) => {
-    
-// this.companyList=data;
-//   })
-// }
-
-// GetTax(){
-//   this.apiService.GetTax().subscribe((data:any) => {
-    
-// this.taxList=data;
-//   })
-// }
-// GetUnit(){
-//   this.apiService.GetUnit().subscribe((data:any) => {
-    
-// this.unitList=data;
-//   })
-// }
-// GetCountry(){
-//   this.apiService.GetCountry().subscribe((data:any) => {
-    
-// this.countryList=data;
-//   })
-// }
-// GetItemGroup(){
-//   this.apiService.GetItemGroup().subscribe((data:any) => {
-    
-// this.itemGroupList=data;
-//   })
-// }
 loadDropdowns() {
   forkJoin({
     brands: this.apiService.GetBrand(),
-    units: this.apiService.GetUnit(),
-    countries: this.apiService.GetCountry(),
-    itemGroups: this.apiService.GetItemGroup(),
-    taxes: this.apiService.GetTax(),
-    companies: this.apiService.GetCompany()
-  }).subscribe(({ brands, units, countries, itemGroups, taxes, companies }) => {
+    customers: this.apiService.GetCustomer({p_customer_id:'0'}),
+  }).subscribe(({ brands, customers }) => {
     this.brandList = brands;
-    this.unitList = units;
-    this.countryList = countries;
-    this.itemGroupList = itemGroups;
-    this.taxList = taxes;
-    this.companyList = companies;
+    this.customerList = customers;
 
     // If editing, update the form after loading data
     if (this.Id!=0) {
-      this.fetchItemDetails(this.Id);
+      this.fetchData(this.Id);
     }
   });
 }
@@ -215,7 +146,6 @@ loadDropdowns() {
         p_weight:model.p_weight,
         p_is_taxable:model.p_is_taxable.tax_treatment_id,
         p_description:model.p_description,
-         file: this.uploadedFiles.length>0?this.uploadedFiles[0]:null
       }
       const item_stock = this.rows.map(item => ({
         id: item.id,  // Keep the id as is

@@ -20,6 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BillListComponent } from './bill-list/bill-list.component';
+import { PurchaseRoutingModule } from './purchase-routing.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { BillListComponent } from './bill-list/bill-list.component';
   imports: [
     CommonModule,
     FormsModule,
-    PurchaseModule,
+    PurchaseRoutingModule,
 		ReactiveFormsModule,
 		TableModule,
 		RatingModule,

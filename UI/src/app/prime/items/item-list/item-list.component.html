@@ -3,7 +3,7 @@
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-			<h5>Filter Menu</h5>
+			<h5>Item List</h5>
 			<div >
 				<p-button 
 					severity="success" 
@@ -18,7 +18,7 @@
 			[rows]="10"
 			[rowsPerPageOptions]="[10, 25, 50]"
 			[loading]="loading"
-			[paginator]="true" [globalFilterFields]="['image_url','redirect_url','flg_click']" responsiveLayout="scroll">
+			[paginator]="true" [globalFilterFields]="['name','item_type','model_no','cost_price','group']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
