@@ -5,11 +5,13 @@ import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { forkJoin } from 'rxjs';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss']
+  styleUrls: ['./bill.component.scss'],
+  providers: [MessageService,ConfirmationService]
 })
 export class BillComponent implements OnInit {
   loading = false;
@@ -18,13 +20,16 @@ export class BillComponent implements OnInit {
 brandList: any;
 
 customerList: any;
+paymentTermList: any;
+selectedItem: any={};
+suggestions: any=[] ;
 files = [];
 Id:any='0'
 totalSize : number = 0;
 
 totalSizePercent : number = 0;
 rows = [
-  {id:0, branch_id: null,stock: '', stock_value: '' }
+  { id:0,item_id: 0,item_name: '', qty: '' , rate: '' , tax: '' , amount: '' }
 ];
   constructor(
     private formBuilder:FormBuilder,
@@ -44,6 +49,8 @@ rows = [
       p_order_no:[''],
       p_permit_no:[''],
       p_bill_date:[''],
+      p_due_date:[''],
+      p_payment_term_id:[''],
       p_notes:[''],
       p_sub_total:[''],
       p_vat:[''],
@@ -105,11 +112,13 @@ if(data.length>2){
 loadDropdowns() {
   forkJoin({
     brands: this.apiService.GetBrand(),
+    paymentTerms: this.apiService.GetPaymentTerm(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
-  }).subscribe(({ brands, customers }) => {
+  }).subscribe(({ brands, customers,paymentTerms }) => {
     this.brandList = brands;
     this.customerList = customers;
-
+    this.paymentTermList = paymentTerms;
+    
     // If editing, update the form after loading data
     if (this.Id!=0) {
       this.fetchData(this.Id);
@@ -146,6 +155,12 @@ loadDropdowns() {
         p_weight:model.p_weight,
         p_is_taxable:model.p_is_taxable.tax_treatment_id,
         p_description:model.p_description,
+        p_order_details:JSON.stringify(this.rows.map(item => ({
+          id: item.id,  
+          item_id: item.item_id, 
+          qty: item.qty
+        })))
+      };
       }
       const item_stock = this.rows.map(item => ({
         id: item.id,  // Keep the id as is
@@ -241,5 +256,23 @@ removeRow(id: any) {
   this.rows = this.rows.filter(row => row.id !== id);
 }
 
+search(event: AutoCompleteCompleteEvent) {
+  
+  //this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
+let model={
+name:event.query
+}
+  this.apiService.GetItemByName(model).subscribe((data:any) => {
+    this.selectedItem=data;
+    this.suggestions =data.map(row => row.name );;
+    
+  });
+}
+onSelect(event: any, index: number) {
+
+const ab=this.selectedItem.find(x=>x.name==event);
+this.rows[index].item_id=ab.item_id
+this.rows[index].item_name=event
+}
 }
 

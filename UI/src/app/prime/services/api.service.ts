@@ -41,6 +41,10 @@ GetCustomer(model:any) {
    GetUnit() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetUnit`)
    }
+   GetPaymentTerm() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetPaymentTerm`)
+   }
+   
    
    GetItemGroup() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetItemGroup`)

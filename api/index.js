@@ -279,6 +279,14 @@ app.get('/api/global/GetUnit',  async function (req, res) {
     });
  
 })
+app.get('/api/global/GetPaymentTerm',  async function (req, res) {
+  await connection.query('SELECT * FROM `payment_term` where is_active=1', function (error, results, fields) {
+   console.log(error)
+     if (error) return res.send(error);
+     return res.send(results);
+     });
+  
+ })
 app.get('/api/global/GetTax',  async function (req, res) {
   await connection.query('SELECT * FROM `tax_treatment` where is_active=1', function (error, results, fields) {
    console.log(error)
