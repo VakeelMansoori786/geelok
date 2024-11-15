@@ -79,27 +79,31 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>Branch</th>
-                      <th>Opening Stock</th>
-                      <th>Opening Stock Value</th>
-                      <th>Action</th>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Rate</th>
+                      <th>Tax</th>
+                      <th>Amount</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let row of rows; let i = index">
-                      <td><p-dropdown  
-                        [(ngModel)]="rows[i].branch_id" [ngModelOptions]="{standalone: true}"
-                        [options]="companyList"
-                        optionLabel="company_name"
-                        placeholder="Select a branch" /></td>
-                      <td>  <input type="text" pInputText [(ngModel)]="rows[i].stock"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td><input type="text" pInputText [(ngModel)]="rows[i].stock_value" [ngModelOptions]="{standalone: true}" /></td>
                       <td>
+                        <p-autoComplete 
+                        [(ngModel)]="rows[i].item_name"  
+                        [ngModelOptions]="{standalone: true}"
+                    [suggestions]="suggestions" 
+                    (completeMethod)="search($event)" 
+                    (onSelect)="onSelect($event, i)"
+                    optionLabel="name"></p-autoComplete>
+                      </td>
+                      <td style="width: 10%;"><input type="text" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;">
                         <button class="icon-button action" (click)="removeRow(row.id)">
                          X
                         </button>
                       </td>
-                      
                     </tr>
                   </tbody>
                 </table>
