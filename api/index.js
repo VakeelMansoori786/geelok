@@ -389,7 +389,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
   let p_bill_date = req.body.p_bill_date;
   let p_notes = req.body.p_notes; 
   let p_sub_total = req.body.p_sub_total; 
-  let p_vat = req.body.p_vat; 
+  let p_tax = req.body.p_tax; 
   let p_discount = req.body.p_discount; 
   let p_total = req.body.p_total; 
   let p_create_by = 1;
@@ -410,7 +410,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
             p_bill_date,
             p_notes,
             p_sub_total,
-            p_vat,
+            p_tax,
             p_discount,
             p_total,
               p_create_by,
