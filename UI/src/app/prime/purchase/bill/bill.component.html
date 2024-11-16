@@ -16,7 +16,7 @@
                 <p-dropdown 
                 formControlName="p_customer_id" 
                 [options]="customerList"
-                optionLabel="name"
+                optionLabel="customer_name"
                 placeholder="Select a Customer" />
                 
             
@@ -26,10 +26,12 @@
                     <label htmlFor="state">Branch<span style="color: red;">*</span></label>
                       
                     <p-dropdown 
-                    formControlName="p_brand_id" 
+                    formControlName="p_branch_id" 
                     [options]="companyList"
-                    optionLabel="name"
-                    placeholder="Select a Branch" />
+                    optionLabel="company_name"
+                    optionValue="company_id"
+                    placeholder="Select a Branch" >
+                </p-dropdown>
                     
             
         
@@ -98,7 +100,10 @@
                     (onSelect)="onSelect($event, i)"
                     optionLabel="name"></p-autoComplete>
                       </td>
-                      <td style="width: 10%;"><input type="text" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <button class="icon-button action" (click)="removeRow(row.id)">
                          X

@@ -695,9 +695,9 @@ app.get('/api/Customer/CheckCustomer/:p_phone',  async function (req, res) {
  })
  app.post('/api/Customer/GetCustomer',  async function (req, res) {
   let p_customer_id = req.body.p_customer_id;
-  await connection.query('SELECT * FROM `customer`  where id='+p_customer_id, function (error, results, fields) {
-     if (error) return res.send(error);
-     return res.send(results);
+  await connection.query("call pr_get_CustomerDetailsById(?)", [p_customer_id], function (error, results, fields) {
+    if (error) return res.send(error);
+     return res.send(results[0]);
      });
   
  })

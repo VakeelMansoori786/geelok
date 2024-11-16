@@ -229,9 +229,8 @@ formatSize(bytes) {
 }
 
 addRow() {
-  debugger
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 1;
-  this.rows.push({ id: newId,branch_id:'' ,stock:'',stock_value:'' });
+  this.rows.push({ id: newId,item_id:0 ,item_name: '',qty:'' , rate: '' , tax: '' , amt: '' });
  
 }
 
@@ -258,5 +257,6 @@ const ab=this.selectedItem.find(x=>x.name==event);
 this.rows[index].item_id=ab.item_id
 this.rows[index].item_name=event
 }
+
 }
 
