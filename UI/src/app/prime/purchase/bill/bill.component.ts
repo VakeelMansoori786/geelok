@@ -26,11 +26,13 @@ suggestions: any=[] ;
 files = [];
 Id:any='0'
 totalSize : number = 0;
-
+selectedCustomer:any= {};
 totalSizePercent : number = 0;
-rows = [
-  { id:0,item_id: 0,item_name: '', qty: '' , rate: '' , tax: '' , amt: '' }
-];
+// rows = [
+//   { id:0,item_id: 0,item_name: '', qty: '' , rate: '' , tax: '' , amt: '' }
+// ];
+rows:any[] = []; 
+taxList: any;
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -115,13 +117,13 @@ loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
     paymentTerms: this.apiService.GetPaymentTerm(),
+    taxes: this.apiService.GetTax(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
-  }).subscribe(({ companies, customers,paymentTerms }) => {
+  }).subscribe(({ companies, customers,paymentTerms,taxes }) => {
     this.companyList = companies;
     this.customerList = customers;
     this.paymentTermList = paymentTerms;
-    
-    // If editing, update the form after loading data
+    this.taxList = taxes;
     if (this.Id!=0) {
       this.fetchData(this.Id);
     }
@@ -229,9 +231,12 @@ formatSize(bytes) {
 }
 
 addRow() {
-  const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 1;
-  this.rows.push({ id: newId,item_id:0 ,item_name: '',qty:'' , rate: '' , tax: '' , amt: '' });
- 
+  debugger
+  const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
+  this.rows.push({ id: newId,item_id:0 ,item_name: '',qty:'1' , rate: '0' , tax: {} , amt: '0' });
+ if(this.selectedCustomer && this.selectedCustomer.tax_treatment_id){
+  this.rows[newId].tax=this.selectedCustomer.tax_treatment_id;//this.taxList.find(x=>x.tax_treatment_id==this.selectedCustomer.tax_treatment_id);
+ }
 }
 
 removeRow(id: any) {
@@ -258,6 +263,13 @@ this.rows[index].item_id=ab.item_id
 this.rows[index].item_name=event
 this.addRow();
 }
+SelectedCustomer(model:any){
+  
+  this.selectedCustomer=model;
+  this.mainForm.patchValue({
+    p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id)
 
+  })
+}
 }
 

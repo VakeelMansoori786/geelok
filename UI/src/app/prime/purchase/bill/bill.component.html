@@ -12,15 +12,29 @@
                 
                         <input hidden  formControlName="p_purchase_bill_id">
                 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
-                      
+                <div class="flex align-items-center">
                 <p-dropdown 
                 formControlName="p_customer_id" 
                 [options]="customerList"
                 optionLabel="customer_name"
-                placeholder="Select a Customer" />
-                
-            
-            </div>  
+                placeholder="Select a Customer"
+                [filter]="true"
+    filterBy="customer_name" 
+    [showClear]="true"
+    (onChange)="SelectedCustomer($event.value)"
+    [ngStyle]="{ 'flex': '1' }"
+                />
+                  <!-- Currency Avatar -->
+        <div *ngIf="selectedCustomer && selectedCustomer.currency_name" class="ml-2">
+            <p-avatar 
+                label="{{selectedCustomer.currency_name}}" 
+                styleClass="mr-2" 
+                size="large" 
+                [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" 
+            ></p-avatar>
+        </div>
+    </div>
+</div>  
                 <div class="col-12 md:col-6 lg:col-6">
             
                     <label htmlFor="state">Branch<span style="color: red;">*</span></label>
@@ -77,7 +91,7 @@
         </div>
               <!-- table.component.html -->
               <div class="col-12">
-                <table>
+                <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
                       <th>Item</th>
@@ -96,6 +110,7 @@
                         [ngModelOptions]="{standalone: true}"
                         [dropdown]="true"
                         [showClear]="true"
+                        [forceSelection]="true"
                     [suggestions]="suggestions" 
                     (completeMethod)="search($event)" 
                     (onSelect)="onSelect($event, i)"
@@ -103,8 +118,15 @@
                       </td>
                       <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;">
+                        <p-dropdown 
+                        [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
+                        [options]="taxList"
+                        optionLabel="name"
+                        optionValue="tax_treatment_id"
+                        placeholder="Select a tax" >
+                    </p-dropdown>
+                       <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <button class="icon-button action" (click)="removeRow(row.id)">
                          X

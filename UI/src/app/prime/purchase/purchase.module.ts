@@ -22,7 +22,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BillListComponent } from './bill-list/bill-list.component';
 import { PurchaseRoutingModule } from './purchase-routing.module';
 import { CalendarModule } from 'primeng/calendar';
-
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 @NgModule({
   declarations: [
     BillComponent,
@@ -49,8 +50,8 @@ import { CalendarModule } from 'primeng/calendar';
 		MessageModule,
 		ConfirmDialogModule,
 		RadioButtonModule,
-		AutoCompleteModule ,
-		CalendarModule 
+		AutoCompleteModule ,AvatarModule,
+		CalendarModule ,AvatarGroupModule
   ]
 })
 export class PurchaseModule { }
