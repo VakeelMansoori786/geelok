@@ -77,7 +77,6 @@
         </div>
               <!-- table.component.html -->
               <div class="col-12">
-                <button (click)="addRow()">&#43; Add Row</button>
                 <table>
                   <thead>
                     <tr>
@@ -95,6 +94,8 @@
                         <p-autoComplete 
                         [(ngModel)]="rows[i].item_name"  
                         [ngModelOptions]="{standalone: true}"
+                        [dropdown]="true"
+                        [showClear]="true"
                     [suggestions]="suggestions" 
                     (completeMethod)="search($event)" 
                     (onSelect)="onSelect($event, i)"
@@ -112,6 +113,7 @@
                     </tr>
                   </tbody>
                 </table>
+                <button (click)="addRow()">&#43; Add Row</button>
               </div>
         
       

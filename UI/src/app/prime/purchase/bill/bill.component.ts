@@ -256,6 +256,7 @@ onSelect(event: any, index: number) {
 const ab=this.selectedItem.find(x=>x.name==event);
 this.rows[index].item_id=ab.item_id
 this.rows[index].item_name=event
+this.addRow();
 }
 
 }
