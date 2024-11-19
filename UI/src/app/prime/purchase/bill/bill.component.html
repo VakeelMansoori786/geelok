@@ -8,7 +8,7 @@
 
             <div class="col-12">
                 <div class="grid p-fluid">
-                    <div class="col-12 md:col-6 lg:col-6">
+                    <div class="col-12 md:col-12 lg:col-12">
                 
                         <input hidden  formControlName="p_purchase_bill_id">
                 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
@@ -23,6 +23,7 @@
     [showClear]="true"
     (onChange)="SelectedCustomer($event.value)"
     [ngStyle]="{ 'flex': '1' }"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_customer_id.touched && mainForm.controls.p_customer_id.invalid}"
                 />
                   <!-- Currency Avatar -->
         <div *ngIf="selectedCustomer && selectedCustomer.currency_name" class="ml-2">
@@ -44,18 +45,21 @@
                     [options]="companyList"
                     optionLabel="company_name"
                     optionValue="company_id"
-                    placeholder="Select a Branch" >
+                    placeholder="Select a Branch" 
+                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
+                    >
                 </p-dropdown>
                     
             
         
         </div>  
 
-            <div class="col-12 md:col-6 lg:col-3">
+            <div class="col-12 md:col-6 lg:col-2">
                 <label htmlFor="state">Bill No.<span style="color: red;">*</span></label>
-                    <input type="text" pInputText formControlName="p_bill_no" />
+                    <input type="text" pInputText formControlName="p_bill_no"
+                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_bill_no.touched && mainForm.controls.p_bill_no.invalid}" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-3">
+            <div class="col-12 md:col-6 lg:col-2">
                 <label htmlFor="state">Order No.</label>
                     <input type="text" pInputText formControlName="p_order_no" />
             </div>  
@@ -63,25 +67,30 @@
                 <label htmlFor="state">Permit No.</label>
                     <input type="text" pInputText formControlName="p_permit_no" />
             </div>  
-            <div class="col-12 md:col-6 lg:col-2">
-                <label htmlFor="state">Bill Date</label>
-                <p-calendar formControlName="p_bill_date" />
+            <div class="col-12 md:col-6 lg:col-3">
+                <label htmlFor="state">Bill Date<span style="color: red;">*</span></label>
+                <p-calendar formControlName="p_bill_date" (onSelect)="onBillDate($event)"
+                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_bill_date.touched && mainForm.controls.p_bill_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
             </div>  
-            <div class="col-12 md:col-6 lg:col-2">
-                <label htmlFor="state">Due Date</label>
-                <p-calendar formControlName="p_due_date" />
+            <div class="col-12 md:col-6 lg:col-3">
+                <label htmlFor="state">Due Date<span style="color: red;">*</span></label>
+                <p-calendar formControlName="p_due_date" (onSelect)="onDueDate($event)"
+                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_due_date.touched && mainForm.controls.p_due_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
             </div> 
             <div class="col-12 md:col-6 lg:col-2">
             
-                <label htmlFor="state">Payment Terms</label>
+                <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
                       
                 <p-dropdown 
                 formControlName="p_payment_term_id" 
                 [options]="paymentTermList"
                 optionLabel="name"
-                placeholder="Select a Payment Term" />
+                placeholder="Select a Payment Term"
+                (onChange)="ChangePaymentDate($event)"
+                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_term_id.touched && mainForm.controls.p_payment_term_id.invalid}" 
+                />
             </div> 
-            <div class="col-12 md:col-6 lg:col-3">
+            <div class="col-12 md:col-6 lg:col-4">
                 <label htmlFor="state">Notes</label>
                     <input type="text" pInputText formControlName="p_notes" />
             </div> 
@@ -90,16 +99,17 @@
 
         </div>
               <!-- table.component.html -->
-              <div class="col-12">
+              <div class="col-12" *ngIf="selectedCustomer && selectedCustomer.currency_name">
                 <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
                       <th>Item</th>
                       <th>Qty</th>
                       <th>Rate</th>
+                      <th>Discount</th>
                       <th>Tax</th>
                       <th>Amount</th>
-                      <th>Actions</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -115,15 +125,21 @@
                     (completeMethod)="search($event)" 
                     (onSelect)="onSelect($event, i)"
                     optionLabel="name"></p-autoComplete>
+                   <div *ngIf="rows[i].item_name!=''" style="padding: 10px;"><textarea pInputTextarea rows="5"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}">
+
+                    </textarea>
+                </div> 
                       </td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  (blur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].discount"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <p-dropdown 
                         [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
                         [options]="taxList"
                         optionLabel="name"
                         optionValue="tax_treatment_id"
+                        (onChange)="calculate(i)"
                         placeholder="Select a tax" >
                     </p-dropdown>
                        <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
@@ -133,18 +149,51 @@
                         </button>
                       </td>
                     </tr>
+                    <tr>
+                        <td colspan="5"><strong>Sub Total</strong></td>
+                        <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>Discount</strong></td>
+                        <td colspan="2">
+                            <div class="p-inputgroup">
+                                <!-- Text Input -->
+                                <p-inputNumber 
+                                  inputId="integeronly" 
+                                  [ngModelOptions]="{standalone: true}" 
+                                  placeholder="Enter discount"
+                                  
+                                  >
+                                </p-inputNumber>
+                              <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
+                             <span  *ngIf="discountType=='percentage'" style="cursor: pointer;" class="p-inputgroup-addon"  (click)="setDiscountType('amount')"><i class="pi pi-percentage"></i></span>
+                                
+                              </div>
+                              
+                        </td>
+                        <td colspan="2"> <strong>{{this.mainForm.value.p_discount}} </strong></td>
+                      </tr>
+                      
+                    <tr>
+                        <td colspan="5"><strong>{{selectedCustomer.tax_treatment_name}}</strong></td>
+                        <td colspan="2"> <strong>{{this.mainForm.value.p_tax}} </strong></td>
+                    </tr>
+                      <tr>
+                          <td colspan="5"><strong>Total ({{selectedCustomer.currency_name}})</strong></td>
+                          <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
+                      </tr>
+                      
                   </tbody>
                 </table>
                 <button (click)="addRow()">&#43; Add Row</button>
               </div>
         
-      
         
             
         </div>
         <div class="field col-12 md:col-3">
             <div class="flex gap-2">
-                <button pButton pRipple type="button" label="Save" (click)="SaveItem(mainForm.value)"></button>
+                <button pButton pRipple type="button" label="Save" (click)="Save(mainForm.value)"></button>
                 <button pButton pRipple type="button" label="Clear"  (click)="Clear()"></button>
             </div>
         </div>

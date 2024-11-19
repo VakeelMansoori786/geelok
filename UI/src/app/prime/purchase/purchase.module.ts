@@ -24,6 +24,7 @@ import { PurchaseRoutingModule } from './purchase-routing.module';
 import { CalendarModule } from 'primeng/calendar';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { InputNumberModule } from 'primeng/inputnumber';
 @NgModule({
   declarations: [
     BillComponent,
@@ -51,7 +52,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 		ConfirmDialogModule,
 		RadioButtonModule,
 		AutoCompleteModule ,AvatarModule,
-		CalendarModule ,AvatarGroupModule
+		CalendarModule ,AvatarGroupModule,InputNumberModule 
   ]
 })
 export class PurchaseModule { }
