@@ -144,25 +144,25 @@
                     </p-dropdown>
                        <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
-                        <button class="icon-button action" (click)="removeRow(row.id)">
+                        <button class="icon-button action" (click)="removeRow(row.id,i)">
                          X
                         </button>
                       </td>
                     </tr>
                     <tr>
-                        <td colspan="5"><strong>Sub Total</strong></td>
+                        <td colspan="5"><strong style="float: right;">Sub Total</strong></td>
                         <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
                     </tr>
                     <tr>
-                        <td colspan="3"><strong>Discount</strong></td>
+                        <td colspan="3"><strong style="float: right;">Discount</strong></td>
                         <td colspan="2">
                             <div class="p-inputgroup">
                                 <!-- Text Input -->
                                 <p-inputNumber 
                                   inputId="integeronly" 
-                                  [ngModelOptions]="{standalone: true}" 
+                                  [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
                                   placeholder="Enter discount"
-                                  
+                                  (onBlur)="getTotalDiscount()"
                                   >
                                 </p-inputNumber>
                               <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
@@ -175,11 +175,11 @@
                       </tr>
                       
                     <tr>
-                        <td colspan="5"><strong>{{selectedCustomer.tax_treatment_name}}</strong></td>
+                        <td colspan="5"><strong style="float: right;">{{selectedCustomer.tax_treatment_name}}</strong></td>
                         <td colspan="2"> <strong>{{this.mainForm.value.p_tax}} </strong></td>
                     </tr>
                       <tr>
-                          <td colspan="5"><strong>Total ({{selectedCustomer.currency_name}})</strong></td>
+                          <td colspan="5"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
                           <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
                       </tr>
                       

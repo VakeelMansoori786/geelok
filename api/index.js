@@ -383,6 +383,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
   let p_purchase_bill_id = req.body.p_purchase_bill_id;
   let p_customer_id = req.body.p_customer_id;
   let p_branch_id = req.body.p_branch_id;
+  let p_currency_id = req.body.p_currency_id;
   let p_bill_no = req.body.p_bill_no;
   let p_order_no = req.body.p_order_no;
   let p_permit_no = req.body.p_permit_no;
@@ -399,7 +400,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
 
 
     await connection.query(
-          "CALL pr_save_purchase_bill(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ? )",
+          "CALL pr_save_purchase_bill(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,? )",
           [
             p_purchase_bill_id,
             p_customer_id,
@@ -416,6 +417,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
               p_create_by,
               p_order_details,
               p_due_date,
+              p_currency_id,
             ],
             function (error, results, fields) {
                 if (error) return res.send(error);
@@ -431,7 +433,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
       
       
           await connection.query(
-                "CALL pr_get_transferOrderDetails(?)",
+                "CALL pr_get_PurchaseBill(?)",
                 [
                   p_purchase_bill_id
                   ],
