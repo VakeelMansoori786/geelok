@@ -8,17 +8,20 @@ import { forkJoin } from 'rxjs';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss'],
+  selector: 'app-purchase-order',
+  templateUrl: './purchase-order.component.html',
+  styleUrls: ['./purchase-order.component.scss'],
   providers: [MessageService,ConfirmationService]
+  
 })
-export class BillComponent implements OnInit {
+export class PurchaseOrderComponent  implements OnInit {
   loading = false;
   mainForm :any;
 companyList: any;
 discountType='percentage'
 customerList: any;
+customerAddressList: any;
+companyAddressList: any;
 paymentTermList: any;
 selectedItem: any={};
 suggestions: any=[] ;
@@ -41,15 +44,17 @@ taxList: any;
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_purchase_bill_id:['0'],
+      p_purchase_order_id:['0'],
       p_customer_id:['', Validators.required],
       p_branch_id:['', Validators.required],
+      p_delivery_address:[''],
+      p_customer_address_id:[''],
+      p_company_address_id:[''],
       p_currency_id:[''],
-      p_bill_no:['', Validators.required],
-      p_order_no:[''],
+      p_ref_no:['', Validators.required],
       p_permit_no:[''],
-      p_bill_date:['', Validators.required],
-      p_due_date:['', Validators.required],
+      p_delivery_date:['', Validators.required],
+      p_purchase_order_date:['', Validators.required],
       p_payment_term_id:['', Validators.required],
       p_notes:[''],
       p_sub_total:[''],
@@ -78,15 +83,18 @@ taxList: any;
       debugger
       // Populate the form with the fetched data
       this.mainForm.patchValue({
-        p_purchase_bill_id: item.purchase_bill_id,
+        p_purchase_order_id: item.purchase_order_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
         p_bill_no: item.bill_no,
+        p_delivery_address: item.delivery_address,
+        p_customer_address_id: item.p_customer_address_id,
+        p_company_address_id: item.company_address_id,
         p_currency_id: item.currency_id,
-        p_order_no: item.order_no,
+        p_ref_no: item.ref_no,
         p_permit_no: item.permit_no,
-        p_bill_date:new Date(item.bill_date),
-        p_due_date: new Date(item.due_date),
+        p_delivery_date:new Date(item.delivery_date),
+        p_purchase_order_date: new Date(item.purchase_order_date),
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
         p_notes: item.notes,
         p_sub_total: item.sub_total,
@@ -136,6 +144,19 @@ loadDropdowns() {
   });
 }
 
+GetCustomerAddress(customer_id:any){
+  let model={customer_id:customer_id};
+  this.apiService.GetCustomerAddress(model).subscribe((data:any) => {
+   this.customerAddressList=data;
+  });
+}
+
+GetCompanyAddress(company_id:any){
+  let model={company_id:company_id};
+  this.apiService.GetCompanyAddress(model).subscribe((data:any) => {
+   this.companyAddressList=data;
+  });
+}
 
 
 Save(model: any) {
@@ -155,15 +176,17 @@ Save(model: any) {
 
   // Prepare the request object
   const req = {
-    p_purchase_bill_id: model.p_purchase_bill_id,
+    p_purchase_order_id: model.p_purchase_order_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
+    p_delivery_address: model.p_delivery_address,
+    p_customer_address_id: model.p_customer_address_id,
+    p_company_address_id: model.p_company_address_id,
     p_currency_id: model.p_currency_id,
-    p_bill_no: model.p_bill_no,
-    p_order_no: model.p_order_no,
+    p_ref_no: model.p_ref_no,
     p_permit_no: model.p_permit_no,
-    p_bill_date: model.p_bill_date,
-    p_due_date: model.p_due_date,
+    p_delivery_date: model.p_delivery_date,
+    p_purchase_order_date: model.p_purchase_order_date,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
@@ -185,10 +208,10 @@ Save(model: any) {
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveBill(req).subscribe((data:any) => {
+  this.apiService.SaveOrder(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/bill-list']);
+        this.router.navigate(['/purchase/order-list']);
       });
             }
   
@@ -371,4 +394,3 @@ getTotalDiscount(){
 }
 
 }
-

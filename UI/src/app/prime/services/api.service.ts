@@ -53,6 +53,14 @@ GetCustomer(model:any) {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCountry`)
    }
    
+   GetCustomerAddress(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/global/GetCustomerAddress`,model)
+   }
+
+   GetCompanyAddress(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/global/GetCompanyAddress`,model)
+   }
+
    
    
    SaveItem(model:any) {
@@ -76,6 +84,15 @@ GetCustomer(model:any) {
 
  //#region Purchase
 
+//#region Purchase Order
+SaveOrder(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveOrder`,model)
+ }
+ GetOrder(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/GetOrder`,model)
+ }
+
+   //#endregion
 //#region Bill
 SaveBill(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveBill`,model)

@@ -25,10 +25,14 @@ import { CalendarModule } from 'primeng/calendar';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 @NgModule({
   declarations: [
     BillComponent,
-    BillListComponent
+    BillListComponent,
+    PurchaseOrderComponent,
+    PurchaseOrderListComponent
   ],
   imports: [
     CommonModule,

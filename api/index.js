@@ -363,6 +363,22 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
        });
     
    })
+   app.get('/api/global/GetCustomerAddress',  async function (req, res) {
+    let customer_id = req.body.customer_id;
+   await connection.query('SELECT * FROM `customer_address`  where  `is_active`=1 and `customer_id`='+customer_id, function (error, results, fields) {
+      if (error) return res.send(error);
+      return res.send(results);
+      });
+   
+  })
+  app.get('/api/global/GetCompanyAddress',  async function (req, res) {
+    let company_id = req.body.company_id;
+   await connection.query('SELECT * FROM `company_address` where  `is_active`=1 and  `company_id`='+company_id, function (error, results, fields) {
+      if (error) return res.send(error);
+      return res.send(results);
+      });
+   
+  })
    app.post('/api/global/SaveCompany',  async function (req, res) {
      
      let p_company_id = req.body.p_company_id;
@@ -384,6 +400,84 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
     })
 
 //#region Purchase
+
+//#region Purchase Order
+app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
+  let p_purchase_order_id = req.body.p_purchase_order_id || 0;
+  let p_customer_id = req.body.p_customer_id;
+  let p_branch_id = req.body.p_branch_id;
+  let p_delivery_address = req.body.p_delivery_address;
+  let p_customer_address_id = req.body.p_customer_address_id;
+  let p_company_address_id = req.body.p_company_address_id;
+  let p_payment_term_id = req.body.p_payment_term_id;
+  let p_currency_id = req.body.p_currency_id;
+  let p_ref_no = req.body.p_ref_no;
+  let p_permit_no = req.body.p_permit_no;
+  let p_delivery_date = req.body.p_delivery_date;
+  let p_purchase_order_date = req.body.p_purchase_order_date;
+  let p_notes = req.body.p_notes;
+  let p_sub_total = req.body.p_sub_total;
+  let p_tax = req.body.p_tax;
+  let p_discount = req.body.p_discount;
+  let p_total = req.body.p_total;
+  let p_status = req.body.p_status || 1;
+  let p_create_by = req.user.user[0].user_id;
+  let p_order_details = req.body.p_order_details;
+
+  try {
+    await connection.query(
+      "CALL pr_save_purchase_order(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        p_purchase_order_id,
+        p_customer_id,
+        p_branch_id,
+        p_delivery_address,
+        p_customer_address_id,
+        p_company_address_id,
+        p_payment_term_id,
+        p_currency_id,
+        p_ref_no,
+        p_permit_no,
+        p_delivery_date,
+        p_purchase_order_date,
+        p_notes,
+        p_sub_total,
+        p_tax,
+        p_discount,
+        p_total,
+        p_status,
+        p_create_by,
+        p_order_details
+      ],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+app.post('/api/purchase/GetOrder', authMiddleware, async function (req, res) {
+  let p_purchase_order_id = req.body.p_purchase_order_id;
+
+
+
+
+    await connection.query(
+          "CALL pr_get_PurchaseOrder(?)",
+          [
+            p_purchase_order_id
+            ],
+            function (error, results, fields) {
+                if (error) return res.send(error);
+              if(p_purchase_bill_id!='0') return res.send(results);
+                return res.send(results[0]);
+            }
+        );
+      });
+
+//#endregion
 
 //#region Bill
 
@@ -436,7 +530,8 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
             }
         );
       });
-
+     
+      
       app.post('/api/purchase/GetBill', authMiddleware, async function (req, res) {
         let p_purchase_bill_id = req.body.p_purchase_bill_id;
 
@@ -457,6 +552,8 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
             });
 
 //#endregion
+
+
 
 //#endregion
 
