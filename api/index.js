@@ -122,10 +122,18 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
    
      if (error) return res.send(error);
      if (results.length > 0) {
-    
+
        const rows = results;
-       const token = jwt.sign({ userId: rows[0].user_id }, config.JWT_SERECT_KEY, config.JWT_OPTION);
+       const payload = { user: rows[0] };
+       console.log(payload)
+       const token = jwt.sign(payload, config.JWT_SERECT_KEY, config.JWT_OPTION);
+      
+       console.log(token)
+       const decoded = jwt.decode(token);
+       
+       console.log(decoded)
        res.json({ token: token, user: rows[0],menu:rows[1] });
+       
      } else {
        return res.json({ message: 'Invalid username or password' });
      }
@@ -150,6 +158,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
  app.post('/api/item/GetItem', authMiddleware , async function (req, res) {
   let p_item_id = req.body.p_item_id;
+
   await connection.query("call pr_get_item(?)", [p_item_id], function (error, results, fields) {
    
      if (error) return res.send(error);
@@ -184,7 +193,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   let p_dimensions = req.body.p_dimensions;
   let p_weight = req.body.p_weight;
   let p_is_taxable = req.body.p_is_taxable;
-  let p_create_by = 1;
+  let p_create_by = req.user.user[0].user_id;
   let p_description = req.body.p_description;
   let p_item_stock = req.body.p_item_stock;
     
@@ -221,7 +230,7 @@ app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res
   let p_reason = req.body.p_reason;
   let p_from_company_id = req.body.p_from_company_id;
   let p_to_company_id = req.body.p_to_company_id;
-  let p_create_by = 1;
+  let p_create_by = req.user.user[0].user_id;
   let p_order_details = req.body.p_order_details; // Expecting this to be an array of items
 
 
@@ -395,7 +404,7 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
   let p_tax = req.body.p_tax; 
   let p_discount = req.body.p_discount; 
   let p_total = req.body.p_total; 
-  let p_create_by = 1;
+  let p_create_by = req.user.user[0].user_id;
   let p_order_details = req.body.p_order_details; 
 
 
