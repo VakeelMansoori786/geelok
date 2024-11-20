@@ -75,18 +75,18 @@ taxList: any;
     this.apiService.GetBill(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      
+      debugger
       // Populate the form with the fetched data
       this.mainForm.patchValue({
-        p_purchase_bill_id: item.p_purchase_bill_id,
+        p_purchase_bill_id: item.purchase_bill_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
-        p_branch_id:this.companyList.find(x=>x.branch_id==item.branch_id) ,
+        p_branch_id:item.branch_id ,
         p_bill_no: item.bill_no,
         p_currency_id: item.currency_id,
         p_order_no: item.order_no,
         p_permit_no: item.permit_no,
-        p_bill_date: item.bill_date,
-        p_due_date: item.due_date,
+        p_bill_date:new Date(item.bill_date),
+        p_due_date: new Date(item.due_date),
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
         p_notes: item.notes,
         p_sub_total: item.sub_total,
@@ -94,6 +94,7 @@ taxList: any;
         p_discount: item.discount,
         p_total: item.total
        });
+       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
     id: index,                         // Use the index as the id (starting from 0)
@@ -244,7 +245,7 @@ formatSize(bytes) {
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
-  this.rows.push({ id: newId,item_id:0 ,item_name: '',qty:'1' , rate: '0', discount: '0', tax_amt: '0' , tax: {} , amt: '0' });
+  this.rows.push({ id: newId,item_id:0 ,item_name: '',description:'',qty:'1' , rate: '0', discount: '0', tax_amt: '0' , tax: {} , amt: '0' });
  if(this.selectedCustomer && this.selectedCustomer.tax_treatment_id){
   this.rows[newId].tax=this.selectedCustomer.tax_treatment_id;//this.taxList.find(x=>x.tax_treatment_id==this.selectedCustomer.tax_treatment_id);
  }

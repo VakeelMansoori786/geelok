@@ -46,6 +46,9 @@
                     optionLabel="company_name"
                     optionValue="company_id"
                     placeholder="Select a Branch" 
+                    [filter]="true"
+        filterBy="company_name" 
+        [showClear]="true"
                     [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
                     >
                 </p-dropdown>
@@ -125,7 +128,9 @@
                     (completeMethod)="search($event)" 
                     (onSelect)="onSelect($event, i)"
                     optionLabel="name"></p-autoComplete>
-                   <div *ngIf="rows[i].item_name!=''" style="padding: 10px;"><textarea pInputTextarea rows="5"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}">
+
+                    
+                   <div *ngIf="rows[i].item_name!=''" style="padding: 10px;"><textarea pInputTextarea rows="2"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}">
 
                     </textarea>
                 </div> 
