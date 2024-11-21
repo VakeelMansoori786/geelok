@@ -34,10 +34,11 @@ totalDiscount:any;
 rows:any[] = []; 
 taxList: any;
 deliveryTypeList: any;
+addressList: any;
 deliveryType: any[] = [
     
-  { name: 'Company', key: 'Company' },
-  { name: 'Customer', key: 'Customer' }
+  { name: 'Company', key: 'company' },
+  { name: 'Customer', key: 'customer' }
 ];
   constructor(
     private formBuilder:FormBuilder,
@@ -54,11 +55,9 @@ deliveryType: any[] = [
       p_customer_id:['', Validators.required],
       p_branch_id:['', Validators.required],
       p_delivery_type:[''],
-      delivery_type_id:[''],
-      p_delivery_address_id:[''],
+      p_delivery_type_id:['0'],
+      p_delivery_address_id:['0'],
       p_currency_id:[''],
-      p_ref_no:['', Validators.required],
-      p_permit_no:[''],
       p_delivery_date:['', Validators.required],
       p_purchase_order_date:['', Validators.required],
       p_payment_term_id:['', Validators.required],
@@ -79,26 +78,28 @@ deliveryType: any[] = [
   fetchData(id: string) {
     let req={
 
-      p_purchase_bill_id:id
+      p_purchase_order_id:id
     }
     this.loading=true;
 
-    this.apiService.GetBill(req).subscribe((data:any) => {
+    this.apiService.GetOrder(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      debugger
-      // Populate the form with the fetched data
+      if(item.delivery_type=='company'){
+        this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
+      }
+      else{
+        this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
+      }
+ 
       this.mainForm.patchValue({
         p_purchase_order_id: item.purchase_order_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
-        p_bill_no: item.bill_no,
-        p_delivery_type: item.delivery_type,
-        p_delivery_type_id: item.delivery_type_id,
+        p_delivery_type:this.deliveryType.find(x=>x.key==item.delivery_type) ,
+        p_delivery_type_id:item.delivery_type_id ,
         p_delivery_address_id: item.delivery_address_id,
         p_currency_id: item.currency_id,
-        p_ref_no: item.ref_no,
-        p_permit_no: item.permit_no,
         p_delivery_date:new Date(item.delivery_date),
         p_purchase_order_date: new Date(item.purchase_order_date),
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
@@ -166,6 +167,7 @@ GetCompanyAddress(company_id:any){
 
 
 Save(model: any) {
+  debugger
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -185,12 +187,10 @@ Save(model: any) {
     p_purchase_order_id: model.p_purchase_order_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_delivery_type: model.p_delivery_type,
-    p_delivery_type_id: model.p_delivery_type_id,
-    p_delivery_address_id: model.p_delivery_address_id,
+    p_delivery_type: model.p_delivery_type.key,
+    p_delivery_type_id: (model.p_delivery_type_id==null || model.p_delivery_type_id=="") ?0:model.p_delivery_type_id,
+    p_delivery_address_id: (model.p_delivery_address_id==null || model.p_delivery_address_id=="") ?0:model.p_delivery_address_id,
     p_currency_id: model.p_currency_id,
-    p_ref_no: model.p_ref_no,
-    p_permit_no: model.p_permit_no,
     p_delivery_date: model.p_delivery_date,
     p_purchase_order_date: model.p_purchase_order_date,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
@@ -226,7 +226,24 @@ Save(model: any) {
 
   }
   SetDeliveryType(model:any){
-      this.deliveryTypeList=model=='Company'?this.companyList:this.customerList;
+if(model.key=='company'){
+  this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
+}
+else{
+  this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
+}
+  }
+
+  GetAddress(model:any){
+    debugger
+  let req={
+    p_address_type:this.mainForm.value.p_delivery_type.key,
+    p_id:this.mainForm.value.delivery_type_id
+  }
+    this.apiService.GetAddress(req).subscribe((data:any) => {
+      
+      this.addressList=data;
+    })
   }
 addRow() {
   

@@ -170,7 +170,7 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
  app.post('/api/item/GetItemByName', authMiddleware , async function (req, res) {
   let name = req.body.name;
-  await connection.query("SELECT  * FROM `item`  LIMIT 10 WHERE name like '%"+name+"%'", function (error, results, fields) {
+  await connection.query("SELECT  * FROM `item` WHERE name like '%"+name+"%'  LIMIT 10", function (error, results, fields) {
    
     if (error) return res.send(error);
     return res.send(results);
@@ -353,7 +353,17 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
       });
    
   })
-
+  app.post('/api/global/GetAddress',  async function (req, res) {
+   
+    let p_address_type  = req.body.p_address_type ;
+    let p_id  = req.body.p_id ;
+    await connection.query("call pr_get_address(?,?)", [p_address_type, p_id], function (error, results, fields) {
+     
+       if (error) return res.send(error);
+       return res.send(results[0]);
+       });
+    
+   })
 
   app.get('/api/global/GetCompany',  async function (req, res) {
     await connection.query('SELECT * FROM `Company`', function (error, results, fields) {
@@ -411,8 +421,7 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
   let p_delivery_address_id = req.body.p_delivery_address_id;
   let p_payment_term_id = req.body.p_payment_term_id;
   let p_currency_id = req.body.p_currency_id;
-  let p_ref_no = req.body.p_ref_no;
-  let p_permit_no = req.body.p_permit_no;
+
   let p_delivery_date = req.body.p_delivery_date;
   let p_purchase_order_date = req.body.p_purchase_order_date;
   let p_notes = req.body.p_notes;
@@ -426,7 +435,7 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
 
   try {
     await connection.query(
-      "CALL pr_save_purchase_order(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_purchase_order(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         p_purchase_order_id,
         p_customer_id,
@@ -436,8 +445,6 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
         p_delivery_address_id,
         p_payment_term_id,
         p_currency_id,
-        p_ref_no,
-        p_permit_no,
         p_delivery_date,
         p_purchase_order_date,
         p_notes,
@@ -450,6 +457,7 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
         p_order_details
       ],
       function (error, results, fields) {
+     
         if (error) return res.status(500).send({ error: error.message });
         return res.status(200).send(results[0]);
       }
@@ -471,7 +479,7 @@ app.post('/api/purchase/GetOrder', authMiddleware, async function (req, res) {
             ],
             function (error, results, fields) {
                 if (error) return res.send(error);
-              if(p_purchase_bill_id!='0') return res.send(results);
+              if(p_purchase_order_id!='0') return res.send(results);
                 return res.send(results[0]);
             }
         );

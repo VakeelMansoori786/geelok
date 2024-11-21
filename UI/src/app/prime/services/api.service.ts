@@ -53,6 +53,9 @@ GetCustomer(model:any) {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCountry`)
    }
    
+   GetAddress(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/global/GetAddress`,model)
+   }
    GetCustomerAddress(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/global/GetCustomerAddress`,model)
    }

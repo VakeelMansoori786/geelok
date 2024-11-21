@@ -36,34 +36,20 @@
         </div>
     </div>
 </div>  
-<div class="col-12 md:col-6 lg:col-12">
-    <label htmlFor="state">Delivery Address<span style="color: red;">*</span></label>
-<div class="flex flex-wrap gap-3">
-    <div *ngFor="let item of deliveryType" class="field-checkbox">
-        <p-radioButton 
-            [inputId]="item.key" 
-            [value]="item"
-            formControlName="p_delivery_type"
-            (onClick)="SetDeliveryType($event.value)"
-            />
-        <label [for]="item.key" class="ml-2">
-            {{ item.name }}
-        </label>
-    </div>
-
-</div>  
-</div>
 <div class="col-12 md:col-6 lg:col-6">
-
+            
+    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
+      
     <p-dropdown 
-    formControlName="delivery_type_id" 
-    [options]="deliveryTypeList"
+    formControlName="p_branch_id" 
+    [options]="companyList"
     optionLabel="company_name"
     optionValue="company_id"
+    placeholder="Select a Branch" 
     [filter]="true"
 filterBy="company_name" 
 [showClear]="true"
- 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
     >
 </p-dropdown>
     
@@ -71,40 +57,77 @@ filterBy="company_name"
 
 </div>  
 
-                <div class="col-12 md:col-6 lg:col-6">
             
-                    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
-                      
-                    <p-dropdown 
-                    formControlName="p_branch_id" 
-                    [options]="companyList"
-                    optionLabel="company_name"
-                    optionValue="company_id"
-                    placeholder="Select a Branch" 
-                    [filter]="true"
-        filterBy="company_name" 
-        [showClear]="true"
-                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
-                    >
-                </p-dropdown>
-                    
-            
+<div class="col-12 md:col-6 lg:col-3">
+    <label htmlFor="state">Date<span style="color: red;">*</span></label>
+    <p-calendar formControlName="p_purchase_order_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div> 
+   
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">Delivery Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_delivery_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_date.touched && mainForm.controls.p_delivery_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    </div>
+<div class="col-12">
+    
+    <div class="flex align-items-center gap-3">
         
-        </div>  
+    <label >Delivery Address<span style="color: red;">*</span></label>
+        <!-- Radio Buttons -->
+        <div class="field-checkbox flex align-items-center" *ngFor="let item of deliveryType">
+        
+            <p-radioButton 
+                [inputId]="item.key" 
+                [value]="item"
+                formControlName="p_delivery_type"
+                (onClick)="SetDeliveryType($event.value)">
+            </p-radioButton>
+            <label [for]="item.key" class="ml-2">
+                {{ item.name }}
+            </label>
+        </div>
+
+        <!-- Dropdown 1 -->
+        <div *ngIf="this.mainForm.value.p_delivery_type != ''" style="width: 30%;">
+            <label htmlFor="state">{{this.mainForm.value.p_delivery_type.name }}</label>
+            <p-dropdown 
+                formControlName="p_delivery_type_id" 
+                [options]="deliveryTypeList"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Select" 
+                (onChange)="GetAddress($event.value)"
+                [filter]="true"
+                filterBy="company_name" 
+                [showClear]="true">
+            </p-dropdown>
+        </div>
+
+        <!-- Dropdown 2 -->
+        <div *ngIf="this.mainForm.value.delivery_type_id != ''"  style="width: 50%;">
+            <label htmlFor="state">Shipping Address</label>
+            <p-dropdown 
+                formControlName="p_delivery_address_id" 
+                [options]="addressList"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Select" 
+                [filter]="true"
+                filterBy="company_name" 
+                [showClear]="true"
+                >
+            </p-dropdown>
+        </div>
+    </div>
+</div>
+
+
+
 
             
-        <div class="col-12 md:col-6 lg:col-3">
-            <label htmlFor="state">Date<span style="color: red;">*</span></label>
-            <p-calendar formControlName="p_purchase_order_date" 
-            [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-        </div> 
-           
+
             <div class="col-12 md:col-6 lg:col-3">
-                <label htmlFor="state">Delivery Date<span style="color: red;">*</span></label>
-                <p-calendar formControlName="p_delivery_date" 
-                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_date.touched && mainForm.controls.p_delivery_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-            </div>
-            <div class="col-12 md:col-6 lg:col-2">
             
                 <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
                       
@@ -117,7 +140,7 @@ filterBy="company_name"
                 [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_term_id.touched && mainForm.controls.p_payment_term_id.invalid}" 
                 />
             </div> 
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-6">
                 <label htmlFor="state">Notes</label>
                     <input type="text" pInputText formControlName="p_notes" />
             </div> 
