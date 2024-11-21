@@ -8,29 +8,44 @@ import { forkJoin } from 'rxjs';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss'],
+  selector: 'app-expense',
+  templateUrl: './expense.component.html',
+  styleUrls: ['./expense.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class BillComponent implements OnInit {
+export class ExpenseComponent   implements OnInit {
   loading = false;
   mainForm :any;
 companyList: any;
 discountType='percentage'
 customerList: any;
+customerAddressList: any;
+companyAddressList: any;
 paymentTermList: any;
 selectedItem: any={};
 suggestions: any=[] ;
 files = [];
 Id:any='0'
-po:any='0'
 totalSize : number = 0;
 selectedCustomer:any= {};
 totalSizePercent : number = 0;
 totalDiscount:any;
 rows:any[] = []; 
 taxList: any;
+deliveryTypeList: any;
+paymentTypeList: any;
+addressList: any;
+deliveryType: any[] = [
+    
+  { name: 'Company', key: 'company' },
+  { name: 'Customer', key: 'customer' }
+];
+paymentType: any[] = [
+    
+  { name: 'Bank', key: 'bank' },
+  { name: 'Cash', key: 'cash' },
+  { name: 'Other', key: 'other' }
+];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -42,54 +57,54 @@ taxList: any;
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_purchase_bill_id:['0'],
-      p_customer_id:['', Validators.required],
-      p_branch_id:['', Validators.required],
+      p_expense_id:['0'],
+      p_customer_id:[''],
+      p_branch_id:[''],
+      p_expense_date:[''],
+      p_payment_type:['0'],
+      p_payment_type_id:['0'],
+      p_payment_term_id:[''],
       p_currency_id:[''],
-      p_bill_no:['', Validators.required],
-      p_order_no:[''],
-      p_permit_no:[''],
-      p_bill_date:['', Validators.required],
-      p_due_date:['', Validators.required],
-      p_payment_term_id:['', Validators.required],
-      p_notes:[''],
+      p_is_billable:[''],
       p_sub_total:[''],
       p_tax:[''],
-      p_discount:[''],
       p_total:['']
     
     });
   
     if (this.route.snapshot.paramMap.get('id')) {
      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
-    }
-    if (this.route.snapshot.paramMap.get('po')) {
-     this.po= atob(this.route.snapshot.paramMap.get('po')!);
+  
     }
   this.loadDropdowns();
   }
   fetchData(id: string) {
     let req={
 
-      p_purchase_bill_id:id
+      p_purchase_order_id:id
     }
     this.loading=true;
 
-    this.apiService.GetBill(req).subscribe((data:any) => {
+    this.apiService.GetOrder(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      debugger
-      // Populate the form with the fetched data
+      if(item.delivery_type=='company'){
+        this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
+      }
+      else{
+        this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
+      }
+ 
       this.mainForm.patchValue({
-        p_purchase_bill_id: item.purchase_bill_id,
+        p_purchase_order_id: item.purchase_order_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
-        p_bill_no: item.bill_no,
+        p_delivery_type:this.deliveryType.find(x=>x.key==item.delivery_type) ,
+        p_delivery_type_id:item.delivery_type_id ,
+        p_delivery_address_id: item.delivery_address_id,
         p_currency_id: item.currency_id,
-        p_order_no: item.order_no,
-        p_permit_no: item.permit_no,
-        p_bill_date:new Date(item.bill_date),
-        p_due_date: new Date(item.due_date),
+        p_delivery_date:new Date(item.delivery_date),
+        p_purchase_order_date: new Date(item.purchase_order_date),
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
         p_notes: item.notes,
         p_sub_total: item.sub_total,
@@ -112,7 +127,7 @@ if(data.length>2){
     tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
 }));
   
- 
+ debugger
   this.rows = mappedData // Assuming p_item_stock is an array of rows
 }
     }
@@ -120,58 +135,7 @@ if(data.length>2){
       
     });
   }
-  poData(id: string) {
-    let req={
 
-      p_purchase_order_id:id
-    }
-    this.loading=true;
-
-    this.apiService.GetOrder(req).subscribe((data:any) => {
-      if(data.length>0){
-      const item = data[0][0];  // Assuming the response structure is correct
-      debugger
-      // Populate the form with the fetched data
-      this.mainForm.patchValue({
-        p_purchase_bill_id: '0',
-        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
-        p_branch_id:item.branch_id ,
-        p_bill_no: '',
-        p_currency_id: item.currency_id,
-        p_order_no: item.ref_no,
-        p_permit_no: '',
-        p_bill_date:'',
-        p_due_date: '',
-        p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
-        p_notes: item.notes,
-        p_sub_total: item.sub_total,
-        p_tax: item.tax,
-        p_discount: item.discount,
-        p_total: item.total
-       });
-       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
-if(data.length>2){
-  const mappedData = data[1].map((item, index) => ({
-    id: index,                         // Use the index as the id (starting from 0)
-    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
-    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
-    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    discount: item.discount || '' ,
-    tax_amt: item.tax || '' ,
-    description: item.description || '' ,
-    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: this.selectedCustomer.tax_treatment_id  || '' // stock_value will be set to item.stock_value or default to an empty string
-}));
-  
- 
-  this.rows = mappedData // Assuming p_item_stock is an array of rows
-}
-    }
-   
-      
-    });
-  }
 
 loadDropdowns() {
   forkJoin({
@@ -187,15 +151,26 @@ loadDropdowns() {
     if (this.Id!=0) {
       this.fetchData(this.Id);
     }
-    if (this.po!=0) {
-      this.poData(this.po);
-    }
+  });
+}
+
+GetCustomerAddress(customer_id:any){
+  let model={customer_id:customer_id};
+  this.apiService.GetCustomerAddress(model).subscribe((data:any) => {
+   this.customerAddressList=data;
+  });
+}
+
+GetCompanyAddress(company_id:any){
+  let model={company_id:company_id};
+  this.apiService.GetCompanyAddress(model).subscribe((data:any) => {
+   this.companyAddressList=data;
   });
 }
 
 
-
 Save(model: any) {
+  debugger
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -212,15 +187,15 @@ Save(model: any) {
 
   // Prepare the request object
   const req = {
-    p_purchase_bill_id: model.p_purchase_bill_id,
+    p_purchase_order_id: model.p_purchase_order_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
+    p_delivery_type: model.p_delivery_type.key,
+    p_delivery_type_id: (model.p_delivery_type_id==null || model.p_delivery_type_id=="") ?0:model.p_delivery_type_id,
+    p_delivery_address_id: (model.p_delivery_address_id==null || model.p_delivery_address_id=="") ?0:model.p_delivery_address_id,
     p_currency_id: model.p_currency_id,
-    p_bill_no: model.p_bill_no,
-    p_order_no: model.p_order_no,
-    p_permit_no: model.p_permit_no,
-    p_bill_date: model.p_bill_date,
-    p_due_date: model.p_due_date,
+    p_delivery_date: model.p_delivery_date,
+    p_purchase_order_date: model.p_purchase_order_date,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
@@ -242,10 +217,10 @@ Save(model: any) {
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveBill(req).subscribe((data:any) => {
+  this.apiService.SaveOrder(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/bill-list']);
+        this.router.navigate(['/purchase/order-list']);
       });
             }
   
@@ -253,53 +228,26 @@ Save(model: any) {
     this.mainForm.reset();
 
   }
-
-  choose(event, callback) {
-    callback();
+  SetDeliveryType(model:any){
+if(model.key=='company'){
+  this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
 }
-
-onRemoveTemplatingFile(event, file, removeFileCallback, index) {
-    removeFileCallback(event, index);
-    this.totalSize -= parseInt(this.formatSize(file.size));
-    this.totalSizePercent = this.totalSize / 10;
+else{
+  this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
 }
+  }
 
-onClearTemplatingUpload(clear) {
-    clear();
-    this.totalSize = 0;
-    this.totalSizePercent = 0;
-}
-
-onTemplatedUpload() {
-    this.service.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-}
-
-onSelectedFiles(event) {
-    this.files = event.currentFiles;
-    this.files.forEach((file) => {
-        this.totalSize += parseInt(this.formatSize(file.size));
-    });
-    this.totalSizePercent = this.totalSize / 10;
-}
-
-uploadEvent(callback) {
-    callback();
-}
-
-formatSize(bytes) {
-    const k = 1024;
-    const dm = 3;
-    const sizes = 20000;
-    if (bytes === 0) {
-        return `0 ${sizes[0]}`;
-    }
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-    return `${formattedSize} ${sizes[i]}`;
-}
-
+  GetAddress(model:any){
+    debugger
+  let req={
+    p_address_type:this.mainForm.value.p_delivery_type.key,
+    p_id:this.mainForm.value.delivery_type_id
+  }
+    this.apiService.GetAddress(req).subscribe((data:any) => {
+      
+      this.addressList=data;
+    })
+  }
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
@@ -339,7 +287,7 @@ this.addRow();
 }
 }
 SelectedCustomer(model:any){
-  
+  debugger
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({

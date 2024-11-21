@@ -87,6 +87,15 @@ GetCustomer(model:any) {
 
  //#region Purchase
 
+//#region Expense
+SaveExpense(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveExpense`,model)
+ }
+ GetExpense(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/GetExpense`,model)
+ }
+
+   //#endregion
 //#region Purchase Order
 SaveOrder(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveOrder`,model)

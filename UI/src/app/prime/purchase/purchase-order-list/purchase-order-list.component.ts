@@ -68,6 +68,9 @@ GetDetail(id:any){
 Add(){
   this.router.navigate(['/purchase/order']);
 }
+Covert(id:any){
+  this.router.navigate(['/purchase/bill',{ po: btoa(id) },]);
 
+}
 }
 

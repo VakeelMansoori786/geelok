@@ -411,6 +411,76 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
 
 //#region Purchase
 
+//#region Expenses
+app.post('/api/expense/SaveExpense', authMiddleware, async function (req, res) {
+  let p_expense_id = req.body.p_expense_id || 0;
+  let p_customer_id = req.body.p_customer_id;
+  let p_branch_id = req.body.p_branch_id;
+  let p_expense_date = req.body.p_expense_date;
+  let p_payment_type = req.body.p_payment_type;
+  let p_payment_type_id = req.body.p_payment_type_id;
+  let p_payment_term_id = req.body.p_payment_term_id;
+  let p_currency_id = req.body.p_currency_id;
+
+  let p_is_billable = req.body.p_is_billable || 0;
+  let p_sub_total = req.body.p_sub_total;
+  let p_tax = req.body.p_tax;
+  let p_total = req.body.p_total;
+  let p_create_by = req.user.user[0].user_id;
+  let p_expense_details = req.body.p_expense_details;
+
+  try {
+    await connection.query(
+      "CALL pr_save_expense(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        p_expense_id,
+        p_customer_id,
+        p_branch_id,
+        p_expense_date,
+        p_payment_type,
+        p_payment_type_id,
+        p_payment_term_id,
+        p_currency_id,
+        p_is_billable,
+        p_sub_total,
+        p_tax,
+        p_total,
+        p_status,
+        p_create_by,
+        p_expense_details
+      ],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+app.post('/api/purchase/GetExpense', authMiddleware, async function (req, res) {
+  let p_expense_id = req.body.p_expense_id;
+
+
+
+
+    await connection.query(
+          "CALL pr_get_Expense(?)",
+          [
+            p_expense_id
+            ],
+            function (error, results, fields) {
+                if (error) return res.send(error);
+              if(p_expense_id!='0') return res.send(results);
+                return res.send(results[0]);
+            }
+        );
+      });
+
+//#endregion
+
+
+
 //#region Purchase Order
 app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
   let p_purchase_order_id = req.body.p_purchase_order_id || 0;
@@ -560,7 +630,6 @@ app.post('/api/purchase/SaveBill', authMiddleware, async function (req, res) {
             });
 
 //#endregion
-
 
 
 //#endregion

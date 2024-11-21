@@ -121,10 +121,10 @@ if(data.length>2){
     tax_amt: item.tax || '' ,
     description: item.description || '' ,
     amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: item.tax || '' // stock_value will be set to item.stock_value or default to an empty string
+    tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
 }));
   
- 
+ debugger
   this.rows = mappedData // Assuming p_item_stock is an array of rows
 }
     }
@@ -284,7 +284,7 @@ this.addRow();
 }
 }
 SelectedCustomer(model:any){
-  
+  debugger
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({

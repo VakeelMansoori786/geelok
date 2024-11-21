@@ -27,12 +27,16 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
+import { ExpenseComponent } from './expense/expense.component';
+import { ExpenseListComponent } from './expense-list/expense-list.component';
 @NgModule({
   declarations: [
     BillComponent,
     BillListComponent,
     PurchaseOrderComponent,
-    PurchaseOrderListComponent
+    PurchaseOrderListComponent,
+    ExpenseComponent,
+    ExpenseListComponent
   ],
   imports: [
     CommonModule,
