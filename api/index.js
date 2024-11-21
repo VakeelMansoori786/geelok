@@ -406,9 +406,9 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
   let p_purchase_order_id = req.body.p_purchase_order_id || 0;
   let p_customer_id = req.body.p_customer_id;
   let p_branch_id = req.body.p_branch_id;
-  let p_delivery_address = req.body.p_delivery_address;
-  let p_customer_address_id = req.body.p_customer_address_id;
-  let p_company_address_id = req.body.p_company_address_id;
+  let p_delivery_type = req.body.p_delivery_type;
+  let p_delivery_type_id = req.body.p_delivery_type_id;
+  let p_delivery_address_id = req.body.p_delivery_address_id;
   let p_payment_term_id = req.body.p_payment_term_id;
   let p_currency_id = req.body.p_currency_id;
   let p_ref_no = req.body.p_ref_no;
@@ -431,9 +431,9 @@ app.post('/api/purchase/SaveOrder', authMiddleware, async function (req, res) {
         p_purchase_order_id,
         p_customer_id,
         p_branch_id,
-        p_delivery_address,
-        p_customer_address_id,
-        p_company_address_id,
+        p_delivery_type,
+        p_delivery_type_id,
+        p_delivery_address_id,
         p_payment_term_id,
         p_currency_id,
         p_ref_no,

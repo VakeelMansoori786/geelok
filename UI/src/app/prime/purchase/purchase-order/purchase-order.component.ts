@@ -33,6 +33,12 @@ totalSizePercent : number = 0;
 totalDiscount:any;
 rows:any[] = []; 
 taxList: any;
+deliveryTypeList: any;
+deliveryType: any[] = [
+    
+  { name: 'Company', key: 'Company' },
+  { name: 'Customer', key: 'Customer' }
+];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -47,9 +53,9 @@ taxList: any;
       p_purchase_order_id:['0'],
       p_customer_id:['', Validators.required],
       p_branch_id:['', Validators.required],
-      p_delivery_address:[''],
-      p_customer_address_id:[''],
-      p_company_address_id:[''],
+      p_delivery_type:[''],
+      delivery_type_id:[''],
+      p_delivery_address_id:[''],
       p_currency_id:[''],
       p_ref_no:['', Validators.required],
       p_permit_no:[''],
@@ -87,9 +93,9 @@ taxList: any;
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
         p_bill_no: item.bill_no,
-        p_delivery_address: item.delivery_address,
-        p_customer_address_id: item.p_customer_address_id,
-        p_company_address_id: item.company_address_id,
+        p_delivery_type: item.delivery_type,
+        p_delivery_type_id: item.delivery_type_id,
+        p_delivery_address_id: item.delivery_address_id,
         p_currency_id: item.currency_id,
         p_ref_no: item.ref_no,
         p_permit_no: item.permit_no,
@@ -179,9 +185,9 @@ Save(model: any) {
     p_purchase_order_id: model.p_purchase_order_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_delivery_address: model.p_delivery_address,
-    p_customer_address_id: model.p_customer_address_id,
-    p_company_address_id: model.p_company_address_id,
+    p_delivery_type: model.p_delivery_type,
+    p_delivery_type_id: model.p_delivery_type_id,
+    p_delivery_address_id: model.p_delivery_address_id,
     p_currency_id: model.p_currency_id,
     p_ref_no: model.p_ref_no,
     p_permit_no: model.p_permit_no,
@@ -219,53 +225,9 @@ Save(model: any) {
     this.mainForm.reset();
 
   }
-
-  choose(event, callback) {
-    callback();
-}
-
-onRemoveTemplatingFile(event, file, removeFileCallback, index) {
-    removeFileCallback(event, index);
-    this.totalSize -= parseInt(this.formatSize(file.size));
-    this.totalSizePercent = this.totalSize / 10;
-}
-
-onClearTemplatingUpload(clear) {
-    clear();
-    this.totalSize = 0;
-    this.totalSizePercent = 0;
-}
-
-onTemplatedUpload() {
-    this.service.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-}
-
-onSelectedFiles(event) {
-    this.files = event.currentFiles;
-    this.files.forEach((file) => {
-        this.totalSize += parseInt(this.formatSize(file.size));
-    });
-    this.totalSizePercent = this.totalSize / 10;
-}
-
-uploadEvent(callback) {
-    callback();
-}
-
-formatSize(bytes) {
-    const k = 1024;
-    const dm = 3;
-    const sizes = 20000;
-    if (bytes === 0) {
-        return `0 ${sizes[0]}`;
-    }
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-    return `${formattedSize} ${sizes[i]}`;
-}
-
+  SetDeliveryType(model:any){
+      this.deliveryTypeList=model=='Company'?this.companyList:this.customerList;
+  }
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;

@@ -1,7 +1,7 @@
 <p-toast key="tst"></p-toast>
 <div class="col-12"  [formGroup]="mainForm">
     <div class="card">
-        <h5>Item</h5>
+        <h5>Purchase Order</h5>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12">
         
@@ -36,6 +36,41 @@
         </div>
     </div>
 </div>  
+<div class="col-12 md:col-6 lg:col-12">
+    <label htmlFor="state">Delivery Address<span style="color: red;">*</span></label>
+<div class="flex flex-wrap gap-3">
+    <div *ngFor="let item of deliveryType" class="field-checkbox">
+        <p-radioButton 
+            [inputId]="item.key" 
+            [value]="item"
+            formControlName="p_delivery_type"
+            (onClick)="SetDeliveryType($event.value)"
+            />
+        <label [for]="item.key" class="ml-2">
+            {{ item.name }}
+        </label>
+    </div>
+
+</div>  
+</div>
+<div class="col-12 md:col-6 lg:col-6">
+
+    <p-dropdown 
+    formControlName="delivery_type_id" 
+    [options]="deliveryTypeList"
+    optionLabel="company_name"
+    optionValue="company_id"
+    [filter]="true"
+filterBy="company_name" 
+[showClear]="true"
+ 
+    >
+</p-dropdown>
+    
+
+
+</div>  
+
                 <div class="col-12 md:col-6 lg:col-6">
             
                     <label htmlFor="state">Branch<span style="color: red;">*</span></label>
