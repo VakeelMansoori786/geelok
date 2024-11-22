@@ -6,6 +6,8 @@ import { PurchaseOrderComponent } from './purchase-order/purchase-order.componen
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
+import { PayableListComponent } from './payable-list/payable-list.component';
+import { PayableComponent } from './payable/payable.component';
 
 @NgModule({
 	imports: [RouterModule.forChild([
@@ -15,6 +17,8 @@ import { ExpenseListComponent } from './expense-list/expense-list.component';
 		{ path: 'order-list', component: PurchaseOrderListComponent },
 		{ path: 'expense', component: ExpenseComponent },
 		{ path: 'expense-list', component: ExpenseListComponent },
+		{ path: 'payable-list', component: PayableListComponent },
+		{ path: 'payable', component: PayableComponent },
 	])],
 	exports: [RouterModule]
 })

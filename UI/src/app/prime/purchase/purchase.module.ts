@@ -29,6 +29,8 @@ import { PurchaseOrderComponent } from './purchase-order/purchase-order.componen
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
+import { PayableComponent } from './payable/payable.component';
+import { PayableListComponent } from './payable-list/payable-list.component';
 @NgModule({
   declarations: [
     BillComponent,
@@ -36,7 +38,9 @@ import { ExpenseListComponent } from './expense-list/expense-list.component';
     PurchaseOrderComponent,
     PurchaseOrderListComponent,
     ExpenseComponent,
-    ExpenseListComponent
+    ExpenseListComponent,
+    PayableComponent,
+    PayableListComponent
   ],
   imports: [
     CommonModule,

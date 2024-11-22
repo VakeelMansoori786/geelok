@@ -97,6 +97,15 @@ GetCustomer(model:any) {
 
  //#region Purchase
 
+//#region Payable
+SavePayable(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/SavePayable`,model)
+ }
+ GetPayable(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/GetPayable`,model)
+ }
+
+   //#endregion
 //#region Expense
 SaveExpense(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/purchase/SaveExpense`,model)
