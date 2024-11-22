@@ -661,6 +661,14 @@ app.get('/api/global/GetCompany',  async function (req, res) {
      });
   
  })
+ app.get('/api/global/GetPaymentMethod',  async function (req, res) {
+   await connection.query('SELECT * FROM `payment_method` where is_active=1', function (error, results, fields) {
+   
+      if (error) return res.send(error);
+      return res.send(results);
+      });
+   
+  })
 app.get('/api/Customer/GetOrders',  async function (req, res) {
   let p_service_id = req.body.primary_service_id;
  await connection.query('SELECT * FROM `orders` where  `primary_service_id`='+p_service_id, function (error, results, fields) {

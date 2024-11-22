@@ -19,8 +19,6 @@ export class ExpenseComponent   implements OnInit {
 companyList: any;
 discountType='percentage'
 customerList: any;
-customerAddressList: any;
-companyAddressList: any;
 paymentTermList: any;
 selectedItem: any={};
 suggestions: any=[] ;
@@ -34,7 +32,7 @@ rows:any[] = [];
 taxList: any;
 deliveryTypeList: any;
 paymentTypeList: any;
-addressList: any;
+paymentMethodList: any;
 deliveryType: any[] = [
     
   { name: 'Company', key: 'company' },
@@ -142,32 +140,36 @@ loadDropdowns() {
     companies: this.apiService.GetCompany(),
     paymentTerms: this.apiService.GetPaymentTerm(),
     taxes: this.apiService.GetTax(),
+    paymentMethod: this.apiService.GetPaymentMethod(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
-  }).subscribe(({ companies, customers,paymentTerms,taxes }) => {
+  }).subscribe(({ companies, customers,paymentTerms,taxes,paymentMethod  }) => {
     this.companyList = companies;
     this.customerList = customers;
     this.paymentTermList = paymentTerms;
     this.taxList = taxes;
+    this.paymentMethodList =this.groupByType(paymentMethod);
+
     if (this.Id!=0) {
       this.fetchData(this.Id);
     }
   });
 }
 
-GetCustomerAddress(customer_id:any){
-  let model={customer_id:customer_id};
-  this.apiService.GetCustomerAddress(model).subscribe((data:any) => {
-   this.customerAddressList=data;
-  });
+groupByType(paymentMethods:any) {
+  return paymentMethods.reduce((result, currentValue) => {
+    const group = result.find(group => group.value === currentValue.type);
+    if (group) {
+      group.items.push({ label: currentValue.name, value: currentValue.code });
+    } else {
+      result.push({
+        label: currentValue.type.charAt(0).toUpperCase() + currentValue.type.slice(1),
+        value: currentValue.type,
+        items: [{ label: currentValue.name, value: currentValue.code }]
+      });
+    }
+    return result;
+  }, []);
 }
-
-GetCompanyAddress(company_id:any){
-  let model={company_id:company_id};
-  this.apiService.GetCompanyAddress(model).subscribe((data:any) => {
-   this.companyAddressList=data;
-  });
-}
-
 
 Save(model: any) {
   debugger
@@ -237,17 +239,6 @@ else{
 }
   }
 
-  GetAddress(model:any){
-    debugger
-  let req={
-    p_address_type:this.mainForm.value.p_delivery_type.key,
-    p_id:this.mainForm.value.delivery_type_id
-  }
-    this.apiService.GetAddress(req).subscribe((data:any) => {
-      
-      this.addressList=data;
-    })
-  }
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
