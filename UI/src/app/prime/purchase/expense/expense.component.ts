@@ -83,7 +83,7 @@ accountList:any={};
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
         p_expense_date:new Date(item.expense_date),
-        p_currency_id: item.currency_id,
+        p_currency_id:this.currencyList.find(x=>x.currency_id==item.currency_id) ,
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
         p_payment_type_id: item.payment_type_id,
         p_is_billable: item.is_billable==1?true:false,
