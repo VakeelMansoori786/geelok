@@ -373,14 +373,30 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
        });
     
    })
-   app.get('/api/global/GetCustomerAddress',  async function (req, res) {
-    let customer_id = req.body.customer_id;
-   await connection.query('SELECT * FROM `customer_address`  where  `is_active`=1 and `customer_id`='+customer_id, function (error, results, fields) {
-      if (error) return res.send(error);
-      return res.send(results);
-      });
-   
-  })
+   app.get('/api/global/GetCurrency',  async function (req, res) {
+     await connection.query('SELECT * FROM `currency` where is_active=1', function (error, results, fields) {
+    
+        if (error) return res.send(error);
+        return res.send(results);
+        });
+     
+    })
+   app.get('/api/global/GetCurrency',  async function (req, res) {
+     await connection.query('SELECT * FROM `currency` where is_active=1', function (error, results, fields) {
+    
+        if (error) return res.send(error);
+        return res.send(results);
+        });
+     
+    })
+    app.get('/api/global/GetAccount',  async function (req, res) {
+      await connection.query('SELECT * FROM `account` where is_active=1', function (error, results, fields) {
+     
+         if (error) return res.send(error);
+         return res.send(results);
+         });
+      
+     })
   app.get('/api/global/GetCompanyAddress',  async function (req, res) {
     let company_id = req.body.company_id;
    await connection.query('SELECT * FROM `company_address` where  `is_active`=1 and  `company_id`='+company_id, function (error, results, fields) {
@@ -412,12 +428,12 @@ app.post('/api/global/SaveBrand',  async function (req, res) {
 //#region Purchase
 
 //#region Expenses
-app.post('/api/expense/SaveExpense', authMiddleware, async function (req, res) {
+app.post('/api/purchase/SaveExpense', authMiddleware, async function (req, res) {
   let p_expense_id = req.body.p_expense_id || 0;
   let p_customer_id = req.body.p_customer_id;
   let p_branch_id = req.body.p_branch_id;
   let p_expense_date = req.body.p_expense_date;
-  let p_payment_type = req.body.p_payment_type;
+  let p_ref_no = req.body.p_ref_no;
   let p_payment_type_id = req.body.p_payment_type_id;
   let p_payment_term_id = req.body.p_payment_term_id;
   let p_currency_id = req.body.p_currency_id;
@@ -431,13 +447,12 @@ app.post('/api/expense/SaveExpense', authMiddleware, async function (req, res) {
 
   try {
     await connection.query(
-      "CALL pr_save_expense(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_expense(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)",
       [
         p_expense_id,
         p_customer_id,
         p_branch_id,
         p_expense_date,
-        p_payment_type,
         p_payment_type_id,
         p_payment_term_id,
         p_currency_id,
@@ -445,9 +460,9 @@ app.post('/api/expense/SaveExpense', authMiddleware, async function (req, res) {
         p_sub_total,
         p_tax,
         p_total,
-        p_status,
         p_create_by,
-        p_expense_details
+        p_expense_details,
+        p_ref_no
       ],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
@@ -661,8 +676,8 @@ app.get('/api/global/GetCompany',  async function (req, res) {
      });
   
  })
- app.get('/api/global/GetPaymentMethod',  async function (req, res) {
-   await connection.query('SELECT * FROM `payment_method` where is_active=1', function (error, results, fields) {
+ app.get('/api/global/GetPaymentType',  async function (req, res) {
+   await connection.query('SELECT * FROM `payment_type` where is_active=1', function (error, results, fields) {
    
       if (error) return res.send(error);
       return res.send(results);

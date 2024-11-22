@@ -29,13 +29,13 @@ filterBy="company_name"
 
 
 </div> 
-<div class="col-12 md:col-6 lg:col-3">
+<div class="col-12 md:col-6 lg:col-6">
     <label htmlFor="state">Date<span style="color: red;">*</span></label>
     <p-calendar formControlName="p_expense_date" 
     [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_expense_date.touched && mainForm.controls.p_expense_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
 </div>  
 
-<div class="col-12 md:col-12 lg:col-12">
+<div class="col-12 md:col-6 lg:col-6">
                 
     <input hidden  formControlName="p_expense_id">
 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
@@ -63,7 +63,25 @@ size="large"
 </div>
 </div>
 </div>  
-<div class="col-12 md:col-6 lg:col-3">
+<div class="col-12 md:col-6 lg:col-6">
+
+    <label htmlFor="state">Paid Through<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    [options]="paymentTypeList" 
+    formControlName="p_payment_type_id" 
+    placeholder="Select" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_type_id.touched && mainForm.controls.p_payment_type_id.invalid}" 
+    [group]="true">
+    <ng-template let-group pTemplate="group">
+        <div class="flex align-items-center">
+            <span>{{ group.label }}</span>
+        </div>
+    </ng-template>
+</p-dropdown>
+</div>
+
+<div class="col-12 md:col-4 lg:col-4">
 
     <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
           
@@ -72,88 +90,53 @@ size="large"
     [options]="paymentTermList"
     optionLabel="name"
     placeholder="Select a Payment Term"
-    (onChange)="ChangePaymentDate($event)"
     [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_term_id.touched && mainForm.controls.p_payment_term_id.invalid}" 
     />
 </div>
+<div class="col-12 md:col-4 lg:col-4">
+
+    <label htmlFor="state">Currency<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    formControlName="p_currency_id" 
+    [options]="currencyList"
+    optionLabel="name"
+    placeholder="Select"
+    (onChange)="ChangeCurrency($event)"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_currency_id.touched && mainForm.controls.p_currency_id.invalid}" 
+    />
+</div>
+<div class="col-12 md:col-4 lg:col-4">
+    <label htmlFor="state">Reference No.</label>
+        <input type="text" pInputText formControlName="p_ref_no" />
+</div> 
+<div class="col-12 md:col-4 lg:col-4">
+    <p-checkbox 
+    formControlName="p_is_billable" 
+        [binary]="true" 
+        inputId="binary" 
+        inputId="is_billable" 
+        />
+        <label for="is_billable">Billable</label>
+</div>          
             
 
    
-<div class="col-12">
-    
-    <div class="flex align-items-center gap-3">
-        
-    <label >Delivery Address<span style="color: red;">*</span></label>
-        <!-- Radio Buttons -->
-        <div class="field-checkbox flex align-items-center" *ngFor="let item of deliveryType">
-        
-            <p-radioButton 
-                [inputId]="item.key" 
-                [value]="item"
-                formControlName="p_delivery_type"
-                (onClick)="SetDeliveryType($event.value)">
-            </p-radioButton>
-            <label [for]="item.key" class="ml-2">
-                {{ item.name }}
-            </label>
-        </div>
-
-        <!-- Dropdown 1 -->
-        <div *ngIf="this.mainForm.value.p_delivery_type != ''" style="width: 30%;">
-            <label htmlFor="state">{{this.mainForm.value.p_delivery_type.name }}</label>
-            <p-dropdown 
-                formControlName="p_delivery_type_id" 
-                [options]="deliveryTypeList"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="Select" 
-                (onChange)="GetAddress($event.value)"
-                [filter]="true"
-                filterBy="company_name" 
-                [showClear]="true">
-            </p-dropdown>
-        </div>
-
-        <!-- Dropdown 2 -->
-        <div *ngIf="this.mainForm.value.delivery_type_id != ''"  style="width: 50%;">
-            <label htmlFor="state">Shipping Address</label>
-            <p-dropdown 
-                formControlName="p_delivery_address_id" 
-                [options]="addressList"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="Select" 
-                [filter]="true"
-                filterBy="company_name" 
-                [showClear]="true"
-                >
-            </p-dropdown>
-        </div>
-    </div>
-</div>
 
 
 
 
-            
- 
-            <div class="col-12 md:col-6 lg:col-6">
-                <label htmlFor="state">Notes</label>
-                    <input type="text" pInputText formControlName="p_notes" />
-            </div> 
         </div>
     </div>
 
         </div>
               <!-- table.component.html -->
-              <div class="col-12" *ngIf="selectedCustomer && selectedCustomer.currency_name">
+              <div class="col-12" >
                 <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
-                      <th>Item</th>
-                      <th>Qty</th>
-                      <th>Rate</th>
-                      <th>Discount</th>
+                      <th>Expense Account</th>
+                      <th>Notes</th>
                       <th>Tax</th>
                       <th>Amount</th>
                       <th></th>
@@ -162,80 +145,61 @@ size="large"
                   <tbody>
                     <tr *ngFor="let row of rows; let i = index">
                       <td>
-                        <p-autoComplete 
-                        [(ngModel)]="rows[i].item_name"  
-                        [ngModelOptions]="{standalone: true}"
-                        [dropdown]="true"
-                        [showClear]="true"
-                        [forceSelection]="true"
-                    [suggestions]="suggestions" 
-                    (completeMethod)="search($event)" 
-                    (onSelect)="onSelect($event, i)"
-                    optionLabel="name"></p-autoComplete>
-
-                    
-                   <div *ngIf="rows[i].item_name!=''" style="padding: 10px;"><textarea pInputTextarea rows="2"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}">
-
-                    </textarea>
-                </div> 
+                        <p-dropdown 
+                        [(ngModel)]="rows[i].account_id"  [ngModelOptions]="{standalone: true}"
+                        [options]="accountList"
+                        optionLabel="name"
+                        optionValue="account_id"
+                        [filter]="true"
+                         filterBy="name" 
+                         (onClick)="onSelect($event, i)"
+                        placeholder="Select" >
+                    </p-dropdown>
+               
                       </td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  (blur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].discount"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;">
+                      <td style="width: 40%;"><textarea pInputTextarea rows="2"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}"></textarea></td>
+                          <td style="width: 10%;">
                         <p-dropdown 
                         [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
                         [options]="taxList"
                         optionLabel="name"
                         optionValue="tax_treatment_id"
-                        (onChange)="calculate(i)"
+                        (onClick)="calculate(i)"
                         placeholder="Select a tax" >
                     </p-dropdown>
-                       <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;">
+                          </td>
+                       <td style="width: 10%;">
+                        <p-inputNumber 
+                        inputId="integeronly" 
+                        [(ngModel)]="rows[i].amount"  [ngModelOptions]="{standalone: true}"
+                        placeholder="Enter amount"
+                        (onBlur)="calculate(i)"
+                        />
+                    </td>
+                      <td style="width: 5%;">
                         <button class="icon-button action" (click)="removeRow(row.id,i)">
                          X
                         </button>
                       </td>
                     </tr>
                     <tr>
-                        <td colspan="5"><strong style="float: right;">Sub Total</strong></td>
+                        <td colspan="3"><strong style="float: right;">Sub Total</strong></td>
                         <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
                     </tr>
+
                     <tr>
-                        <td colspan="3"><strong style="float: right;">Discount</strong></td>
-                        <td colspan="2">
-                            <div class="p-inputgroup">
-                                <!-- Text Input -->
-                                <p-inputNumber 
-                                  inputId="integeronly" 
-                                  [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
-                                  placeholder="Enter discount"
-                                  (onBlur)="getTotalDiscount()"
-                                  >
-                                </p-inputNumber>
-                              <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
-                             <span  *ngIf="discountType=='percentage'" style="cursor: pointer;" class="p-inputgroup-addon"  (click)="setDiscountType('amount')"><i class="pi pi-percentage"></i></span>
-                                
-                              </div>
-                              
-                        </td>
-                        <td colspan="2"> <strong>{{this.mainForm.value.p_discount}} </strong></td>
-                      </tr>
-                      
-                    <tr>
-                        <td colspan="5"><strong style="float: right;">{{selectedCustomer.tax_treatment_name}}</strong></td>
+                        <td colspan="3"><strong style="float: right;">VAT</strong></td>
                         <td colspan="2"> <strong>{{this.mainForm.value.p_tax}} </strong></td>
                     </tr>
                       <tr>
-                          <td colspan="5"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
+                          <td colspan="3"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
                           <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
                       </tr>
                       
                   </tbody>
                 </table>
                 <button (click)="addRow()">&#43; Add Row</button>
-              </div>
+           
         
         
             

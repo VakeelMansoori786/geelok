@@ -32,18 +32,8 @@ rows:any[] = [];
 taxList: any;
 deliveryTypeList: any;
 paymentTypeList: any;
-paymentMethodList: any;
-deliveryType: any[] = [
-    
-  { name: 'Company', key: 'company' },
-  { name: 'Customer', key: 'customer' }
-];
-paymentType: any[] = [
-    
-  { name: 'Bank', key: 'bank' },
-  { name: 'Cash', key: 'cash' },
-  { name: 'Other', key: 'other' }
-];
+currencyList: any;
+accountList:any={};
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -56,14 +46,14 @@ paymentType: any[] = [
     this.mainForm=this.formBuilder.group({
   
       p_expense_id:['0'],
-      p_customer_id:[''],
-      p_branch_id:[''],
-      p_expense_date:[''],
-      p_payment_type:['0'],
-      p_payment_type_id:['0'],
-      p_payment_term_id:[''],
-      p_currency_id:[''],
-      p_is_billable:[''],
+      p_customer_id:['', Validators.required],
+      p_branch_id:['', Validators.required],
+      p_expense_date:[new Date(), Validators.required],
+      p_payment_type_id:['', Validators.required],
+      p_payment_term_id:['', Validators.required],
+      p_currency_id:['', Validators.required],
+      p_ref_no:[''],
+      p_is_billable:[false],
       p_sub_total:[''],
       p_tax:[''],
       p_total:['']
@@ -79,53 +69,40 @@ paymentType: any[] = [
   fetchData(id: string) {
     let req={
 
-      p_purchase_order_id:id
+      p_expense_id:id
     }
     this.loading=true;
 
-    this.apiService.GetOrder(req).subscribe((data:any) => {
+    this.apiService.GetExpense(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      if(item.delivery_type=='company'){
-        this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
-      }
-      else{
-        this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
-      }
+     
  
       this.mainForm.patchValue({
-        p_purchase_order_id: item.purchase_order_id,
+        p_expense_id: item.expense_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
-        p_delivery_type:this.deliveryType.find(x=>x.key==item.delivery_type) ,
-        p_delivery_type_id:item.delivery_type_id ,
-        p_delivery_address_id: item.delivery_address_id,
+        p_expense_date:new Date(item.expense_date),
         p_currency_id: item.currency_id,
-        p_delivery_date:new Date(item.delivery_date),
-        p_purchase_order_date: new Date(item.purchase_order_date),
         p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
-        p_notes: item.notes,
+        p_payment_type_id: item.payment_type_id,
+        p_is_billable: item.is_billable==1?true:false,
+        p_ref_no: item.ref_no,
         p_sub_total: item.sub_total,
         p_tax: item.tax,
-        p_discount: item.discount,
         p_total: item.total
        });
-       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
+       debugger
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
-    id: index,                         // Use the index as the id (starting from 0)
-    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
-    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
-    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    discount: item.discount || '' ,
-    tax_amt: item.tax || '' ,
-    description: item.description || '' ,
-    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
-}));
+    id: index,
+    account_id: item.account_id || null,
+    tax: item.tax_id ,
+    description: item.description || '',
+    amount: item.amount || ''
+  }));
   
- debugger
+ 
   this.rows = mappedData // Assuming p_item_stock is an array of rows
 }
     }
@@ -140,14 +117,20 @@ loadDropdowns() {
     companies: this.apiService.GetCompany(),
     paymentTerms: this.apiService.GetPaymentTerm(),
     taxes: this.apiService.GetTax(),
-    paymentMethod: this.apiService.GetPaymentMethod(),
+    paymentType: this.apiService.GetPaymentType(),
+    currencies: this.apiService.GetCurrency(),
+    accounts: this.apiService.GetAccount(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
-  }).subscribe(({ companies, customers,paymentTerms,taxes,paymentMethod  }) => {
+  }).subscribe(({ companies, customers,paymentTerms,taxes,paymentType,currencies,accounts  }) => {
     this.companyList = companies;
     this.customerList = customers;
     this.paymentTermList = paymentTerms;
     this.taxList = taxes;
-    this.paymentMethodList =this.groupByType(paymentMethod);
+    this.currencyList = currencies;
+    this.paymentTypeList =this.groupByType(paymentType);
+    
+this.accountList=accounts;
+this.accountList=this.accountList.filter(x=>x.account_type_id==1);
 
     if (this.Id!=0) {
       this.fetchData(this.Id);
@@ -159,12 +142,12 @@ groupByType(paymentMethods:any) {
   return paymentMethods.reduce((result, currentValue) => {
     const group = result.find(group => group.value === currentValue.type);
     if (group) {
-      group.items.push({ label: currentValue.name, value: currentValue.code });
+      group.items.push({ label: currentValue.name, value: currentValue.payment_type_id });
     } else {
       result.push({
         label: currentValue.type.charAt(0).toUpperCase() + currentValue.type.slice(1),
         value: currentValue.type,
-        items: [{ label: currentValue.name, value: currentValue.code }]
+        items: [{ label: currentValue.name, value: currentValue.payment_type_id }]
       });
     }
     return result;
@@ -172,7 +155,7 @@ groupByType(paymentMethods:any) {
 }
 
 Save(model: any) {
-  debugger
+  
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -182,47 +165,39 @@ Save(model: any) {
   }
 
   // Filter out rows with item_id '0'
-  this.rows = this.rows.filter(x => x.item_id !== '0');
+  this.rows = this.rows.filter(x => x.account_id != 0);
 
   // Mark loading state
   this.loading = true;
 
   // Prepare the request object
   const req = {
-    p_purchase_order_id: model.p_purchase_order_id,
+    p_expense_id: model.p_expense_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_delivery_type: model.p_delivery_type.key,
-    p_delivery_type_id: (model.p_delivery_type_id==null || model.p_delivery_type_id=="") ?0:model.p_delivery_type_id,
-    p_delivery_address_id: (model.p_delivery_address_id==null || model.p_delivery_address_id=="") ?0:model.p_delivery_address_id,
-    p_currency_id: model.p_currency_id,
-    p_delivery_date: model.p_delivery_date,
-    p_purchase_order_date: model.p_purchase_order_date,
+    p_expense_date: model.p_expense_date,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
-    p_notes: model.p_notes,
+    p_payment_type_id: model.p_payment_type_id,
+    p_currency_id: model.p_currency_id.currency_id,
+    p_is_billable: model.p_is_billable,
+    p_ref_no: model.p_ref_no,
     p_sub_total: model.p_sub_total,
     p_tax: model.p_tax,
-    p_discount: model.p_discount,
     p_total: model.p_total,
-    p_order_details: JSON.stringify(this.rows.map((item, index) => ({
+    p_expense_details: JSON.stringify(this.rows.map((item, index) => ({
       id: index,
-      item_id: item.item_id || null,
-      item_name: item.item_name || null,
-      qty: item.qty || '',
-      rate: item.rate || '',
-      discount: item.discount || '',
-      tax_amt: item.tax || '',
+      account_id: item.account_id || null,
+      tax_id: item.tax || '',
       description: item.description || '',
-      amt: item.amt || '',
-      tax: item.tax_amt || ''
+      amount: item.amount || ''
     })))
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveOrder(req).subscribe((data:any) => {
+  this.apiService.SaveExpense(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/order-list']);
+        this.router.navigate(['/purchase/expense-list']);
       });
             }
   
@@ -230,19 +205,12 @@ Save(model: any) {
     this.mainForm.reset();
 
   }
-  SetDeliveryType(model:any){
-if(model.key=='company'){
-  this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
-}
-else{
-  this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
-}
-  }
+
 
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
-  this.rows.push({ id: newId,item_id:0 ,item_name: '',description:'',qty:'1' , rate: '0', discount: '0', tax_amt: '0' , tax: {} , amt: '0' });
+  this.rows.push({ id: newId,account_id:0 ,description:'', tax_amt: '0' , tax: null , amount: '0' });
  if(this.selectedCustomer && this.selectedCustomer.tax_treatment_id){
   this.rows[newId].tax=this.selectedCustomer.tax_treatment_id;//this.taxList.find(x=>x.tax_treatment_id==this.selectedCustomer.tax_treatment_id);
  }
@@ -254,84 +222,46 @@ removeRow(id: any,index:any) {
   this.calculate(index);
 }
 
-search(event: AutoCompleteCompleteEvent) {
-  
-  //this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
-let model={
-name:event.query
-}
-  this.apiService.GetItemByName(model).subscribe((data:any) => {
-    this.selectedItem=data;
-    this.suggestions =data.map(row => row.name );;
-    
-  });
-}
+
 onSelect(event: any, index: number) {
 
-const ab=this.selectedItem.find(x=>x.name==event);
-this.rows[index].item_id=ab.item_id
-this.rows[index].item_name=event
-this.rows[index].rate=ab.cost_price
 this.calculate(index);
-if (!this.rows.length || this.rows[this.rows.length - 1].item_name) {
+if (!this.rows.length || this.rows[this.rows.length - 1].account_id) {
 this.addRow();
 }
 }
 SelectedCustomer(model:any){
-  debugger
+  
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({
     p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
-    p_due_date:new Date(),
-    p_currency_id:model.currency_id
+    p_currency_id:this.currencyList.find(x=>x.currency_id==model.currency_id)
   })
 }
 calculate(index:any){
-  debugger
-const amt =parseFloat(this.rows[index].rate)*parseFloat(this.rows[index].qty);
-
+  
+if(this.rows[index].tax!=null){
 const taxPercent =this.taxList.find(x=>x.tax_treatment_id==this.rows[index].tax).tax_percent 
- this.rows[index].amt=amt-parseFloat(this.rows[index].discount);
- this.rows[index].tax_amt=(parseFloat(taxPercent)/100)*this.rows[index].amt;
-    const subTotal = this.rows.reduce((sum, row) => sum + parseFloat(row.amt), 0);
-    const discount=this.rows.reduce((sum, row) => sum + parseFloat(row.discount), 0);
-    const tax=this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal - discount+tax;
+ this.rows[index].tax_amt=(parseFloat(taxPercent)/100)*this.rows[index].amount;
+}
+    const subTotal = this.rows.reduce((sum, row) => sum + parseFloat(row.amount), 0);
+     const tax=this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
+    const totalAmount = subTotal +tax;
 
     this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
     this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
-    this.mainForm.controls.p_discount.setValue(discount.toFixed(2));
     this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
 }
-onBillDate(event: any) {
-  this.updateDueDate();
+
+
+ChangeCurrency(event:any){
+  
+  let curr=this.mainForm.value.p_currency_id;
+  this.selectedCustomer.currency_name=curr.name;
+  this.selectedCustomer.currency_id=curr.currency_id;
 }
 
-onDueDate(event: any) {
-  this.updateDueDate();
-}
-
-ChangePaymentDate(event: any) {
-  this.updateDueDate();
-}
-
-updateDueDate() {
-  const billDate = this.mainForm.value.p_bill_date;
-  const paymentTerm = this.mainForm.value.p_payment_term_id;
-
-  // Check if both bill date and payment term are available
-  if (billDate && paymentTerm && paymentTerm.days != null) {
-    const modifiedDate = new Date(billDate);
-    modifiedDate.setDate(modifiedDate.getDate() + paymentTerm.days);
-    this.mainForm.controls.p_due_date.setValue(modifiedDate);
-  }
-}
-
-
-setDiscountType(type:any){
-  this.discountType=type;
-}
 getTotalDiscount(){
   const totalDiscountValue = parseFloat(this.totalDiscount) || 0;
   let subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);

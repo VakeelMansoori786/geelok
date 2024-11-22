@@ -41,12 +41,15 @@ GetCustomer(model:any) {
    GetUnit() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetUnit`)
    }
+   GetCurrency() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetCurrency`)
+   }
    GetPaymentTerm() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetPaymentTerm`)
    }
    
-   GetPaymentMethod() {
-    return this.httpClient.get(`${baseApiUrl}/api/global/GetPaymentMethod`)
+   GetPaymentType() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetPaymentType`)
    }
    
    
@@ -55,6 +58,9 @@ GetCustomer(model:any) {
    }
    GetCountry() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCountry`)
+   }
+   GetAccount() {
+    return this.httpClient.get(`${baseApiUrl}/api/global/GetAccount`)
    }
    
    GetAddress(model:any) {
