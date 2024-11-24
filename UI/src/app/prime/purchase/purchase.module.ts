@@ -31,6 +31,7 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { PayableComponent } from './payable/payable.component';
 import { PayableListComponent } from './payable-list/payable-list.component';
+
 @NgModule({
   declarations: [
     BillComponent,

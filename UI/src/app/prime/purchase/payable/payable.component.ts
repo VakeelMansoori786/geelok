@@ -195,29 +195,8 @@ Save(model: any) {
   }
 
 
-addRow() {
-  
-  const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
-  this.rows.push({ id: newId,account_id:0 ,description:'', tax_amt: '0' , tax: null , amount: '0' });
- if(this.selectedCustomer && this.selectedCustomer.tax_treatment_id){
-  this.rows[newId].tax=this.selectedCustomer.tax_treatment_id;//this.taxList.find(x=>x.tax_treatment_id==this.selectedCustomer.tax_treatment_id);
- }
-}
-
-removeRow(id: any,index:any) {
-  
-  this.rows = this.rows.filter(row => row.id !== id);
-  this.calculate(index);
-}
 
 
-onSelect(event: any, index: number) {
-
-this.calculate(index);
-if (!this.rows.length || this.rows[this.rows.length - 1].account_id) {
-this.addRow();
-}
-}
 SelectedCustomer(model:any){
   
   this.selectedCustomer=model;
@@ -227,61 +206,6 @@ SelectedCustomer(model:any){
     p_currency_id:this.currencyList.find(x=>x.currency_id==model.currency_id)
   })
 }
-calculate(index:any){
-  
-if(this.rows[index].tax!=null){
-const taxPercent =this.taxList.find(x=>x.tax_treatment_id==this.rows[index].tax).tax_percent 
- this.rows[index].tax_amt=(parseFloat(taxPercent)/100)*this.rows[index].amount;
-}
-    const subTotal = this.rows.reduce((sum, row) => sum + parseFloat(row.amount), 0);
-     const tax=this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal +tax;
 
-    this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
-    this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
-    this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
-}
-
-
-ChangeCurrency(event:any){
-  
-  let curr=this.mainForm.value.p_currency_id;
-  this.selectedCustomer.currency_name=curr.name;
-  this.selectedCustomer.currency_id=curr.currency_id;
-}
-
-getTotalDiscount(){
-  const totalDiscountValue = parseFloat(this.totalDiscount) || 0;
-  let subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);
-
-  if (subTotal > 0) {
-   
-    if (this.discountType === 'percentage') {
-      this.rows.forEach(row => {
-        const rowAmount =parseFloat(row.rate)*parseFloat(row.qty);
-        const rowDiscount = (rowAmount * totalDiscountValue) / 100; // Percentage discount
-        row.discount = rowDiscount.toFixed(2);
-      });
-    } else {
-      const discountRatio = totalDiscountValue / subTotal;
-    // Apply proportional discount to each row
-    this.rows.forEach(row => {
-      const rowAmount = parseFloat(row.rate)*parseFloat(row.qty);
-      const rowDiscount = rowAmount * discountRatio;
-      row.discount = rowDiscount.toFixed(2);
-    });
-  }
-    // Recalculate the totals
-    subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);
-    const discount = this.rows.reduce((sum, row) => sum + parseFloat(row.discount), 0);
-    const tax = this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal - discount + tax;
-  
-    this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
-    this.mainForm.controls.p_discount.setValue(discount.toFixed(2));
-    this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
-    this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
-  }
-}
 
 }
