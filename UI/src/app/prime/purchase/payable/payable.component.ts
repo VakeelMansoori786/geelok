@@ -31,7 +31,7 @@ rows:any[] = [];
 taxList: any;
 deliveryTypeList: any;
 paymentTypeList: any;
-currencyList: any;
+currencyName: any='';
 accountList:any={};
   constructor(
     private formBuilder:FormBuilder,
@@ -72,7 +72,7 @@ accountList:any={};
     this.apiService.GetPayable(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-     
+      this.currencyName=item.currencyName;
  
       this.mainForm.patchValue({
         p_purchase_payable_id: item.purchase_payable_id,
@@ -81,7 +81,7 @@ accountList:any={};
         p_payment_date:new Date(item.payment_date),
         p_cheque_date:new Date(item.cheque_date),
         p_other_ref_no:item.other_ref_no ,
-        p_currency_id:this.currencyList.find(x=>x.currency_id==item.currency_id) ,
+        p_currency_id:item.currency_id ,
          p_payment_type_id: item.payment_type_id,
         p_total_amount: item.total_amount
        });
@@ -112,12 +112,10 @@ loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
     paymentType: this.apiService.GetPaymentType(),
-    currencies: this.apiService.GetCurrency(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
-  }).subscribe(({ companies, customers,paymentType,currencies  }) => {
+  }).subscribe(({ companies, customers,paymentType  }) => {
     this.companyList = companies;
     this.customerList = customers;
-    this.currencyList = currencies;
     this.paymentTypeList =this.groupByType(paymentType);
     
 
@@ -199,12 +197,25 @@ Save(model: any) {
 
 SelectedCustomer(model:any){
   
-  this.selectedCustomer=model;
+ this.currencyName= model.currency_name;
+  let req={
+    p_customer_id:model.customer_id
 
-  this.mainForm.patchValue({
-    p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
-    p_currency_id:this.currencyList.find(x=>x.currency_id==model.currency_id)
-  })
+  }
+
+  this.apiService.GetCustomerPayable(req).subscribe((data:any) => {
+    debugger
+    this.selectedCustomer=data;
+if(data.length>0){
+    this.mainForm.patchValue({
+
+      p_currency_id:model.currency_id
+    })
+  }
+  });
+ 
+
+ 
 }
 
 

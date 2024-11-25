@@ -553,6 +553,23 @@ app.post('/api/purchase/GetPayable', authMiddleware, async function (req, res) {
   }
 });
 
+app.post('/api/purchase/GetCustomerPayable', authMiddleware, async function (req, res) {
+  let p_customer_id = req.body.p_customer_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_customerPayable(?)",
+      [p_customer_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+        
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
 
 //#endregion
 
