@@ -38,6 +38,8 @@
 						<th>Due Date</th>
 						<th>Currency</th>
 						<th>Amount</th>
+						<th>Paid Amount</th>
+						<th>Status</th>
 						<th>Action</th>
 					</tr>
 				</ng-template>
@@ -59,6 +61,8 @@
 							{{mainList.currency_name}}
 						</td>
 						<td>{{mainList.total}}</td>
+						<td>{{mainList.due_amount}}</td>
+						<td>{{mainList.status_name}}</td>
 						
 					<td>	
 						<div class="flex flex-wrap gap-2">

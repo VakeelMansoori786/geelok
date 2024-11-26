@@ -507,23 +507,23 @@ app.post('/api/purchase/SavePayable', authMiddleware, async function (req, res) 
   let p_currency_id = req.body.p_currency_id;
   let p_total_amount = req.body.p_total_amount;
   let p_create_by = req.user.user[0].user_id;
-  let p_payable_details = req.body.p_payable_details;
+  let p_purchase_payable_details = req.body.p_purchase_payable_details;
 
   try {
     await connection.query(
-      "CALL pr_save_payable(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_purchase_payable(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         p_purchase_payable_id,
         p_customer_id,
         p_branch_id,
+        p_currency_id,
+        p_payment_type_id,
         p_payment_date,
         p_cheque_date,
         p_other_ref_no,
-        p_payment_type_id,
-        p_currency_id,
         p_total_amount,
         p_create_by,
-        p_payable_details
+        p_purchase_payable_details
       ],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });

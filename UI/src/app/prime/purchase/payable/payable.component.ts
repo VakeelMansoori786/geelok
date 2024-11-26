@@ -5,7 +5,7 @@ import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { forkJoin } from 'rxjs';
-
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-payable',
   templateUrl: './payable.component.html',
@@ -41,7 +41,8 @@ otherDetail:any={
       private router: Router,
       private ls:LocalStoreService,
       private apiService:APIService,
-      private service: MessageService
+      private service: MessageService,
+      private cdr: ChangeDetectorRef
       ) { }
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
@@ -64,6 +65,9 @@ otherDetail:any={
     }
   this.loadDropdowns();
   }
+  ngAfterViewChecked() {
+    this.cdr.detectChanges();
+  }
   fetchData(id: string) {
     let req={
 
@@ -82,7 +86,7 @@ otherDetail:any={
         p_branch_id:item.branch_id ,
         p_payment_date:new Date(item.payment_date),
         p_cheque_date:new Date(item.cheque_date),
-        p_other_ref_no:item.other_ref_no ,
+        p_other_ref_no:item.other_ref_no==null?'':item.other_ref_no ,
         p_currency_id:item.currency_id ,
          p_payment_type_id: item.payment_type_id,
         p_total_amount: item.total_amount
@@ -91,13 +95,14 @@ otherDetail:any={
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
     id: index,
+    purchase_bill_id:item.purchase_bill_id,
     due_date: item.due_date,
     bill_no: item.bill_no ,
     po_no: item.po_no ,
     branch: item.company_name ,
-    bill_amount: item.bill_amount || '',
-    due_amount: item.due_amount || '',
-    paid_amount: item.paid_amount || ''
+    bill_amount: item.total,
+    due_amount: item.due_amount,
+    paid_amount:item.paid_amount
   }));
   
  
@@ -158,26 +163,28 @@ Save(model: any) {
 
   // Mark loading state
   this.loading = true;
-
+debugger
   // Prepare the request object
   const req = {
     p_purchase_payable_id: model.p_purchase_payable_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
     p_payment_date: model.p_payment_date,
+    p_cheque_date: model.p_cheque_date,
     p_payment_type_id: model.p_payment_type_id,
     p_currency_id: model.p_currency_id,
     p_other_ref_no: model.p_other_ref_no,
     p_total_amount: model.p_total_amount,
     p_purchase_payable_details: JSON.stringify(this.rows.map((item, index) => ({
       id: index,
+      purchase_bill_id:item.purchase_bill_id,
       due_date: item.due_date,
       bill_no: item.bill_no ,
       po_no: item.po_no ,
       branch: item.company_name ,
-      bill_amount: item.bill_amount || '',
-      due_amount: item.due_amount || '',
-      paid_amount: item.paid_amount || ''
+      bill_amount: item.total,
+      due_amount: item.due_amount,
+      paid_amount:item.paid_amount
     })))
   };
 
@@ -279,9 +286,7 @@ calculate(){
 }
 ClearPaidAmt(){
   this.mainForm.patchValue({
-
-    p_total_amount:'0'
- 
+    p_total_amount:0
   })
   this.rows.forEach((row) => {
     row.paid_amount =0;
