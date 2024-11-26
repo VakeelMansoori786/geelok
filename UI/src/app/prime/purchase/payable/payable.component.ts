@@ -48,10 +48,10 @@ otherDetail:any={
   
       p_purchase_payable_id:['0'],
       p_customer_id:['', Validators.required],
-      p_branch_id:['', Validators.required],
+      p_branch_id:[this.ls.getItem('user').company_id, Validators.required],
       p_payment_date:[''],
-      p_cheque_date:[''],
-      p_other_ref_no:['', Validators.required],
+      p_cheque_date:[new Date()],
+      p_other_ref_no:[''],
       p_payment_type_id:['', Validators.required],
       p_currency_id:['', Validators.required],
       p_total_amount:['']
@@ -144,7 +144,7 @@ groupByType(paymentMethods:any) {
 }
 
 Save(model: any) {
-  
+  debugger
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -154,7 +154,7 @@ Save(model: any) {
   }
 
   // Filter out rows with item_id '0'
-  this.rows = this.rows.filter(x => x.paid_amount != 0);
+  this.rows = this.rows.filter(x => x.paid_amount && Number(x.paid_amount) !== 0);
 
   // Mark loading state
   this.loading = true;
@@ -162,11 +162,11 @@ Save(model: any) {
   // Prepare the request object
   const req = {
     p_purchase_payable_id: model.p_purchase_payable_id,
-    p_customer_id: model.p_customer_id.p_customer_id,
+    p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
     p_payment_date: model.p_payment_date,
     p_payment_type_id: model.p_payment_type_id,
-    p_currency_id: model.p_currency_id.currency_id,
+    p_currency_id: model.p_currency_id,
     p_other_ref_no: model.p_other_ref_no,
     p_total_amount: model.p_total_amount,
     p_purchase_payable_details: JSON.stringify(this.rows.map((item, index) => ({
@@ -206,7 +206,7 @@ SelectedCustomer(model:any){
   }
 
   this.apiService.GetCustomerPayable(req).subscribe((data:any) => {
-    debugger
+    
     this.rows=data;
     this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.due_amount), 0);
 
@@ -214,6 +214,7 @@ SelectedCustomer(model:any){
     this.mainForm.patchValue({
 
       p_currency_id:model.currency_id
+   
     })
   }
   });
@@ -221,6 +222,99 @@ SelectedCustomer(model:any){
 
  
 }
+PayFull(event:any){
 
+  if(event.checked){
 
+   
+    this.mainForm.patchValue({
+
+      p_total_amount:this.otherDetail.full_amount
+   
+    })
+    this.rows.forEach((row) => {
+      const amountDue =parseFloat(row.total)  -parseFloat(row.due_amount);
+      row.paid_amount = (amountDue / this.otherDetail.full_amount) * this.otherDetail.full_amount;
+    });
+  }
+else{
+  this.rows.forEach((row) => {
+    row.paid_amount = 0;
+  });
+}
+ 
+}
+PayFullBill(i:any){
+  
+    this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].due_amount);
+
+    const totalAmt  = this.rows.reduce((sum, row) => {
+      const amount = row.paid_amount ?? 0; // Use 0 if row.paid_amount is null or undefined
+      return sum + (typeof amount === 'number' && !isNaN(amount) ? amount : 0);
+    }, 0);
+
+      
+    this.mainForm.patchValue({
+
+      p_total_amount:totalAmt
+   
+    })
+}
+
+calculate(){
+  
+    
+
+  const amt = this.rows.reduce((sum, row) => {
+    const amount = row.paid_amount ?? 0; // Use 0 if row.paid_amount is null or undefined
+    return sum + (typeof amount === 'number' && !isNaN(amount) ? amount : 0);
+  }, 0);
+
+      
+    this.mainForm.patchValue({
+
+      p_total_amount:amt
+   
+    })
+}
+ClearPaidAmt(){
+  this.mainForm.patchValue({
+
+    p_total_amount:'0'
+ 
+  })
+  this.rows.forEach((row) => {
+    row.paid_amount =0;
+  });
+}
+calculatePayment() {
+  debugger;
+  const totalPayment = parseFloat(this.mainForm.value.p_total_amount) || 0;
+
+  if (totalPayment <= 0) {
+    console.error("Total payment amount must be greater than zero.");
+    return;
+  }
+
+  // Calculate the total amount due for all rows
+  const totalAmountDue = this.rows.reduce((sum, row) => {
+    const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
+    return sum + (amountDue > 0 ? amountDue : 0); // Only sum positive amounts
+  }, 0);
+
+  if (totalAmountDue <= 0) {
+    console.error("No valid amount due to distribute.");
+    return;
+  }
+
+  // Calculate the ratio of amount due for each row and assign the paid amount
+  this.rows.forEach((row) => {
+    const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
+    if (amountDue > 0) {
+      row.paid_amount = (amountDue / totalAmountDue) * totalPayment;
+    } else {
+      row.paid_amount = 0; // Set to 0 if no valid amount due
+    }
+  });
+}
 }

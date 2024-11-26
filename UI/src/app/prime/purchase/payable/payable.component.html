@@ -91,12 +91,14 @@ filterBy="company_name"
 
         <p-inputNumber 
         inputId="integeronly"  formControlName="p_total_amount" 
+        (onBlur)="calculatePayment()"
         /><p-checkbox 
- 
+        (onChange)="PayFull($event)"
         [(ngModel)]="otherDetail.is_full_payement"  [ngModelOptions]="{standalone: true}"
             [binary]="true" 
             inputId="binary" 
             inputId="is_full_payement" 
+          
             />
             <label for="is_full_payement">Pay full amount ({{currencyName}} {{otherDetail.full_amount}}) </label>
         
@@ -113,6 +115,7 @@ filterBy="company_name"
         </div>
               <!-- table.component.html -->
               <div class="col-12"  *ngIf="mainForm.value.p_customer_id!=''">
+                <a href="javascript:void()" (click)="ClearPaidAmt()">Clear Applied Amount</a>
                 <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
@@ -137,20 +140,17 @@ filterBy="company_name"
                        <td style="width: 10%;">
                         <p-inputNumber 
                         inputId="integeronly" 
-                        [(ngModel)]="rows[i].amount"  [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"
                         placeholder="Enter amount"
-                        (onBlur)="calculate(i)"
+                        (onBlur)="calculate()"
                         />
+                        <a href="javascript:void()" (click)="PayFullBill(i)">Pay in Full</a>
                     </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><strong style="float: right;">Sub Total</strong></td>
-                        <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
                     </tr>
 
                       <tr>
                           <td colspan="6"><strong  style="float: right;">Total ({{currencyName}})</strong></td>
-                          <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
+                          <td colspan="2"> <strong>{{this.mainForm.value.p_total_amount}}  </strong></td>
                       </tr>
                       
                   </tbody>
