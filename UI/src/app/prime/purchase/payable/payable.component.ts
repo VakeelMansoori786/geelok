@@ -24,7 +24,6 @@ suggestions: any=[] ;
 files = [];
 Id:any='0'
 totalSize : number = 0;
-selectedCustomer:any= {};
 totalSizePercent : number = 0;
 totalDiscount:any;
 rows:any[] = []; 
@@ -33,6 +32,9 @@ deliveryTypeList: any;
 paymentTypeList: any;
 currencyName: any='';
 accountList:any={};
+otherDetail:any={
+  is_full_payement:false,full_amount:0
+};
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -205,8 +207,10 @@ SelectedCustomer(model:any){
 
   this.apiService.GetCustomerPayable(req).subscribe((data:any) => {
     debugger
-    this.selectedCustomer=data;
-if(data.length>0){
+    this.rows=data;
+    this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.due_amount), 0);
+
+    if(data.length>0){
     this.mainForm.patchValue({
 
       p_currency_id:model.currency_id

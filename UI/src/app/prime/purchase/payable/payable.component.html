@@ -56,9 +56,14 @@ filterBy="company_name"
 
 
 </div> 
-<div class="col-12 md:col-4 lg:col-4" *ngIf="mainForm.value.p_customer_id!=''">
-    <label htmlFor="state">Reference No.</label>
-        <input type="text" pInputText formControlName="p_ref_no" />
+<div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Payment Date<span style="color: red;">*</span></label>
+    <p-calendar formControlName="p_cheque_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_cheque_date.touched && mainForm.controls.p_cheque_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div>  
+<div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Cheque No</label>
+        <input type="text" pInputText formControlName="p_other_ref_no" />
 </div>  
 
 
@@ -82,12 +87,22 @@ filterBy="company_name"
 
 
 <div class="col-12 md:col-4 lg:col-4" *ngIf="mainForm.value.p_customer_id!=''">
-    <label htmlFor="state">Payment No.</label>
-        <input type="text" pInputText formControlName="p_ref_no" />
-</div> 
- 
+    <label htmlFor="state">Amount</label>
 
-   
+        <p-inputNumber 
+        inputId="integeronly"  formControlName="p_total_amount" 
+        /><p-checkbox 
+ 
+        [(ngModel)]="otherDetail.is_full_payement"  [ngModelOptions]="{standalone: true}"
+            [binary]="true" 
+            inputId="binary" 
+            inputId="is_full_payement" 
+            />
+            <label for="is_full_payement">Pay full amount ({{currencyName}} {{otherDetail.full_amount}}) </label>
+        
+           
+        
+</div> 
 
 
 
@@ -113,12 +128,12 @@ filterBy="company_name"
                   </thead>
                   <tbody>
                     <tr *ngFor="let row of rows; let i = index">
-                      <td> {{rows[i].due_date}}</td>
+                      <td> {{rows[i].due_date  | date:'dd/MM/yyyy' }}</td>
                       <td> {{rows[i].bill_no}}</td>
-                      <td> {{rows[i].po_no}}</td>
+                      <td> {{rows[i].order_no}}</td>
                       <td> {{rows[i].company_name}}</td>
-                      <td> {{rows[i].bill_amount}}</td>
-                      <td> {{rows[i].due_amount}}</td>
+                      <td> {{rows[i].total}}</td>
+                      <td> {{rows[i].total-rows[i].due_amount}}</td>
                        <td style="width: 10%;">
                         <p-inputNumber 
                         inputId="integeronly" 
@@ -129,12 +144,12 @@ filterBy="company_name"
                     </td>
                     </tr>
                     <tr>
-                        <td colspan="3"><strong style="float: right;">Sub Total</strong></td>
+                        <td colspan="6"><strong style="float: right;">Sub Total</strong></td>
                         <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
                     </tr>
 
                       <tr>
-                          <td colspan="3"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
+                          <td colspan="6"><strong  style="float: right;">Total ({{currencyName}})</strong></td>
                           <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
                       </tr>
                       
