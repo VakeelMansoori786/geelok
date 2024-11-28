@@ -18,6 +18,7 @@ import { AuthInterceptor } from './prime/shared/interceptor/auth.interceptor';
                   { path: 'user', loadChildren: () => import('./prime/user/user.module').then(m => m.UserModule) },
                   { path: 'items', loadChildren: () => import('./prime/items/item.module').then(m => m.ItemModule) },
                   { path: 'purchase', loadChildren: () => import('./prime/purchase/purchase.module').then(m => m.PurchaseModule) },
+                  { path: 'sale', loadChildren: () => import('./prime/sales/sale.module').then(m => m.SaleModule) },
                   { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
                   { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
                   { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },

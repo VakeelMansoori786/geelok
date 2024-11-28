@@ -1,0 +1,214 @@
+<p-toast key="tst"></p-toast>
+<div class="col-12"  [formGroup]="mainForm">
+    <div class="card">
+        <h5>Expenses</h5>
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12">
+        
+
+            <div class="col-12">
+                <div class="grid p-fluid">
+         
+<div class="col-12 md:col-6 lg:col-6">
+            
+    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
+      
+    <p-dropdown 
+    formControlName="p_branch_id" 
+    [options]="companyList"
+    optionLabel="company_name"
+    optionValue="company_id"
+    placeholder="Select a Branch" 
+    [filter]="true"
+filterBy="company_name" 
+[showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
+    >
+</p-dropdown>
+    
+
+
+</div> 
+<div class="col-12 md:col-6 lg:col-6">
+    <label htmlFor="state">Date<span style="color: red;">*</span></label>
+    <p-calendar formControlName="p_expense_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_expense_date.touched && mainForm.controls.p_expense_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div>  
+
+<div class="col-12 md:col-6 lg:col-6">
+                
+    <input hidden  formControlName="p_expense_id">
+<label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
+<div class="flex align-items-center">
+<p-dropdown 
+formControlName="p_customer_id" 
+[options]="customerList"
+optionLabel="customer_name"
+placeholder="Select a Customer"
+[filter]="true"
+filterBy="customer_name" 
+[showClear]="true"
+(onChange)="SelectedCustomer($event.value)"
+[ngStyle]="{ 'flex': '1' }"
+[ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_customer_id.touched && mainForm.controls.p_customer_id.invalid}"
+/>
+<!-- Currency Avatar -->
+<div *ngIf="selectedCustomer && selectedCustomer.currency_name" class="ml-2">
+<p-avatar 
+label="{{selectedCustomer.currency_name}}" 
+styleClass="mr-2" 
+size="large" 
+[style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" 
+></p-avatar>
+</div>
+</div>
+</div>  
+<div class="col-12 md:col-6 lg:col-6">
+
+    <label htmlFor="state">Paid Through<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    [options]="paymentTypeList" 
+    formControlName="p_payment_type_id" 
+    placeholder="Select" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_type_id.touched && mainForm.controls.p_payment_type_id.invalid}" 
+    [group]="true">
+    <ng-template let-group pTemplate="group">
+        <div class="flex align-items-center">
+            <span>{{ group.label }}</span>
+        </div>
+    </ng-template>
+</p-dropdown>
+</div>
+
+<div class="col-12 md:col-4 lg:col-4">
+
+    <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    formControlName="p_payment_term_id" 
+    [options]="paymentTermList"
+    optionLabel="name"
+    placeholder="Select a Payment Term"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_term_id.touched && mainForm.controls.p_payment_term_id.invalid}" 
+    />
+</div>
+<div class="col-12 md:col-4 lg:col-4">
+
+    <label htmlFor="state">Currency<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    formControlName="p_currency_id" 
+    [options]="currencyList"
+    optionLabel="name"
+    placeholder="Select"
+    (onChange)="ChangeCurrency($event)"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_currency_id.touched && mainForm.controls.p_currency_id.invalid}" 
+    />
+</div>
+<div class="col-12 md:col-4 lg:col-4">
+    <label htmlFor="state">Reference No.</label>
+        <input type="text" pInputText formControlName="p_ref_no" />
+</div> 
+<div class="col-12 md:col-4 lg:col-4">
+    <p-checkbox 
+    formControlName="p_is_billable" 
+        [binary]="true" 
+        inputId="binary" 
+        inputId="is_billable" 
+        />
+        <label for="is_billable">Billable</label>
+</div>          
+            
+
+   
+
+
+
+
+        </div>
+    </div>
+
+        </div>
+              <!-- table.component.html -->
+              <div class="col-12" >
+                <table *ngIf="rows.length>0">
+                  <thead>
+                    <tr>
+                      <th>Expense Account</th>
+                      <th>Notes</th>
+                      <th>Tax</th>
+                      <th>Amount</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of rows; let i = index">
+                      <td>
+                        <p-dropdown 
+                        [(ngModel)]="rows[i].account_id"  [ngModelOptions]="{standalone: true}"
+                        [options]="accountList"
+                        optionLabel="name"
+                        optionValue="account_id"
+                        [filter]="true"
+                         filterBy="name" 
+                         (onClick)="onSelect($event, i)"
+                        placeholder="Select" >
+                    </p-dropdown>
+               
+                      </td>
+                      <td style="width: 40%;"><textarea pInputTextarea rows="2"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}"></textarea></td>
+                          <td style="width: 10%;">
+                        <p-dropdown 
+                        [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
+                        [options]="taxList"
+                        optionLabel="name"
+                        optionValue="tax_treatment_id"
+                        (onClick)="calculate(i)"
+                        placeholder="Select a tax" >
+                    </p-dropdown>
+                          </td>
+                       <td style="width: 10%;">
+                        <p-inputNumber 
+                        inputId="integeronly" 
+                        [(ngModel)]="rows[i].amount"  [ngModelOptions]="{standalone: true}"
+                        placeholder="Enter amount"
+                        (onBlur)="calculate(i)"
+                        />
+                    </td>
+                      <td style="width: 5%;">
+                        <button class="icon-button action" (click)="removeRow(row.id,i)">
+                         X
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong style="float: right;">Sub Total</strong></td>
+                        <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3"><strong style="float: right;">VAT</strong></td>
+                        <td colspan="2"> <strong>{{this.mainForm.value.p_tax}} </strong></td>
+                    </tr>
+                      <tr>
+                          <td colspan="3"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
+                          <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
+                      </tr>
+                      
+                  </tbody>
+                </table>
+                <button (click)="addRow()">&#43; Add Row</button>
+           
+        
+        
+            
+        </div>
+        <div class="field col-12 md:col-3">
+            <div class="flex gap-2">
+                <button pButton pRipple type="button" label="Save" (click)="Save(mainForm.value)"></button>
+                <button pButton pRipple type="button" label="Clear"  (click)="Clear()"></button>
+            </div>
+        </div>
+    </div>
+</div>

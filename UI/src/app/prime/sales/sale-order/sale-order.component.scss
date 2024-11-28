@@ -1,0 +1,46 @@
+/* table.component.css */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  button {
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .add-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }
+  
+  .remove-button {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+  
+  .add-button:hover {
+    background-color: #45a049; /* Darker green */
+  }
+  
+  .remove-button:hover {
+    background-color: #e53935; /* Darker red */
+  }
+  
+  .icon-button:not(.btn,.btn-primary,.btn-secondary,.pagetips-icon) {
+    background: 0 0;
+    border: 1px solid red;
+    box-shadow: none;
+    color: red;
+    padding: 5px;
+    border-radius: 2.5em;
+}

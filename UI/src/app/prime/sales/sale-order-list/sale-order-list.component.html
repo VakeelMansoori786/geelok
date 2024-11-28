@@ -1,0 +1,91 @@
+<p-toast key="tst"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Purchase Order List</h5>
+			<div >
+				<p-button 
+					severity="success" 
+					label="New" 
+					icon="pi pi-plus" 
+					class="mr-2" 
+					(onClick)="Add()" 
+				 />
+			</div>
+				
+			<p-table #dt1 [value]="mainList"    dataKey="id"
+			[rows]="10"
+			[rowsPerPageOptions]="[10, 25, 50]"
+			[loading]="loading"
+			[paginator]="true" [globalFilterFields]="['company_name','customer_name','ref_no','currency_name','total','status_name']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				
+				<ng-template pTemplate="header">
+					<tr>
+						<th>	
+							Date</th>
+							<th>Branch</th>
+						<th>Vendor</th>
+						<th>PO</th>
+						<th>Currency</th>
+						<th>Amount</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-mainList>
+					<tr>
+						<td>
+							{{mainList.purchase_order_date | date: 'dd/MM/yyyy' }}
+						</td>
+						<td>
+                            {{mainList.company_name}}
+						</td>
+						<td>
+                            {{mainList.customer_name}}
+						</td>
+						<td>
+                            {{mainList.ref_no}}
+						</td>
+						<td>
+							{{mainList.currency_name}}
+						</td>
+						<td>{{mainList.total}}</td>
+						<td>
+							{{mainList.status_name}}
+						</td>
+						
+					<td>	
+						<div class="flex flex-wrap gap-2">
+						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.purchase_order_id)"></button>
+						<button pButton pRipple type="button" label="Convert to Bill" (click)="Covert(mainList.purchase_order_id)"></button>
+					</div>
+					</td>
+					
+						
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">No data found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Loading  data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+    </div>

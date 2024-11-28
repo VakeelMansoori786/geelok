@@ -1,0 +1,170 @@
+<p-toast key="tst"></p-toast>
+<div class="col-12"  [formGroup]="mainForm">
+    <div class="card">
+        <h5>Record Payment</h5>
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12">
+        
+
+            <div class="col-12">
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-12 lg:col-12">
+                
+                        <input hidden  formControlName="p_purchase_payable_id">
+                    <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
+                    <div class="flex align-items-center">
+                    <p-dropdown 
+                    formControlName="p_customer_id" 
+                    [options]="customerList"
+                    optionLabel="customer_name"
+                    placeholder="Select a Customer"
+                    [filter]="true"
+                    filterBy="customer_name" 
+                    [showClear]="true"
+                    (onChange)="SelectedCustomer($event.value)"
+                    [ngStyle]="{ 'flex': '1' }"
+                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_customer_id.touched && mainForm.controls.p_customer_id.invalid}"
+                    />
+                    <!-- Currency Avatar -->
+                    <div *ngIf="currencyName!=''" class="ml-2">
+                    <p-avatar 
+                    label="{{currencyName}}" 
+                    styleClass="mr-2" 
+                    size="large" 
+                    [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" 
+                    ></p-avatar>
+                    </div>
+                    </div>
+                    </div>        
+<div class="col-12 md:col-6 lg:col-6" *ngIf="mainForm.value.p_customer_id!=''">
+            
+    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
+      
+    <p-dropdown 
+    formControlName="p_branch_id" 
+    [options]="companyList"
+    optionLabel="company_name"
+    optionValue="company_id"
+    placeholder="Select a Branch" 
+    [filter]="true"
+filterBy="company_name" 
+[showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
+    >
+</p-dropdown>
+    
+
+
+</div> 
+<div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Payment Date<span style="color: red;">*</span></label>
+    <p-calendar formControlName="p_cheque_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_cheque_date.touched && mainForm.controls.p_cheque_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div>  
+<div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Cheque No</label>
+        <input type="text" pInputText formControlName="p_other_ref_no" />
+</div>  
+
+
+<div class="col-12 md:col-6 lg:col-6" *ngIf="mainForm.value.p_customer_id!=''">
+
+    <label htmlFor="state">Paid Through<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    [options]="paymentTypeList" 
+    formControlName="p_payment_type_id" 
+    placeholder="Select" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_type_id.touched && mainForm.controls.p_payment_type_id.invalid}" 
+    [group]="true">
+    <ng-template let-group pTemplate="group">
+        <div class="flex align-items-center">
+            <span>{{ group.label }}</span>
+        </div>
+    </ng-template>
+</p-dropdown>
+</div>
+
+
+<div class="col-12 md:col-4 lg:col-4" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Amount</label>
+
+        <p-inputNumber 
+        inputId="integeronly"  formControlName="p_total_amount" 
+        (onBlur)="calculatePayment()"
+        /><p-checkbox 
+        (onChange)="PayFull($event)"
+        [(ngModel)]="otherDetail.is_full_payement"  [ngModelOptions]="{standalone: true}"
+            [binary]="true" 
+            inputId="binary" 
+            inputId="is_full_payement" 
+          
+            />
+            <label for="is_full_payement">Pay full amount ({{currencyName}} {{otherDetail.full_amount}}) </label>
+        
+           
+        
+</div> 
+
+
+
+
+        </div>
+    </div>
+
+        </div>
+              <!-- table.component.html -->
+              <div class="col-12"  *ngIf="mainForm.value.p_customer_id!=''">
+                <a href="javascript:void()" (click)="ClearPaidAmt()">Clear Applied Amount</a>
+                <table *ngIf="rows.length>0">
+                  <thead>
+                    <tr>
+                      <th>
+                        Date</th>
+                      <th>Bill#</th>
+                      <th>PO#</th>
+                      <th>Branch</th>
+                      <th>Bill Amount</th>
+                      <th>Amount Due</th>
+                      <th>Payment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of rows; let i = index">
+                      <td> {{rows[i].due_date  | date:'dd/MM/yyyy' }}</td>
+                      <td> {{rows[i].bill_no}}</td>
+                      <td> {{rows[i].order_no}}</td>
+                      <td> {{rows[i].company_name}}</td>
+                      <td> {{rows[i].total}}</td>
+                      <td> {{rows[i].total-rows[i].due_amount}}</td>
+                       <td style="width: 10%;">
+                        <p-inputNumber 
+                        inputId="integeronly" 
+                        [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"
+                        placeholder="Enter amount"
+                        (onBlur)="calculate()"
+                        />
+                        <a href="javascript:void()" (click)="PayFullBill(i)">Pay in Full</a>
+                    </td>
+                    </tr>
+
+                      <tr>
+                          <td colspan="6"><strong  style="float: right;">Total ({{currencyName}})</strong></td>
+                          <td colspan="2"> <strong>{{this.mainForm.value.p_total_amount}}  </strong></td>
+                      </tr>
+                      
+                  </tbody>
+                </table>
+              
+        
+        
+            
+        </div>
+        <div class="field col-12 md:col-3"  *ngIf="mainForm.value.p_customer_id!=''">
+            <div class="flex gap-2">
+                <button pButton pRipple type="button" label="Save" (click)="Save(mainForm.value)"></button>
+                <button pButton pRipple type="button" label="Clear"  (click)="Clear()"></button>
+            </div>
+        </div>
+    </div>
+</div>
