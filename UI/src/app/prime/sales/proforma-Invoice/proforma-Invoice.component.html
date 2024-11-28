@@ -1,7 +1,7 @@
 <p-toast key="tst"></p-toast>
 <div class="col-12"  [formGroup]="mainForm">
     <div class="card">
-        <h5>sale Order</h5>
+        <h5>Proforma Invoice</h5>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12">
         
@@ -10,7 +10,7 @@
                 <div class="grid p-fluid">
                     <div class="col-12 md:col-12 lg:col-12">
                 
-                        <input hidden  formControlName="p_sale_order_id">
+                        <input hidden  formControlName="p_purchase_order_id">
                 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
                 <div class="flex align-items-center">
                 <p-dropdown 
@@ -60,8 +60,8 @@ filterBy="company_name"
             
 <div class="col-12 md:col-6 lg:col-3">
     <label htmlFor="state">Date<span style="color: red;">*</span></label>
-    <p-calendar formControlName="p_sale_order_date" 
-    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_sale_order_date.touched && mainForm.controls.p_sale_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    <p-calendar formControlName="p_purchase_order_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
 </div> 
    
     <div class="col-12 md:col-6 lg:col-3">

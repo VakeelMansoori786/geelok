@@ -28,16 +28,16 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { PayableComponent } from './payable/payable.component';
 import { PayableListComponent } from './payable-list/payable-list.component';
-import { SaleOrderListComponent } from './sale-order-list/sale-order-list.component';
-import { SaleOrderComponent } from './sale-order/sale-order.component';
 import { SaleRoutingModule } from './sale-routing.module';
+import { PerformaInvoiceListComponent } from './performa-invoice-list/performa-invoice-list.component';
+import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.component';
 
 @NgModule({
   declarations: [
     BillComponent,
     BillListComponent,
-    SaleOrderComponent,
-    SaleOrderListComponent,
+    ProformaInvoiceComponent,
+    PerformaInvoiceListComponent,
     ExpenseComponent,
     ExpenseListComponent,
     PayableComponent,

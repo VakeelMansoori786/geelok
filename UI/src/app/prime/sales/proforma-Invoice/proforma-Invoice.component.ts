@@ -8,13 +8,13 @@ import { forkJoin } from 'rxjs';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
-  selector: 'app-sale-order',
-  templateUrl: './sale-order.component.html',
-  styleUrls: ['./sale-order.component.scss'],
+  selector: 'app-proforma-Invoice',
+  templateUrl: './proforma-Invoice.component.html',
+  styleUrls: ['./proforma-Invoice.component.scss'],
   providers: [MessageService,ConfirmationService]
   
 })
-export class SaleOrderComponent  implements OnInit {
+export class ProformaInvoiceComponent  implements OnInit {
   loading = false;
   mainForm :any;
 companyList: any;
@@ -51,21 +51,20 @@ deliveryType: any[] = [
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_sale_order_id:['0'],
-      p_customer_id:['', Validators.required],
-      p_branch_id:['', Validators.required],
-      p_delivery_type:[''],
-      p_delivery_type_id:['0'],
-      p_delivery_address_id:['0'],
-      p_currency_id:[''],
-      p_delivery_date:['', Validators.required],
-      p_sale_order_date:['', Validators.required],
-      p_payment_term_id:['', Validators.required],
-      p_notes:[''],
-      p_sub_total:[''],
-      p_tax:[''],
-      p_discount:[''],
-      p_total:['']
+      p_performa_invoice_id: ['0'],
+      p_customer_id: ['', Validators.required],
+      p_branch_id: ['', Validators.required],
+      p_billing_address_id: ['', Validators.required],
+      p_shipping_address_id: ['', Validators.required],
+      p_payment_term_id: ['', Validators.required],
+      p_currency_id: ['', Validators.required],
+      p_performa_invoice_date: ['', Validators.required],
+      p_purchase_order_date: ['', Validators.required],
+      p_notes: [''],
+      p_sub_total: [''],
+      p_tax: [''],
+      p_discount: [''],
+      p_total: ['']
     
     });
   
@@ -78,11 +77,11 @@ deliveryType: any[] = [
   fetchData(id: string) {
     let req={
 
-      p_sale_order_id:id
+      p_performa_invoice_id:id
     }
     this.loading=true;
 
-    this.apiService.GetOrder(req).subscribe((data:any) => {
+    this.apiService.GetProformaInvoice(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
       if(item.delivery_type=='company'){
@@ -93,16 +92,15 @@ deliveryType: any[] = [
       }
  
       this.mainForm.patchValue({
-        p_sale_order_id: item.sale_order_id,
+        p_performa_invoice_id: item.p_performa_invoice_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
-        p_delivery_type:this.deliveryType.find(x=>x.key==item.delivery_type) ,
-        p_delivery_type_id:item.delivery_type_id ,
-        p_delivery_address_id: item.delivery_address_id,
+        p_billing_address_id: item.billing_address_id,
+        p_shipping_address_id: item.shipping_address_id,
+        p_payment_term_id: item.payment_term_id,
         p_currency_id: item.currency_id,
-        p_delivery_date:new Date(item.delivery_date),
-        p_sale_order_date: new Date(item.sale_order_date),
-        p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
+        p_performa_invoice_date: new Date(item.performa_invoice_date),
+        p_purchase_order_date: new Date(item.purchase_order_date),
         p_notes: item.notes,
         p_sub_total: item.sub_total,
         p_tax: item.tax,
@@ -151,19 +149,6 @@ loadDropdowns() {
   });
 }
 
-GetCustomerAddress(customer_id:any){
-  let model={customer_id:customer_id};
-  this.apiService.GetCustomerAddress(model).subscribe((data:any) => {
-   this.customerAddressList=data;
-  });
-}
-
-GetCompanyAddress(company_id:any){
-  let model={company_id:company_id};
-  this.apiService.GetCompanyAddress(model).subscribe((data:any) => {
-   this.companyAddressList=data;
-  });
-}
 
 
 Save(model: any) {
@@ -184,7 +169,7 @@ Save(model: any) {
 
   // Prepare the request object
   const req = {
-    p_sale_order_id: model.p_sale_order_id,
+    p_purchase_order_id: model.p_purchase_order_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
     p_delivery_type: model.p_delivery_type.key,
@@ -192,7 +177,7 @@ Save(model: any) {
     p_delivery_address_id: (model.p_delivery_address_id==null || model.p_delivery_address_id=="") ?0:model.p_delivery_address_id,
     p_currency_id: model.p_currency_id,
     p_delivery_date: model.p_delivery_date,
-    p_sale_order_date: model.p_sale_order_date,
+    p_purchase_order_date: model.p_purchase_order_date,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
@@ -217,7 +202,7 @@ Save(model: any) {
   this.apiService.SaveOrder(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/sale/order-list']);
+        this.router.navigate(['/purchase/order-list']);
       });
             }
   

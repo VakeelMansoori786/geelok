@@ -8,12 +8,12 @@ import { APIService } from '../../services/api.service';
 import { Table } from 'primeng/table';
 
 @Component({
-  selector: 'app-sale-order-list',
-  templateUrl: './sale-order-list.component.html',
-  styleUrls: ['./sale-order-list.component.scss'],
+  selector: 'app-performa-invoice-list',
+  templateUrl: './performa-invoice-list.component.html',
+  styleUrls: ['./performa-invoice-list.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class SaleOrderListComponent   implements OnInit {
+export class PerformaInvoiceListComponent   implements OnInit {
   
 
   @ViewChild('filter') filter!: ElementRef;
@@ -39,11 +39,11 @@ export class SaleOrderListComponent   implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_sale_order_id:id
+      p_proforma_invoice_id:id
     }
     this.loading=true;
 
-    this.apiService.GetOrder(req).subscribe((data:any) => {
+    this.apiService.GetProformaInvoice(req).subscribe((data:any) => {
         this.mainList=data;
     this.loading=false;
 

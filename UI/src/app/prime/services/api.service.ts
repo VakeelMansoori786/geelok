@@ -139,4 +139,20 @@ SaveBill(model:any) {
 
 //#endregion
 
+
+//#region Sales
+
+//#region Performa Invoice
+
+//#region Purchase Order
+SaveProformaInvoice(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/SaveProformaInvoice`,model)
+ }
+ GetProformaInvoice(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetProformaInvoice`,model)
+ }
+
+   //#endregion
+//#region 
+//#endregion
 }
