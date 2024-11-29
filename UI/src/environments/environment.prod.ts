@@ -2,6 +2,6 @@ export const environment = {
   production: true
 };
 
-export const baseApiUrlLocal="https://mobileapp.primehealth.ae:8041";
-export const baseApiUrl="https://mobileapp.primehealth.ae:8041";
-export const baseApiUrlImage="https://mobileapp.primehealth.ae:8041";
+export const baseApiUrlLocal="https://geelok-backend.vercel.app";
+export const baseApiUrl="https://geelok-backend.vercel.app";
+export const baseApiUrlImage="https://geelok-backend.vercel.app";
