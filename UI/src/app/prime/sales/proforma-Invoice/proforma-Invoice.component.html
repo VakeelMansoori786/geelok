@@ -10,7 +10,7 @@
                 <div class="grid p-fluid">
                     <div class="col-12 md:col-12 lg:col-12">
                 
-                        <input hidden  formControlName="p_purchase_order_id">
+                        <input hidden  formControlName="p_performa_invoice_id">
                 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
                 <div class="flex align-items-center">
                 <p-dropdown 
@@ -37,6 +37,36 @@
     </div>
 </div>  
 <div class="col-12 md:col-6 lg:col-6">
+        <label htmlFor="state">Billing Address</label>
+        <p-dropdown 
+            formControlName="p_billing_address_id" 
+            [options]="addressList"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select" 
+            [filter]="true"
+            filterBy="addressList" 
+            [showClear]="true">
+        </p-dropdown>
+    
+
+</div>
+<div class="col-12 md:col-6 lg:col-6">
+        <label htmlFor="state">Shipping Address</label>
+        <p-dropdown 
+            formControlName="p_shipping_address_id" 
+            [options]="addressList"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select" 
+            [filter]="true"
+            filterBy="addressList" 
+            [showClear]="true">
+        </p-dropdown>
+    
+
+</div>
+<div class="col-12 md:col-6 lg:col-6">
             
     <label htmlFor="state">Branch<span style="color: red;">*</span></label>
       
@@ -57,75 +87,18 @@ filterBy="company_name"
 
 </div>  
 
-            
-<div class="col-12 md:col-6 lg:col-3">
-    <label htmlFor="state">Date<span style="color: red;">*</span></label>
-    <p-calendar formControlName="p_purchase_order_date" 
-    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-</div> 
    
     <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Delivery Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_delivery_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_date.touched && mainForm.controls.p_delivery_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+        <label htmlFor="state">Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_performa_invoice_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_performa_invoice_date.touched && mainForm.controls.p_performa_invoice_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div>
-<div class="col-12">
-    
-    <div class="flex align-items-center gap-3">
-        
-    <label >Delivery Address<span style="color: red;">*</span></label>
-        <!-- Radio Buttons -->
-        <div class="field-checkbox flex align-items-center" *ngFor="let item of deliveryType">
-        
-            <p-radioButton 
-                [inputId]="item.key" 
-                [value]="item"
-                formControlName="p_delivery_type"
-                (onClick)="SetDeliveryType($event.value)">
-            </p-radioButton>
-            <label [for]="item.key" class="ml-2">
-                {{ item.name }}
-            </label>
-        </div>
-
-        <!-- Dropdown 1 -->
-        <div *ngIf="this.mainForm.value.p_delivery_type != ''" style="width: 30%;">
-            <label htmlFor="state">{{this.mainForm.value.p_delivery_type.name }}</label>
-            <p-dropdown 
-                formControlName="p_delivery_type_id" 
-                [options]="deliveryTypeList"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="Select" 
-                (onChange)="GetAddress($event.value)"
-                [filter]="true"
-                filterBy="company_name" 
-                [showClear]="true">
-            </p-dropdown>
-        </div>
-
-        <!-- Dropdown 2 -->
-        <div *ngIf="this.mainForm.value.delivery_type_id != ''"  style="width: 50%;">
-            <label htmlFor="state">Shipping Address</label>
-            <p-dropdown 
-                formControlName="p_delivery_address_id" 
-                [options]="addressList"
-                optionLabel="name"
-                optionValue="code"
-                placeholder="Select" 
-                [filter]="true"
-                filterBy="company_name" 
-                [showClear]="true"
-                >
-            </p-dropdown>
-        </div>
-    </div>
-</div>
-
-
-
-
             
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">PO Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_purchase_order_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    </div> 
 
             <div class="col-12 md:col-6 lg:col-3">
             

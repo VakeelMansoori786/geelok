@@ -169,16 +169,16 @@ Save(model: any) {
 
   // Prepare the request object
   const req = {
-    p_purchase_order_id: model.p_purchase_order_id,
+    p_performa_invoice_id: model.p_performa_invoice_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_delivery_type: model.p_delivery_type.key,
-    p_delivery_type_id: (model.p_delivery_type_id==null || model.p_delivery_type_id=="") ?0:model.p_delivery_type_id,
-    p_delivery_address_id: (model.p_delivery_address_id==null || model.p_delivery_address_id=="") ?0:model.p_delivery_address_id,
+    p_billing_address_id: model.billing_address_id,
+    p_shipping_address_id: model.shipping_address_id,
+    p_payment_term_id: model.payment_term_id,
     p_currency_id: model.p_currency_id,
     p_delivery_date: model.p_delivery_date,
-    p_purchase_order_date: model.p_purchase_order_date,
-    p_payment_term_id: model.p_payment_term_id.payment_term_id,
+    p_performa_invoice_date: new Date(model.performa_invoice_date),
+    p_purchase_order_date: new Date(model.purchase_order_date),
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
     p_tax: model.p_tax,
@@ -199,7 +199,7 @@ Save(model: any) {
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveOrder(req).subscribe((data:any) => {
+  this.apiService.SaveProformaInvoice(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
         this.router.navigate(['/purchase/order-list']);
@@ -210,19 +210,11 @@ Save(model: any) {
     this.mainForm.reset();
 
   }
-  SetDeliveryType(model:any){
-if(model.key=='company'){
-  this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
-}
-else{
-  this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
-}
-  }
-
+  
   GetAddress(model:any){
     debugger
   let req={
-    p_address_type:this.mainForm.value.p_delivery_type.key,
+    p_address_type:'customer',
     p_id:this.mainForm.value.delivery_type_id
   }
     this.apiService.GetAddress(req).subscribe((data:any) => {
@@ -274,7 +266,6 @@ SelectedCustomer(model:any){
 
   this.mainForm.patchValue({
     p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
-    p_due_date:new Date(),
     p_currency_id:model.currency_id
   })
 }
@@ -311,12 +302,7 @@ updateDueDate() {
   const billDate = this.mainForm.value.p_bill_date;
   const paymentTerm = this.mainForm.value.p_payment_term_id;
 
-  // Check if both bill date and payment term are available
-  if (billDate && paymentTerm && paymentTerm.days != null) {
-    const modifiedDate = new Date(billDate);
-    modifiedDate.setDate(modifiedDate.getDate() + paymentTerm.days);
-    this.mainForm.controls.p_due_date.setValue(modifiedDate);
-  }
+
 }
 
 
