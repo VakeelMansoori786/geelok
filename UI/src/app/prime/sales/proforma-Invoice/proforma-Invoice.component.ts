@@ -20,8 +20,6 @@ export class ProformaInvoiceComponent  implements OnInit {
 companyList: any;
 discountType='percentage'
 customerList: any;
-customerAddressList: any;
-companyAddressList: any;
 paymentTermList: any;
 selectedItem: any={};
 suggestions: any=[] ;
@@ -58,8 +56,8 @@ deliveryType: any[] = [
       p_shipping_address_id: ['', Validators.required],
       p_payment_term_id: ['', Validators.required],
       p_currency_id: ['', Validators.required],
-      p_performa_invoice_date: ['', Validators.required],
-      p_purchase_order_date: ['', Validators.required],
+      p_performa_invoice_date: [new Date(), Validators.required],
+      p_purchase_order_date: [new Date(), Validators.required],
       p_notes: [''],
       p_sub_total: [''],
       p_tax: [''],
@@ -122,7 +120,7 @@ if(data.length>2){
     tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
 }));
   
- debugger
+ 
   this.rows = mappedData // Assuming p_item_stock is an array of rows
 }
     }
@@ -152,7 +150,7 @@ loadDropdowns() {
 
 
 Save(model: any) {
-  debugger
+  
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -211,17 +209,7 @@ Save(model: any) {
 
   }
   
-  GetAddress(model:any){
-    debugger
-  let req={
-    p_address_type:'customer',
-    p_id:this.mainForm.value.delivery_type_id
-  }
-    this.apiService.GetAddress(req).subscribe((data:any) => {
-      
-      this.addressList=data;
-    })
-  }
+ 
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
@@ -261,7 +249,9 @@ this.addRow();
 }
 }
 SelectedCustomer(model:any){
-  debugger
+  
+ 
+  this.GetAddress(model.customer_id);
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({
@@ -269,8 +259,17 @@ SelectedCustomer(model:any){
     p_currency_id:model.currency_id
   })
 }
+
+GetAddress(customer_id:any){
+  let req={p_address_type:'customer',p_id:customer_id};
+  
+  this.apiService.GetAddress(req).subscribe((data:any) => {
+    
+   this.addressList=data.map(x=>({ code:x.customer_address_id,name:x.address_1+' '+x.address_2+' '+x.city+' '+x.country_state_name+' '+x.country_name   }));
+  });
+}
 calculate(index:any){
-  debugger
+  
 const amt =parseFloat(this.rows[index].rate)*parseFloat(this.rows[index].qty);
 
 const taxPercent =this.taxList.find(x=>x.tax_treatment_id==this.rows[index].tax).tax_percent 
