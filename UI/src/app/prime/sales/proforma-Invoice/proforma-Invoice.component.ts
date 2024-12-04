@@ -56,8 +56,9 @@ deliveryType: any[] = [
       p_shipping_address_id: ['', Validators.required],
       p_payment_term_id: ['', Validators.required],
       p_currency_id: ['', Validators.required],
-      p_performa_invoice_date: [new Date(), Validators.required],
-      p_purchase_order_date: [new Date(), Validators.required],
+      p_other_ref_no: [''],
+      p_performa_invoice_date: [new Date()],
+      p_purchase_order_date: [new Date()],
       p_notes: [''],
       p_sub_total: [''],
       p_tax: [''],
@@ -80,14 +81,10 @@ deliveryType: any[] = [
     this.loading=true;
 
     this.apiService.GetProformaInvoice(req).subscribe((data:any) => {
+      debugger
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      if(item.delivery_type=='company'){
-        this.deliveryTypeList=this.companyList.map(x=>({code:x.company_id,name:x.company_name}))
-      }
-      else{
-        this.deliveryTypeList=this.customerList.map(x=>({code:x.customer_id,name:x.customer_name}))
-      }
+  
  
       this.mainForm.patchValue({
         p_performa_invoice_id: item.p_performa_invoice_id,
@@ -97,6 +94,7 @@ deliveryType: any[] = [
         p_shipping_address_id: item.shipping_address_id,
         p_payment_term_id: item.payment_term_id,
         p_currency_id: item.currency_id,
+        p_other_ref_no: item.other_ref_no,
         p_performa_invoice_date: new Date(item.performa_invoice_date),
         p_purchase_order_date: new Date(item.purchase_order_date),
         p_notes: item.notes,
@@ -160,8 +158,7 @@ Save(model: any) {
   }
 
   // Filter out rows with item_id '0'
-  this.rows = this.rows.filter(x => x.item_id !== '0');
-
+  this.rows = this.rows.filter(x => x.item_id && x.item_id !== '0');
   // Mark loading state
   this.loading = true;
 
@@ -170,19 +167,19 @@ Save(model: any) {
     p_performa_invoice_id: model.p_performa_invoice_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_billing_address_id: model.billing_address_id,
-    p_shipping_address_id: model.shipping_address_id,
-    p_payment_term_id: model.payment_term_id,
+    p_billing_address_id: model.p_billing_address_id,
+    p_shipping_address_id: model.p_shipping_address_id,
+    p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_currency_id: model.p_currency_id,
-    p_delivery_date: model.p_delivery_date,
-    p_performa_invoice_date: new Date(model.performa_invoice_date),
-    p_purchase_order_date: new Date(model.purchase_order_date),
+    p_other_ref_no: model.p_other_ref_no,
+    p_performa_invoice_date: model.p_performa_invoice_date,
+    p_purchase_order_date:model.p_purchase_order_date,
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
     p_tax: model.p_tax,
     p_discount: model.p_discount,
     p_total: model.p_total,
-    p_order_details: JSON.stringify(this.rows.map((item, index) => ({
+    p_invoice_details: JSON.stringify(this.rows.map((item, index) => ({
       id: index,
       item_id: item.item_id || null,
       item_name: item.item_name || null,
@@ -200,7 +197,7 @@ Save(model: any) {
   this.apiService.SaveProformaInvoice(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/order-list']);
+        this.router.navigate(['/sales/performa-invoice-list']);
       });
             }
   
@@ -268,23 +265,39 @@ GetAddress(customer_id:any){
    this.addressList=data.map(x=>({ code:x.customer_address_id,name:x.address_1+' '+x.address_2+' '+x.city+' '+x.country_state_name+' '+x.country_name   }));
   });
 }
-calculate(index:any){
-  
-const amt =parseFloat(this.rows[index].rate)*parseFloat(this.rows[index].qty);
+calculate(index: any) {
+  // Safely parse rate and quantity, defaulting to 0 if invalid
+  const rate = parseFloat(this.rows[index].rate) || 0;
+  const qty = parseFloat(this.rows[index].qty) || 0;
 
-const taxPercent =this.taxList.find(x=>x.tax_treatment_id==this.rows[index].tax).tax_percent 
- this.rows[index].amt=amt-parseFloat(this.rows[index].discount);
- this.rows[index].tax_amt=(parseFloat(taxPercent)/100)*this.rows[index].amt;
-    const subTotal = this.rows.reduce((sum, row) => sum + parseFloat(row.amt), 0);
-    const discount=this.rows.reduce((sum, row) => sum + parseFloat(row.discount), 0);
-    const tax=this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal - discount+tax;
+  // Calculate base amount
+  const amt = rate * qty;
 
-    this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
-    this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
-    this.mainForm.controls.p_discount.setValue(discount.toFixed(2));
-    this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
+  // Ensure discount is properly initialized
+  const discount = parseFloat(this.rows[index].discount) || 0;
+  this.rows[index].discount = discount;
+
+  // Find tax percent and handle potential null/undefined values
+  const taxEntry = this.taxList.find(x => x.tax_treatment_id === this.rows[index].tax);
+  const taxPercent = taxEntry?.tax_percent || 0;
+
+  // Calculate amount and tax
+  this.rows[index].amt = amt - discount;
+  this.rows[index].tax_amt = (taxPercent / 100) * this.rows[index].amt;
+
+  // Calculate subtotals, discounts, taxes, and total amount
+  const subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.amt) || 0), 0);
+  const totalDiscount = this.rows.reduce((sum, row) => sum + (parseFloat(row.discount) || 0), 0);
+  const totalTax = this.rows.reduce((sum, row) => sum + (parseFloat(row.tax_amt) || 0), 0);
+  const totalAmount = subTotal + totalTax - totalDiscount;
+
+  // Update form controls
+  this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
+  this.mainForm.controls.p_tax.setValue(totalTax.toFixed(2));
+  this.mainForm.controls.p_discount.setValue(totalDiscount.toFixed(2));
+  this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
 }
+
 onBillDate(event: any) {
   this.updateDueDate();
 }

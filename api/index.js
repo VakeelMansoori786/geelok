@@ -739,7 +739,7 @@ app.post('/api/sales/SaveProformaInvoice', authMiddleware, async function (req, 
   let p_shipping_address_id = req.body.p_shipping_address_id;
   let p_payment_term_id = req.body.p_payment_term_id;
   let p_currency_id = req.body.p_currency_id;
-
+  let p_other_ref_no = req.body.p_other_ref_no;
   let p_performa_invoice_date = req.body.p_performa_invoice_date;
   let p_purchase_order_date = req.body.p_purchase_order_date;
   let p_notes = req.body.p_notes;
@@ -762,6 +762,7 @@ app.post('/api/sales/SaveProformaInvoice', authMiddleware, async function (req, 
         p_shipping_address_id,
         p_payment_term_id,
         p_currency_id,
+        p_other_ref_no,
         p_performa_invoice_date,
         p_purchase_order_date,
         p_notes,

@@ -3,7 +3,7 @@
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-			<h5>Purchase Order List</h5>
+			<h5>Proforma Invoice List</h5>
 			<div >
 				<p-button 
 					severity="success" 
@@ -34,8 +34,9 @@
 						<th>	
 							Date</th>
 							<th>Branch</th>
-						<th>Vendor</th>
-						<th>PO</th>
+						<th>Customer</th>
+						<th>Sales Order#</th>
+						<th>Reference#</th>
 						<th>Currency</th>
 						<th>Amount</th>
 						<th>Status</th>
@@ -57,6 +58,9 @@
                             {{mainList.ref_no}}
 						</td>
 						<td>
+                            {{mainList.other_ref_no}}
+						</td>
+						<td>
 							{{mainList.currency_name}}
 						</td>
 						<td>{{mainList.total}}</td>
@@ -66,9 +70,8 @@
 						
 					<td>	
 						<div class="flex flex-wrap gap-2">
-						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.purchase_order_id)"></button>
-						<button pButton pRipple type="button" label="Convert to Bill" (click)="Covert(mainList.purchase_order_id)"></button>
-					</div>
+						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.performa_invoice_id)"></button>
+						</div>
 					</td>
 					
 						

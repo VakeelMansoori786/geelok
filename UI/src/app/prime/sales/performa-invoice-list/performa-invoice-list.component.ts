@@ -39,7 +39,7 @@ export class PerformaInvoiceListComponent   implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_proforma_invoice_id:id
+      p_performa_invoice_id:id
     }
     this.loading=true;
 
@@ -61,16 +61,13 @@ clear(table: Table) {
     this.filter.nativeElement.value = '';
 }
 GetDetail(id:any){
-  this.router.navigate(['/sale/order',{ id: btoa(id) },]);
+  this.router.navigate(['/sales/performa-invoice',{ id: btoa(id) },]);
 
 }
 
 Add(){
-  this.router.navigate(['/sale/order']);
+  this.router.navigate(['/sales/performa-invoice']);
 }
-Covert(id:any){
-  this.router.navigate(['/sale/bill',{ po: btoa(id) },]);
 
-}
 }
 

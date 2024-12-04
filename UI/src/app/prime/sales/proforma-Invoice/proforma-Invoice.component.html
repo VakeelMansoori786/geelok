@@ -37,7 +37,7 @@
     </div>
 </div>  
 <div class="col-12 md:col-6 lg:col-6">
-        <label htmlFor="state">Billing Address</label>
+        <label htmlFor="state">Billing Address<span style="color: red;">*</span></label>
         <p-dropdown 
             formControlName="p_billing_address_id" 
             [options]="addressList"
@@ -46,13 +46,14 @@
             placeholder="Select" 
             [filter]="true"
             filterBy="addressList" 
+            [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_billing_address_id.touched && mainForm.controls.p_billing_address_id.invalid}"
             [showClear]="true">
         </p-dropdown>
     
 
 </div>
 <div class="col-12 md:col-6 lg:col-6">
-        <label htmlFor="state">Shipping Address</label>
+        <label htmlFor="state">Shipping Address<span style="color: red;">*</span></label>
         <p-dropdown 
             formControlName="p_shipping_address_id" 
             [options]="addressList"
@@ -60,7 +61,8 @@
             optionValue="code"
             placeholder="Select" 
             [filter]="true"
-            filterBy="addressList" 
+            filterBy="addressList"  
+            [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_shipping_address_id.touched && mainForm.controls.p_shipping_address_id.invalid}"
             [showClear]="true">
         </p-dropdown>
     
@@ -99,7 +101,10 @@ filterBy="company_name"
         <p-calendar formControlName="p_purchase_order_date" 
         [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div> 
-
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">Reference#</label>
+            <input type="text" pInputText formControlName="p_other_ref_no" />
+    </div> 
             <div class="col-12 md:col-6 lg:col-3">
             
                 <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
@@ -122,7 +127,7 @@ filterBy="company_name"
 
         </div>
               <!-- table.component.html -->
-              <div class="col-12" *ngIf="selectedCustomer && selectedCustomer.currency_name">
+              <div class="col-12">
                 <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
@@ -155,9 +160,12 @@ filterBy="company_name"
                     </textarea>
                 </div> 
                       </td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  (blur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].discount"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <p-dropdown 
                         [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
