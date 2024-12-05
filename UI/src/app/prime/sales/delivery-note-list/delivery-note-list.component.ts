@@ -10,12 +10,12 @@ import { APIService } from '../../services/api.service';
 import { Table } from 'primeng/table';
 
 @Component({
-  selector: 'app-bill-list',
-  templateUrl: './bill-list.component.html',
-  styleUrls: ['./bill-list.component.scss'],
+  selector: 'app-delivery-note-list',
+  templateUrl: './delivery-note-list.component.html',
+  styleUrls: ['./delivery-note-list.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class BillListComponent  implements OnInit {
+export class DeliveryNoteListComponent  implements OnInit {
   
 
   @ViewChild('filter') filter!: ElementRef;

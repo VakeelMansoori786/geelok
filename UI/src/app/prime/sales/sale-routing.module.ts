@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BillComponent } from './bill/bill.component';
-import { BillListComponent } from './bill-list/bill-list.component';
+import { DeliveryNoteComponent } from './delivery-note/delivery-note.component';
+import { DeliveryNoteListComponent } from './delivery-note-list/delivery-note-list.component';
 import { PerformaInvoiceListComponent } from './performa-invoice-list/performa-invoice-list.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
@@ -11,8 +11,8 @@ import {  ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.c
 
 @NgModule({
 	imports: [RouterModule.forChild([
-		{ path: 'bill', component: BillComponent },
-		{ path: 'bill-list', component: BillListComponent },
+		{ path: 'delivery-note', component: DeliveryNoteComponent },
+		{ path: 'delivery-note-list', component: DeliveryNoteListComponent },
 		{ path: 'performa-invoice', component: ProformaInvoiceComponent },
 		{ path: 'performa-invoice-list', component: PerformaInvoiceListComponent },
 		{ path: 'expense', component: ExpenseComponent },

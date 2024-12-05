@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BillComponent } from './bill/bill.component';
+import {  DeliveryNoteComponent } from './delivery-note/delivery-note.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -19,7 +19,7 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { BillListComponent } from './bill-list/bill-list.component';
+import { DeliveryNoteListComponent } from './delivery-note-list/delivery-note-list.component';
 import { CalendarModule } from 'primeng/calendar';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -34,8 +34,8 @@ import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.co
 
 @NgModule({
   declarations: [
-    BillComponent,
-    BillListComponent,
+    DeliveryNoteComponent,
+    DeliveryNoteListComponent,
     ProformaInvoiceComponent,
     PerformaInvoiceListComponent,
     ExpenseComponent,

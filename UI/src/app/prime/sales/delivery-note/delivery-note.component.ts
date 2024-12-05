@@ -8,12 +8,12 @@ import { forkJoin } from 'rxjs';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss'],
+  selector: 'app-delivery-note',
+  templateUrl: './delivery-note.component.html',
+  styleUrls: ['./delivery-note.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class BillComponent implements OnInit {
+export class DeliveryNoteComponent implements OnInit {
   loading = false;
   mainForm :any;
 companyList: any;
