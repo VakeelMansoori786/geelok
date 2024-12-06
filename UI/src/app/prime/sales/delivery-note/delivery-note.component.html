@@ -1,7 +1,7 @@
 <p-toast key="tst"></p-toast>
 <div class="col-12"  [formGroup]="mainForm">
     <div class="card">
-        <h5>Item</h5>
+        <h5>Delivery Note</h5>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12">
         
@@ -10,7 +10,7 @@
                 <div class="grid p-fluid">
                     <div class="col-12 md:col-12 lg:col-12">
                 
-                        <input hidden  formControlName="p_purchase_bill_id">
+                        <input hidden  formControlName="p_delivery_note_id">
                 <label htmlFor="state">Vendor Name<span style="color: red;">*</span></label>
                 <div class="flex align-items-center">
                 <p-dropdown 
@@ -36,51 +36,76 @@
         </div>
     </div>
 </div>  
-                <div class="col-12 md:col-6 lg:col-6">
-            
-                    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
-                      
-                    <p-dropdown 
-                    formControlName="p_branch_id" 
-                    [options]="companyList"
-                    optionLabel="company_name"
-                    optionValue="company_id"
-                    placeholder="Select a Branch" 
-                    [filter]="true"
-        filterBy="company_name" 
-        [showClear]="true"
-                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
-                    >
-                </p-dropdown>
-                    
-            
-        
-        </div>  
+<div class="col-12 md:col-6 lg:col-6">
+        <label htmlFor="state">Billing Address<span style="color: red;">*</span></label>
+        <p-dropdown 
+            formControlName="p_billing_address_id" 
+            [options]="addressList"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select" 
+            [filter]="true"
+            filterBy="addressList" 
+            [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_billing_address_id.touched && mainForm.controls.p_billing_address_id.invalid}"
+            [showClear]="true">
+        </p-dropdown>
+    
 
-            <div class="col-12 md:col-6 lg:col-2">
-                <label htmlFor="state">Bill No.<span style="color: red;">*</span></label>
-                    <input type="text" pInputText formControlName="p_bill_no"
-                    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_bill_no.touched && mainForm.controls.p_bill_no.invalid}" />
-            </div>  
-            <div class="col-12 md:col-6 lg:col-2">
-                <label htmlFor="state">Order No.</label>
-                    <input type="text" pInputText formControlName="p_order_no" />
-            </div>  
-            <div class="col-12 md:col-6 lg:col-2">
-                <label htmlFor="state">Permit No.</label>
-                    <input type="text" pInputText formControlName="p_permit_no" />
-            </div>  
+</div>
+<div class="col-12 md:col-6 lg:col-6">
+        <label htmlFor="state">Shipping Address<span style="color: red;">*</span></label>
+        <p-dropdown 
+            formControlName="p_shipping_address_id" 
+            [options]="addressList"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select" 
+            [filter]="true"
+            filterBy="addressList"  
+            [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_shipping_address_id.touched && mainForm.controls.p_shipping_address_id.invalid}"
+            [showClear]="true">
+        </p-dropdown>
+    
+
+</div>
+<div class="col-12 md:col-6 lg:col-6">
+            
+    <label htmlFor="state">Branch<span style="color: red;">*</span></label>
+      
+    <p-dropdown 
+    formControlName="p_branch_id" 
+    [options]="companyList"
+    optionLabel="company_name"
+    optionValue="company_id"
+    placeholder="Select a Branch" 
+    [filter]="true"
+filterBy="company_name" 
+[showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_branch_id.touched && mainForm.controls.p_branch_id.invalid}"
+    >
+</p-dropdown>
+    
+
+
+</div>  
+
+   
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_delivery_note_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_note_date.touched && mainForm.controls.p_delivery_note_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    </div>
+            
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">PO Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_purchase_order_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    </div> 
+    <div class="col-12 md:col-6 lg:col-3">
+        <label htmlFor="state">Reference#</label>
+            <input type="text" pInputText formControlName="p_other_ref_no" />
+    </div> 
             <div class="col-12 md:col-6 lg:col-3">
-                <label htmlFor="state">Bill Date<span style="color: red;">*</span></label>
-                <p-calendar formControlName="p_bill_date" (onSelect)="onBillDate($event)"
-                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_bill_date.touched && mainForm.controls.p_bill_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-            </div>  
-            <div class="col-12 md:col-6 lg:col-3">
-                <label htmlFor="state">Due Date<span style="color: red;">*</span></label>
-                <p-calendar formControlName="p_due_date" (onSelect)="onDueDate($event)"
-                [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_due_date.touched && mainForm.controls.p_due_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-            </div> 
-            <div class="col-12 md:col-6 lg:col-2">
             
                 <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
                       
@@ -93,7 +118,7 @@
                 [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_term_id.touched && mainForm.controls.p_payment_term_id.invalid}" 
                 />
             </div> 
-            <div class="col-12 md:col-6 lg:col-4">
+            <div class="col-12 md:col-6 lg:col-6">
                 <label htmlFor="state">Notes</label>
                     <input type="text" pInputText formControlName="p_notes" />
             </div> 
@@ -102,7 +127,7 @@
 
         </div>
               <!-- table.component.html -->
-              <div class="col-12" *ngIf="selectedCustomer && selectedCustomer.currency_name">
+              <div class="col-12">
                 <table *ngIf="rows.length>0">
                   <thead>
                     <tr>
@@ -135,9 +160,12 @@
                     </textarea>
                 </div> 
                       </td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].qty"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].rate"  (blur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].discount"  (blur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
+                      <td style="width: 10%;"> <p-inputNumber 
+                                  inputId="integeronly" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <p-dropdown 
                         [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"

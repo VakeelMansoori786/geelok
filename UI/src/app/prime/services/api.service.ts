@@ -144,7 +144,7 @@ SaveBill(model:any) {
 
 //#region Performa Invoice
 
-//#region Purchase Order
+//#region Proforma Invoice
 SaveProformaInvoice(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/sales/SaveProformaInvoice`,model)
  }
@@ -153,6 +153,19 @@ SaveProformaInvoice(model:any) {
  }
 
    //#endregion
+
+   
+
+//#region Delivery Note
+SaveDeliveryNote(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/SaveDeliveryNote`,model)
+ }
+ GetDeliveryNote(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetDeliveryNote`,model)
+ }
+
+   //#endregion
+
 //#region 
 //#endregion
 }

@@ -24,13 +24,19 @@ selectedItem: any={};
 suggestions: any=[] ;
 files = [];
 Id:any='0'
-po:any='0'
 totalSize : number = 0;
 selectedCustomer:any= {};
 totalSizePercent : number = 0;
 totalDiscount:any;
 rows:any[] = []; 
 taxList: any;
+deliveryTypeList: any;
+addressList: any;
+deliveryType: any[] = [
+    
+  { name: 'Company', key: 'company' },
+  { name: 'Customer', key: 'customer' }
+];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -42,55 +48,54 @@ taxList: any;
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_purchase_bill_id:['0'],
-      p_customer_id:['', Validators.required],
-      p_branch_id:['', Validators.required],
-      p_currency_id:[''],
-      p_bill_no:['', Validators.required],
-      p_order_no:[''],
-      p_permit_no:[''],
-      p_bill_date:['', Validators.required],
-      p_due_date:['', Validators.required],
-      p_payment_term_id:['', Validators.required],
-      p_notes:[''],
-      p_sub_total:[''],
-      p_tax:[''],
-      p_discount:[''],
-      p_total:['']
+      p_delivery_note_id: ['0'],
+      p_customer_id: ['', Validators.required],
+      p_branch_id: ['', Validators.required],
+      p_billing_address_id: ['', Validators.required],
+      p_shipping_address_id: ['', Validators.required],
+      p_payment_term_id: ['', Validators.required],
+      p_currency_id: ['', Validators.required],
+      p_other_ref_no: [''],
+      p_delivery_note_date: [new Date()],
+      p_purchase_order_date: [new Date()],
+      p_notes: [''],
+      p_sub_total: [''],
+      p_tax: [''],
+      p_discount: [''],
+      p_total: ['']
     
     });
   
     if (this.route.snapshot.paramMap.get('id')) {
      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
-    }
-    if (this.route.snapshot.paramMap.get('po')) {
-     this.po= atob(this.route.snapshot.paramMap.get('po')!);
+  
     }
   this.loadDropdowns();
   }
   fetchData(id: string) {
     let req={
 
-      p_purchase_bill_id:id
+      p_delivery_note_id:id
     }
     this.loading=true;
 
-    this.apiService.GetBill(req).subscribe((data:any) => {
+    this.apiService.GetDeliveryNote(req).subscribe((data:any) => {
+      debugger
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
-      debugger
-      // Populate the form with the fetched data
+  
+ 
       this.mainForm.patchValue({
-        p_purchase_bill_id: item.purchase_bill_id,
+        p_delivery_note_id: item.p_delivery_note_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
-        p_bill_no: item.bill_no,
+        p_billing_address_id: item.billing_address_id,
+        p_shipping_address_id: item.shipping_address_id,
+        p_payment_term_id: item.payment_term_id,
         p_currency_id: item.currency_id,
-        p_order_no: item.order_no,
-        p_permit_no: item.permit_no,
-        p_bill_date:new Date(item.bill_date),
-        p_due_date: new Date(item.due_date),
-        p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
+        p_other_ref_no: item.other_ref_no,
+        p_delivery_note_date: new Date(item.delivery_note_date),
+        p_purchase_order_date: new Date(item.purchase_order_date),
         p_notes: item.notes,
         p_sub_total: item.sub_total,
         p_tax: item.tax,
@@ -120,58 +125,7 @@ if(data.length>2){
       
     });
   }
-  poData(id: string) {
-    let req={
 
-      p_purchase_order_id:id
-    }
-    this.loading=true;
-
-    this.apiService.GetOrder(req).subscribe((data:any) => {
-      if(data.length>0){
-      const item = data[0][0];  // Assuming the response structure is correct
-      debugger
-      // Populate the form with the fetched data
-      this.mainForm.patchValue({
-        p_purchase_bill_id: '0',
-        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
-        p_branch_id:item.branch_id ,
-        p_bill_no: '',
-        p_currency_id: item.currency_id,
-        p_order_no: item.ref_no,
-        p_permit_no: '',
-        p_bill_date:'',
-        p_due_date: '',
-        p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==item.payment_term_id) ,
-        p_notes: item.notes,
-        p_sub_total: item.sub_total,
-        p_tax: item.tax,
-        p_discount: item.discount,
-        p_total: item.total
-       });
-       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
-if(data.length>2){
-  const mappedData = data[1].map((item, index) => ({
-    id: index,                         // Use the index as the id (starting from 0)
-    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
-    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
-    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    discount: item.discount || '' ,
-    tax_amt: item.tax || '' ,
-    description: item.description || '' ,
-    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: this.selectedCustomer.tax_treatment_id  || '' // stock_value will be set to item.stock_value or default to an empty string
-}));
-  
- 
-  this.rows = mappedData // Assuming p_item_stock is an array of rows
-}
-    }
-   
-      
-    });
-  }
 
 loadDropdowns() {
   forkJoin({
@@ -187,15 +141,13 @@ loadDropdowns() {
     if (this.Id!=0) {
       this.fetchData(this.Id);
     }
-    if (this.po!=0) {
-      this.poData(this.po);
-    }
   });
 }
 
 
 
 Save(model: any) {
+  
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -205,29 +157,28 @@ Save(model: any) {
   }
 
   // Filter out rows with item_id '0'
-  this.rows = this.rows.filter(x => x.item_id !== '0');
-
+  this.rows = this.rows.filter(x => x.item_id && x.item_id !== '0');
   // Mark loading state
   this.loading = true;
 
   // Prepare the request object
   const req = {
-    p_purchase_bill_id: model.p_purchase_bill_id,
+    p_delivery_note_id: model.p_delivery_note_id,
     p_customer_id: model.p_customer_id.customer_id,
     p_branch_id: model.p_branch_id,
-    p_currency_id: model.p_currency_id,
-    p_bill_no: model.p_bill_no,
-    p_order_no: model.p_order_no,
-    p_permit_no: model.p_permit_no,
-    p_bill_date: model.p_bill_date,
-    p_due_date: model.p_due_date,
+    p_billing_address_id: model.p_billing_address_id,
+    p_shipping_address_id: model.p_shipping_address_id,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
+    p_currency_id: model.p_currency_id,
+    p_other_ref_no: model.p_other_ref_no,
+    p_delivery_note_date: model.p_delivery_note_date,
+    p_purchase_order_date:model.p_purchase_order_date,
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
     p_tax: model.p_tax,
     p_discount: model.p_discount,
     p_total: model.p_total,
-    p_order_details: JSON.stringify(this.rows.map((item, index) => ({
+    p_invoice_details: JSON.stringify(this.rows.map((item, index) => ({
       id: index,
       item_id: item.item_id || null,
       item_name: item.item_name || null,
@@ -242,10 +193,10 @@ Save(model: any) {
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveBill(req).subscribe((data:any) => {
+  this.apiService.SaveDeliveryNote(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/bill-list']);
+        this.router.navigate(['/sales/delivery_note-list']);
       });
             }
   
@@ -253,53 +204,8 @@ Save(model: any) {
     this.mainForm.reset();
 
   }
-
-  choose(event, callback) {
-    callback();
-}
-
-onRemoveTemplatingFile(event, file, removeFileCallback, index) {
-    removeFileCallback(event, index);
-    this.totalSize -= parseInt(this.formatSize(file.size));
-    this.totalSizePercent = this.totalSize / 10;
-}
-
-onClearTemplatingUpload(clear) {
-    clear();
-    this.totalSize = 0;
-    this.totalSizePercent = 0;
-}
-
-onTemplatedUpload() {
-    this.service.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-}
-
-onSelectedFiles(event) {
-    this.files = event.currentFiles;
-    this.files.forEach((file) => {
-        this.totalSize += parseInt(this.formatSize(file.size));
-    });
-    this.totalSizePercent = this.totalSize / 10;
-}
-
-uploadEvent(callback) {
-    callback();
-}
-
-formatSize(bytes) {
-    const k = 1024;
-    const dm = 3;
-    const sizes = 20000;
-    if (bytes === 0) {
-        return `0 ${sizes[0]}`;
-    }
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-    return `${formattedSize} ${sizes[i]}`;
-}
-
+  
+ 
 addRow() {
   
   const newId = this.rows.length ? this.rows[this.rows.length - 1].id + 1 : 0;
@@ -340,31 +246,57 @@ this.addRow();
 }
 SelectedCustomer(model:any){
   
+ 
+  this.GetAddress(model.customer_id);
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({
     p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
-    p_due_date:new Date(),
     p_currency_id:model.currency_id
   })
 }
-calculate(index:any){
-  debugger
-const amt =parseFloat(this.rows[index].rate)*parseFloat(this.rows[index].qty);
 
-const taxPercent =this.taxList.find(x=>x.tax_treatment_id==this.rows[index].tax).tax_percent 
- this.rows[index].amt=amt-parseFloat(this.rows[index].discount);
- this.rows[index].tax_amt=(parseFloat(taxPercent)/100)*this.rows[index].amt;
-    const subTotal = this.rows.reduce((sum, row) => sum + parseFloat(row.amt), 0);
-    const discount=this.rows.reduce((sum, row) => sum + parseFloat(row.discount), 0);
-    const tax=this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal - discount+tax;
-
-    this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
-    this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
-    this.mainForm.controls.p_discount.setValue(discount.toFixed(2));
-    this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
+GetAddress(customer_id:any){
+  let req={p_address_type:'customer',p_id:customer_id};
+  
+  this.apiService.GetAddress(req).subscribe((data:any) => {
+    
+   this.addressList=data.map(x=>({ code:x.customer_address_id,name:x.address_1+' '+x.address_2+' '+x.city+' '+x.country_state_name+' '+x.country_name   }));
+  });
 }
+calculate(index: any) {
+  // Safely parse rate and quantity, defaulting to 0 if invalid
+  const rate = parseFloat(this.rows[index].rate) || 0;
+  const qty = parseFloat(this.rows[index].qty) || 0;
+
+  // Calculate base amount
+  const amt = rate * qty;
+
+  // Ensure discount is properly initialized
+  const discount = parseFloat(this.rows[index].discount) || 0;
+  this.rows[index].discount = discount;
+
+  // Find tax percent and handle potential null/undefined values
+  const taxEntry = this.taxList.find(x => x.tax_treatment_id === this.rows[index].tax);
+  const taxPercent = taxEntry?.tax_percent || 0;
+
+  // Calculate amount and tax
+  this.rows[index].amt = amt - discount;
+  this.rows[index].tax_amt = (taxPercent / 100) * this.rows[index].amt;
+
+  // Calculate subtotals, discounts, taxes, and total amount
+  const subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.amt) || 0), 0);
+  const totalDiscount = this.rows.reduce((sum, row) => sum + (parseFloat(row.discount) || 0), 0);
+  const totalTax = this.rows.reduce((sum, row) => sum + (parseFloat(row.tax_amt) || 0), 0);
+  const totalAmount = subTotal + totalTax - totalDiscount;
+
+  // Update form controls
+  this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
+  this.mainForm.controls.p_tax.setValue(totalTax.toFixed(2));
+  this.mainForm.controls.p_discount.setValue(totalDiscount.toFixed(2));
+  this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
+}
+
 onBillDate(event: any) {
   this.updateDueDate();
 }
@@ -381,12 +313,7 @@ updateDueDate() {
   const billDate = this.mainForm.value.p_bill_date;
   const paymentTerm = this.mainForm.value.p_payment_term_id;
 
-  // Check if both bill date and payment term are available
-  if (billDate && paymentTerm && paymentTerm.days != null) {
-    const modifiedDate = new Date(billDate);
-    modifiedDate.setDate(modifiedDate.getDate() + paymentTerm.days);
-    this.mainForm.controls.p_due_date.setValue(modifiedDate);
-  }
+
 }
 
 

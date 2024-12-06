@@ -810,6 +810,88 @@ app.post('/api/sales/GetProformaInvoice', authMiddleware, async function (req, r
 
 //#endregion
 
+
+
+//#region Delivery Note
+app.post('/api/sales/SaveDeliveryNote', authMiddleware, async function (req, res) {
+  let p_delivery_note_id = req.body.p_delivery_note_id || 0;
+  let p_customer_id = req.body.p_customer_id;
+  let p_branch_id = req.body.p_branch_id;
+  let p_billing_address_id = req.body.p_billing_address_id;
+  let p_shipping_address_id = req.body.p_shipping_address_id;
+  let p_payment_term_id = req.body.p_payment_term_id;
+  let p_currency_id = req.body.p_currency_id;
+  let p_other_ref_no = req.body.p_other_ref_no;
+  let p_performa_invoice_date = req.body.p_performa_invoice_date;
+  let p_purchase_order_date = req.body.p_purchase_order_date;
+  let p_notes = req.body.p_notes;
+  let p_sub_total = req.body.p_sub_total;
+  let p_tax = req.body.p_tax;
+  let p_discount = req.body.p_discount;
+  let p_total = req.body.p_total;
+  let p_status = req.body.p_status || 1;
+  let p_create_by = req.user.user[0].user_id;
+  let p_invoice_details = req.body.p_invoice_details;
+
+  try {
+    await connection.query(
+      "CALL pr_save_delivery_note(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        p_delivery_note_id,
+        p_customer_id,
+        p_branch_id,
+        p_billing_address_id,
+        p_shipping_address_id,
+        p_payment_term_id,
+        p_currency_id,
+        p_other_ref_no,
+        p_performa_invoice_date,
+        p_purchase_order_date,
+        p_notes,
+        p_sub_total,
+        p_tax,
+        p_discount,
+        p_total,
+        p_status,
+        p_create_by,
+        p_invoice_details
+      ],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+app.post('/api/sales/GetDeliveryNote', authMiddleware, async function (req, res) {
+  let p_delivery_note_id = req.body.p_delivery_note_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_delivery_note(?)",
+      [p_delivery_note_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+
+        // If a specific ID is passed, return all related records
+        if (p_performa_invop_delivery_note_idice_id != '0') {
+          return res.status(200).send(results);
+        }
+
+        // If ID is 0, return the general list
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+
+
+//#endregion
+
 //#region 
 
 
