@@ -87,7 +87,7 @@ deliveryType: any[] = [
   
  
       this.mainForm.patchValue({
-        p_delivery_note_id: item.p_delivery_note_id,
+        p_delivery_note_id: item.delivery_note_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
         p_billing_address_id: item.billing_address_id,
