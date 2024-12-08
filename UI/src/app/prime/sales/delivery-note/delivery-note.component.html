@@ -101,11 +101,15 @@ filterBy="company_name"
         <p-calendar formControlName="p_purchase_order_date" 
         [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div> 
-    <div class="col-12 md:col-6 lg:col-3">
+    <div class="col-12 md:col-6 lg:col-2">
+        <label htmlFor="state">PO#</label>
+            <input type="text" pInputText formControlName="p_purchase_order_no" />
+    </div> 
+    <div class="col-12 md:col-6 lg:col-2">
         <label htmlFor="state">Reference#</label>
             <input type="text" pInputText formControlName="p_other_ref_no" />
     </div> 
-            <div class="col-12 md:col-6 lg:col-3">
+            <div class="col-12 md:col-6 lg:col-2">
             
                 <label htmlFor="state">Payment Terms<span style="color: red;">*</span></label>
                       

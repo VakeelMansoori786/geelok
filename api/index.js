@@ -822,6 +822,7 @@ app.post('/api/sales/SaveDeliveryNote', authMiddleware, async function (req, res
   let p_payment_term_id = req.body.p_payment_term_id;
   let p_currency_id = req.body.p_currency_id;
   let p_other_ref_no = req.body.p_other_ref_no;
+  let p_purchase_order_no = req.body.p_purchase_order_no;
   let p_performa_invoice_date = req.body.p_performa_invoice_date;
   let p_purchase_order_date = req.body.p_purchase_order_date;
   let p_notes = req.body.p_notes;
@@ -835,7 +836,7 @@ app.post('/api/sales/SaveDeliveryNote', authMiddleware, async function (req, res
 
   try {
     await connection.query(
-      "CALL pr_save_delivery_note(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_delivery_note(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
         p_delivery_note_id,
         p_customer_id,
@@ -854,7 +855,8 @@ app.post('/api/sales/SaveDeliveryNote', authMiddleware, async function (req, res
         p_total,
         p_status,
         p_create_by,
-        p_invoice_details
+        p_invoice_details,
+        p_purchase_order_no
       ],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });

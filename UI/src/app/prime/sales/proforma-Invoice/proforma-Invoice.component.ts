@@ -322,6 +322,7 @@ setDiscountType(type:any){
   this.discountType=type;
 }
 getTotalDiscount(){
+  debugger
   const totalDiscountValue = parseFloat(this.totalDiscount) || 0;
   let subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);
 
@@ -332,6 +333,14 @@ getTotalDiscount(){
         const rowAmount =parseFloat(row.rate)*parseFloat(row.qty);
         const rowDiscount = (rowAmount * totalDiscountValue) / 100; // Percentage discount
         row.discount = rowDiscount.toFixed(2);
+        row.amt = rowAmount-rowDiscount;
+row.amt =row.amt.toFixed(2); 
+
+const taxEntry = this.taxList.find(x => x.tax_treatment_id === row.tax);
+  const taxPercent = taxEntry?.tax_percent || 0;
+
+  row.tax_amt = (taxPercent / 100) * row.amt;
+
       });
     } else {
       const discountRatio = totalDiscountValue / subTotal;
@@ -340,19 +349,27 @@ getTotalDiscount(){
       const rowAmount = parseFloat(row.rate)*parseFloat(row.qty);
       const rowDiscount = rowAmount * discountRatio;
       row.discount = rowDiscount.toFixed(2);
+      row.amt = rowAmount-rowDiscount;
+row.amt =row.amt.toFixed(2); 
+const taxEntry = this.taxList.find(x => x.tax_treatment_id === row.tax);
+  const taxPercent = taxEntry?.tax_percent || 0;
+
+  row.tax_amt = (taxPercent / 100) * row.amt;
+
     });
   }
     // Recalculate the totals
-    subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);
+    const total = this.rows.reduce((sum, row) => sum + (parseFloat(row.rate)*parseFloat(row.qty)), 0);
     const discount = this.rows.reduce((sum, row) => sum + parseFloat(row.discount), 0);
     const tax = this.rows.reduce((sum, row) => sum + parseFloat(row.tax_amt), 0);
-    const totalAmount = subTotal - discount + tax;
-  
+     subTotal= total - discount ;
+     const totalAmount= subTotal+ tax;
     this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
     this.mainForm.controls.p_discount.setValue(discount.toFixed(2));
     this.mainForm.controls.p_tax.setValue(tax.toFixed(2));
     this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
   }
 }
+
 
 }
