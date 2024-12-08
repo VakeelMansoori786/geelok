@@ -878,7 +878,7 @@ app.post('/api/sales/GetDeliveryNote', authMiddleware, async function (req, res)
         if (error) return res.status(500).send({ error: error.message });
 
         // If a specific ID is passed, return all related records
-        if (p_performa_invop_delivery_note_idice_id != '0') {
+        if (p_delivery_note_id != '0') {
           return res.status(200).send(results);
         }
 

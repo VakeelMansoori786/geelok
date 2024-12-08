@@ -58,7 +58,7 @@ deliveryType: any[] = [
       p_other_ref_no: [''],
       p_purchase_order_no: [''],
       p_delivery_note_date: [new Date()],
-      p_purchase_order_date: [new Date()],
+      p_purchase_order_date: [''],
       p_notes: [''],
       p_sub_total: [''],
       p_tax: [''],
@@ -199,7 +199,7 @@ Save(model: any) {
   this.apiService.SaveDeliveryNote(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/sales/delivery_note-list']);
+        this.router.navigate(['/sales/delivery-note-list']);
       });
             }
   
