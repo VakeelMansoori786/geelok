@@ -24,13 +24,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { ExpenseComponent } from './expense/expense.component';
-import { ExpenseListComponent } from './expense-list/expense-list.component';
+import { InvoiceListComponent } from './invoice-list/invoice-list.component';
 import { PayableComponent } from './payable/payable.component';
 import { PayableListComponent } from './payable-list/payable-list.component';
 import { SaleRoutingModule } from './sale-routing.module';
 import { PerformaInvoiceListComponent } from './performa-invoice-list/performa-invoice-list.component';
 import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +38,8 @@ import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.co
     DeliveryNoteListComponent,
     ProformaInvoiceComponent,
     PerformaInvoiceListComponent,
-    ExpenseComponent,
-    ExpenseListComponent,
+    InvoiceComponent,
+    InvoiceListComponent,
     PayableComponent,
     PayableListComponent
   ],
