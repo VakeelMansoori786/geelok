@@ -15,7 +15,7 @@ import { Table } from 'primeng/table';
   styleUrls: ['./invoice-list.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class InvoiceListComponent  implements OnInit {
+export class InvoiceListComponent    implements OnInit {
   
 
   @ViewChild('filter') filter!: ElementRef;
@@ -41,14 +41,12 @@ export class InvoiceListComponent  implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_expense_id:id
+      p_delivery_note_id:id
     }
     this.loading=true;
 
-    this.apiService.GetExpense(req).subscribe((data:any) => {
+    this.apiService.GetInvoice(req).subscribe((data:any) => {
         this.mainList=data;
-       
-     
     this.loading=false;
 
 
@@ -65,14 +63,12 @@ clear(table: Table) {
     this.filter.nativeElement.value = '';
 }
 GetDetail(id:any){
-  this.router.navigate(['/purchase/expense',{ id: btoa(id) },]);
+  this.router.navigate(['/sales/invoice',{ id: btoa(id) },]);
 
 }
 
 Add(){
-  this.router.navigate(['/purchase/expense']);
+  this.router.navigate(['/sales/invoice']);
 }
-onImageError(event: any): void {
-  event.target.src = 'assets/layout/images/not_found_img.png';  // Set the source to default image
-}
+
 }

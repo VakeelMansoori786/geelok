@@ -3,7 +3,7 @@
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-			<h5>Expenses List</h5>
+			<h5>Delivery Note List</h5>
 			<div >
 				<p-button 
 					severity="success" 
@@ -18,7 +18,7 @@
 			[rows]="10"
 			[rowsPerPageOptions]="[10, 25, 50]"
 			[loading]="loading"
-			[paginator]="true" [globalFilterFields]="['transfer_order_id','from_company_name','to_company_name','reason']" responsiveLayout="scroll">
+			[paginator]="true" [globalFilterFields]="['company_name','customer_name','ref_no','currency_name','total','status_name']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
@@ -34,9 +34,10 @@
 						<th>	
 							Date</th>
 							<th>Branch</th>
-						<th>Vendor</th>
+						<th>Customer</th>
+						<th>Delivery Note#</th>
+						<th>PO#</th>
 						<th>Reference#</th>
-						<th>Paid Through</th>
 						<th>Currency</th>
 						<th>Amount</th>
 						<th>Status</th>
@@ -46,7 +47,7 @@
 				<ng-template pTemplate="body" let-mainList>
 					<tr>
 						<td>
-							{{mainList.expense_date | date: 'dd/MM/yyyy' }}
+							{{mainList.delivery_note_date | date: 'dd/MM/yyyy' }}
 						</td>
 						<td>
                             {{mainList.company_name}}
@@ -58,18 +59,23 @@
                             {{mainList.ref_no}}
 						</td>
 						<td>
-                            {{mainList.payment_type_name}}
+                            {{mainList.purchase_order_no}}
+						</td>
+						<td>
+                            {{mainList.other_ref_no}}
 						</td>
 						<td>
 							{{mainList.currency_name}}
 						</td>
 						<td>{{mainList.total}}</td>
-						<td>{{mainList.status_name}}</td>
+						<td>
+							{{mainList.status_name}}
+						</td>
 						
 					<td>	
 						<div class="flex flex-wrap gap-2">
-						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.expense_id)"></button>
-					</div>
+						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.delivery_note_id)"></button>
+						</div>
 					</td>
 					
 						

@@ -65,7 +65,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
 		ConfirmDialogModule,
 		RadioButtonModule,
 		AutoCompleteModule ,AvatarModule,
-		CalendarModule ,AvatarGroupModule,InputNumberModule 
+		CalendarModule ,AvatarGroupModule,InputNumberModule   
   ]
 })
 export class SaleModule { }

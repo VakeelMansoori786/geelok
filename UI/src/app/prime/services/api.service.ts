@@ -10,6 +10,10 @@ export class APIService {
   constructor(private httpClient:HttpClient) { }
 
   
+  GetUserList(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/global/GetUserList`,model)
+   }
+  
 //#region Customer
 GetCustomer(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/Customer/GetCustomer`,model)
@@ -166,6 +170,15 @@ SaveDeliveryNote(model:any) {
 
    //#endregion
 
+//#region Delivery Note
+SaveInvoice(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/SaveInvoice`,model)
+ }
+ GetInvoice(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetInvoice`,model)
+ }
+
+   //#endregion
 //#region 
 //#endregion
 }

@@ -154,6 +154,17 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   
  })
 
+ app.post('/api/global/GetUserList',  async function (req, res) {
+  
+  let p_company_id = req.body.p_company_id;
+  let p_role_id = req.body.p_role_id;
+  await connection.query("call pr_get_users(?,?)", [p_company_id,p_role_id], function (error, results, fields) {
+   
+     if (error) return res.send(error);
+     return res.send(results[0]);
+     });
+  
+ })
 
 
  app.post('/api/item/GetItem', authMiddleware , async function (req, res) {
@@ -879,6 +890,104 @@ app.post('/api/sales/GetDeliveryNote', authMiddleware, async function (req, res)
 
         // If a specific ID is passed, return all related records
         if (p_delivery_note_id != '0') {
+          return res.status(200).send(results);
+        }
+
+        // If ID is 0, return the general list
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+
+
+//#endregion
+
+//#region Invoice
+app.post('/api/sales/SaveInvoice', authMiddleware, async function (req, res) {
+  // Extract input parameters from the request body
+  let p_invoice_id = req.body.p_invoice_id || 0;
+  let p_customer_id = req.body.p_customer_id;
+  let p_branch_id = req.body.p_branch_id;
+  let p_billing_address_id = req.body.p_billing_address_id;
+  let p_shipping_address_id = req.body.p_shipping_address_id;
+  let p_payment_term_id = req.body.p_payment_term_id;
+  let p_currency_id = req.body.p_currency_id;
+  let p_person_id = req.body.p_person_id;
+  let p_other_ref_no = req.body.p_other_ref_no;
+  let p_purchase_order_date = req.body.p_purchase_order_date;
+  let p_purchase_order_no = req.body.p_purchase_order_no;
+  let p_delivery_note_date = req.body.p_delivery_note_date;
+  let p_delivery_note_no = req.body.p_delivery_note_no;
+  let p_invoice_date = req.body.p_invoice_date;
+  let p_invoice_due_date = req.body.p_invoice_due_date;
+  let p_bill_type = req.body.p_bill_type;
+  let p_notes = req.body.p_notes;
+  let p_sub_total = req.body.p_sub_total;
+  let p_tax = req.body.p_tax;
+  let p_discount = req.body.p_discount;
+  let p_total = req.body.p_total;
+  let p_status = req.body.p_status || 1;
+  let p_create_by = req.user.user[0].user_id; // Authenticated user's ID
+  let p_invoice_details = req.body.p_invoice_details;
+
+  try {
+    // Call the stored procedure
+    await connection.query(
+      "CALL pr_save_invoice(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        p_invoice_id,
+        p_customer_id,
+        p_branch_id,
+        p_billing_address_id,
+        p_shipping_address_id,
+        p_payment_term_id,
+        p_currency_id,
+        p_person_id,
+        p_other_ref_no,
+        p_purchase_order_date,
+        p_purchase_order_no,
+        p_delivery_note_date,
+        p_delivery_note_no,
+        p_invoice_date,
+        p_notes,
+        p_sub_total,
+        p_tax,
+        p_discount,
+        p_total,
+        p_status,
+        p_create_by,
+        JSON.stringify(p_invoice_details), // Pass JSON details as a string
+        p_invoice_due_date,
+        p_bill_type,
+      ],
+      function (error, results) {
+        if (error) {
+          return res.status(500).send({ error: error.message });
+        }
+        // Return the stored procedure result
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+
+app.post('/api/sales/GetInvoice', authMiddleware, async function (req, res) {
+  let p_invoice_id = req.body.p_invoice_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_invoice(?)",
+      [p_invoice_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+
+        // If a specific ID is passed, return all related records
+        if (p_invoice_id != '0') {
           return res.status(200).send(results);
         }
 
