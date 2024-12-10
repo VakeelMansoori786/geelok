@@ -61,7 +61,7 @@ billType: any[] = [
       p_delivery_note_date: [new Date()],
       p_purchase_order_date: [''],
       p_invoice_date: [new Date()],
-      p_invoice_due_date: [new Date()],
+      p_invoice_due_date: [''],
       p_delivery_note_no: [''],
       p_bill_type: ['', Validators.required],
       p_notes: [''],
@@ -184,7 +184,7 @@ Save(model: any) {
     p_shipping_address_id: model.p_shipping_address_id,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_currency_id: model.p_currency_id,
-    p_person_id: model.p_person_id.user_id,
+    p_person_id: model.p_person_id,
     p_other_ref_no: model.p_other_ref_no,
     p_purchase_order_no: model.p_purchase_order_no,
     p_delivery_note_date: model.p_delivery_note_date,
@@ -192,7 +192,7 @@ Save(model: any) {
     p_delivery_note_no:model.p_delivery_note_no,
     p_invoice_date:model.p_invoice_date,
     p_invoice_due_date:model.p_invoice_due_date,
-    p_bill_type: model.p_bill_type,
+    p_bill_type: model.p_bill_type.map(item => item.key).toString(),
     p_notes: model.p_notes,
     p_sub_total: model.p_sub_total,
     p_tax: model.p_tax,
@@ -274,6 +274,7 @@ SelectedCustomer(model:any){
     p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
     p_currency_id:model.currency_id
   })
+  this.updateDueDate();
 }
 
 GetAddress(customer_id:any){
