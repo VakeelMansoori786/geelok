@@ -68,6 +68,9 @@ GetDetail(id:any){
 Add(){
   this.router.navigate(['/sales/delivery-note']);
 }
+Convert(type:any,id:any){
+  if(type=='IN')this.router.navigate(['/sales/invoice',{ dn: btoa(id) },]);
 
+}
 }
 

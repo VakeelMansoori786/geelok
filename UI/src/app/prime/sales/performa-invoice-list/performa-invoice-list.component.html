@@ -71,6 +71,8 @@
 					<td>	
 						<div class="flex flex-wrap gap-2">
 						<button pButton pRipple type="button" label="Detail" (click)="GetDetail(mainList.performa_invoice_id)"></button>
+						<button pButton pRipple type="button" label="Convert Delivery Note" (click)="Convert('DN',mainList.performa_invoice_id)"></button>
+						<button pButton pRipple type="button" label="Convert Invoice" (click)="Convert('IN',mainList.performa_invoice_id)"></button>
 						</div>
 					</td>
 					

@@ -68,6 +68,10 @@ GetDetail(id:any){
 Add(){
   this.router.navigate(['/sales/performa-invoice']);
 }
+Convert(type:any,id:any){
+  if(type=='DN')this.router.navigate(['/sales/delivery-note',{ pi: btoa(id) },]);
+  if(type=='IN')this.router.navigate(['/sales/invoice',{ pi: btoa(id) },]);
 
+}
 }
 
