@@ -41,7 +41,7 @@ export class InvoiceListComponent    implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_delivery_note_id:id
+      p_invoice_id:id
     }
     this.loading=true;
 

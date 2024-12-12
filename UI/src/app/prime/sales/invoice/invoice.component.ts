@@ -73,7 +73,15 @@ billType: any[] = [
       p_total: ['']
     
     });
-  
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
+     }
+     if (this.route.snapshot.paramMap.get('dn')) {
+       this.dn= atob(this.route.snapshot.paramMap.get('dn')!);
+      }
+      if (this.route.snapshot.paramMap.get('pi')) {
+        this.pi= atob(this.route.snapshot.paramMap.get('pi')!);
+       }
     if (this.Id!=0) {
       this.fetchData(this.Id);
     }
@@ -81,7 +89,7 @@ billType: any[] = [
       this.dnData(this.dn);
     }
     if (this.pi!=0) {
-    //  this.piData(this.pi);
+    this.piData(this.pi);
     }
   this.loadDropdowns();
   }
@@ -107,7 +115,7 @@ billType: any[] = [
         p_shipping_address_id: item.shipping_address_id,
         p_payment_term_id: item.payment_term_id,
         p_currency_id: item.currency_id,
-        p_person_id: this.userList.find(x=>x.user_id==item.person_id),
+      //  p_person_id: this.userList.find(x=>x.user_id==item.person_id),
         p_other_ref_no: item.other_ref_no,
         p_purchase_order_no: item.purchase_order_no,
         p_delivery_note_date: new Date(item.delivery_note_date),
@@ -146,6 +154,65 @@ if(data.length>2){
     });
   }
   
+  piData(id: string) {
+    let req={
+  
+      p_performa_invoice_id:id
+    }
+    this.loading=true;
+  
+    this.apiService.GetProformaInvoice(req).subscribe((data:any) => {
+      debugger
+      if(data.length>0){
+      const item = data[0][0];  // Assuming the response structure is correct
+  
+ 
+      this.mainForm.patchValue({
+        p_invoice_id: 0,
+        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
+        p_branch_id:item.branch_id ,
+        p_billing_address_id: item.billing_address_id,
+        p_shipping_address_id: item.shipping_address_id,
+        p_payment_term_id: item.payment_term_id,
+        p_currency_id: item.currency_id,
+      //  p_person_id: this.userList.find(x=>x.user_id==item.person_id),
+        p_other_ref_no: item.ref_no,
+        p_purchase_order_no: item.purchase_order_no,
+        p_delivery_note_date: new Date(item.delivery_note_date),
+        p_purchase_order_date: new Date(item.purchase_order_date),
+        p_notes: item.notes,
+        p_invoice_date: '',
+        p_invoice_due_date: '',
+        p_delivery_note_no: '',
+        p_bill_type: '',
+        p_sub_total: item.sub_total,
+        p_tax: item.tax,
+        p_discount: item.discount,
+        p_total: item.total
+       });
+       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
+if(data.length>2){
+  const mappedData = data[1].map((item, index) => ({
+    id: index,                         // Use the index as the id (starting from 0)
+    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
+    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
+    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
+    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
+    discount: item.discount || '' ,
+    tax_amt: item.tax || '' ,
+    description: item.description || '' ,
+    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
+    tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
+}));
+  
+ 
+  this.rows = mappedData // Assuming p_item_stock is an array of rows
+}
+    }
+   
+      
+    });
+  }
   fetchData(id: string) {
     let req={
 
