@@ -961,7 +961,7 @@ app.post('/api/sales/SaveInvoice', authMiddleware, async function (req, res) {
         p_create_by,
         JSON.stringify(p_invoice_details), // Pass JSON details as a string
         p_invoice_due_date,
-        p_bill_type,
+        p_bill_type
       ],
       function (error, results) {
         if (error) {

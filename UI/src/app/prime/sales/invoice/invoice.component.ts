@@ -82,15 +82,7 @@ billType: any[] = [
       if (this.route.snapshot.paramMap.get('pi')) {
         this.pi= atob(this.route.snapshot.paramMap.get('pi')!);
        }
-    if (this.Id!=0) {
-      this.fetchData(this.Id);
-    }
-    if (this.dn!=0) {
-      this.dnData(this.dn);
-    }
-    if (this.pi!=0) {
-    this.piData(this.pi);
-    }
+   
   this.loadDropdowns();
   }
 
@@ -115,7 +107,7 @@ billType: any[] = [
         p_shipping_address_id: item.shipping_address_id,
         p_payment_term_id: item.payment_term_id,
         p_currency_id: item.currency_id,
-      //  p_person_id: this.userList.find(x=>x.user_id==item.person_id),
+        p_person_id: '',
         p_other_ref_no: item.other_ref_no,
         p_purchase_order_no: item.purchase_order_no,
         p_delivery_note_date: new Date(item.delivery_note_date),
@@ -178,7 +170,7 @@ if(data.length>2){
       //  p_person_id: this.userList.find(x=>x.user_id==item.person_id),
         p_other_ref_no: item.ref_no,
         p_purchase_order_no: item.purchase_order_no,
-        p_delivery_note_date: new Date(item.delivery_note_date),
+      //  p_delivery_note_date: new Date(item.delivery_note_date),
         p_purchase_order_date: new Date(item.purchase_order_date),
         p_notes: item.notes,
         p_invoice_date: '',
@@ -289,6 +281,12 @@ loadDropdowns() {
     this.userList = users;
     if (this.Id!=0) {
       this.fetchData(this.Id);
+    }
+    if (this.dn!=0) {
+      this.dnData(this.dn);
+    }
+    if (this.pi!=0) {
+    this.piData(this.pi);
     }
   });
 }
