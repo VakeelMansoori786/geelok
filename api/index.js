@@ -959,11 +959,12 @@ app.post('/api/sales/SaveInvoice', authMiddleware, async function (req, res) {
         p_total,
         p_status,
         p_create_by,
-        JSON.stringify(p_invoice_details), // Pass JSON details as a string
+        p_invoice_details, // Pass JSON details as a string
         p_invoice_due_date,
         p_bill_type
       ],
       function (error, results) {
+     
         if (error) {
           return res.status(500).send({ error: error.message });
         }
