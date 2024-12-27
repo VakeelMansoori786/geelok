@@ -25,8 +25,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InvoiceListComponent } from './invoice-list/invoice-list.component';
-import { PayableComponent } from './payable/payable.component';
-import { PayableListComponent } from './payable-list/payable-list.component';
+import { CreditNoteComponent } from './credit-note/credit-note.component';
+import { CreditNoteListComponent } from './credit-note-list/credit-note-list.component';
 import { SaleRoutingModule } from './sale-routing.module';
 import { PerformaInvoiceListComponent } from './performa-invoice-list/performa-invoice-list.component';
 import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.component';
@@ -40,8 +40,8 @@ import { InvoiceComponent } from './invoice/invoice.component';
     PerformaInvoiceListComponent,
     InvoiceComponent,
     InvoiceListComponent,
-    PayableComponent,
-    PayableListComponent
+    CreditNoteComponent,
+    CreditNoteListComponent
   ],
   imports: [
     CommonModule,

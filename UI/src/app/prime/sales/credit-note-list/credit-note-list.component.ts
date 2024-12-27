@@ -3,19 +3,18 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
 import { forkJoin } from 'rxjs';
 import { SliderService } from '../../services/slider.service';
 import { APIService } from '../../services/api.service';
 import { Table } from 'primeng/table';
 
 @Component({
-  selector: 'app-payable-list',
-  templateUrl: './payable-list.component.html',
-  styleUrls: ['./payable-list.component.scss'],
+  selector: 'app-credit-note-list',
+  templateUrl: './credit-note-list.component.html',
+  styleUrls: ['./credit-note-list.component.scss'],
   providers: [MessageService,ConfirmationService]
 })
-export class PayableListComponent  implements OnInit {
+export class CreditNoteListComponent implements OnInit {
   
 
   @ViewChild('filter') filter!: ElementRef;
@@ -41,14 +40,12 @@ export class PayableListComponent  implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_purchase_payable_id:id
+      p_invoice_id:id
     }
     this.loading=true;
 
-    this.apiService.GetPayable(req).subscribe((data:any) => {
+    this.apiService.GetInvoice(req).subscribe((data:any) => {
         this.mainList=data;
-       
-     
     this.loading=false;
 
 
@@ -65,14 +62,12 @@ clear(table: Table) {
     this.filter.nativeElement.value = '';
 }
 GetDetail(id:any){
-  this.router.navigate(['/purchase/payable',{ id: btoa(id) },]);
+  this.router.navigate(['/sales/invoice',{ id: btoa(id) },]);
 
 }
 
 Add(){
-  this.router.navigate(['/purchase/payable']);
+  this.router.navigate(['/sales/invoice']);
 }
-onImageError(event: any): void {
-  event.target.src = 'assets/layout/images/not_found_img.png';  // Set the source to default image
-}
+
 }
