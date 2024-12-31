@@ -40,11 +40,11 @@ export class CreditNoteListComponent implements OnInit {
   GetData(id:any) {
     let req={
 
-      p_invoice_id:id
+      p_credit_note_id:id
     }
     this.loading=true;
 
-    this.apiService.GetInvoice(req).subscribe((data:any) => {
+    this.apiService.GetCreditNote(req).subscribe((data:any) => {
         this.mainList=data;
     this.loading=false;
 
@@ -62,12 +62,12 @@ clear(table: Table) {
     this.filter.nativeElement.value = '';
 }
 GetDetail(id:any){
-  this.router.navigate(['/sales/invoice',{ id: btoa(id) },]);
+  this.router.navigate(['/sales/credit-note',{ id: btoa(id) },]);
 
 }
 
 Add(){
-  this.router.navigate(['/sales/invoice']);
+  this.router.navigate(['/sales/credit-note']);
 }
 
 }

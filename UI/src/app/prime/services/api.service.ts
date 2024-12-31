@@ -170,12 +170,23 @@ SaveDeliveryNote(model:any) {
 
    //#endregion
 
-//#region Delivery Note
+//#region Invoice
 SaveInvoice(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/sales/SaveInvoice`,model)
  }
  GetInvoice(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/sales/GetInvoice`,model)
+ }
+
+   //#endregion
+
+   
+//#region Invoice
+SaveCreditNote(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/SaveCreditNote`,model)
+ }
+ GetCreditNote(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetCreditNote`,model)
  }
 
    //#endregion
