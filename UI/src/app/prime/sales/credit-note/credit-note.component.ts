@@ -19,13 +19,11 @@ export class CreditNoteComponent   implements OnInit {
 companyList: any;
 discountType='percentage'
 customerList: any;
-paymentTermList: any;
+invoiceList: any;
 selectedItem: any={};
 suggestions: any=[] ;
 files = [];
 Id:any='0'
-dn:any='0'
-pi:any='0'
 totalSize : number = 0;
 selectedCustomer:any= {};
 totalSizePercent : number = 0;
@@ -50,22 +48,17 @@ billType: any[] = [
   ngOnInit() {
     this.mainForm=this.formBuilder.group({
   
-      p_invoice_id: ['0'],
+      p_credit_note_id: ['0'],
       p_customer_id: ['', Validators.required],
       p_branch_id: ['', Validators.required],
+      p_invoice_id: ['', Validators.required],
       p_billing_address_id: ['', Validators.required],
       p_shipping_address_id: ['', Validators.required],
-      p_payment_term_id: ['', Validators.required],
       p_currency_id: ['', Validators.required],
       p_person_id:  ['', Validators.required],
       p_other_ref_no: [''],
       p_purchase_order_no: ['', Validators.required],
-      p_delivery_note_date: [new Date()],
-      p_purchase_order_date: [new Date()],
-      p_invoice_date: [new Date(), Validators.required],
-      p_invoice_due_date: ['', Validators.required],
-      p_delivery_note_no: [''],
-      p_bill_type: ['', Validators.required],
+      p_credit_note_date: [new Date()],
       p_notes: [''],
       p_sub_total: [''],
       p_tax: [''],
@@ -76,135 +69,11 @@ billType: any[] = [
     if (this.route.snapshot.paramMap.get('id')) {
       this.Id= atob(this.route.snapshot.paramMap.get('id')!);
      }
-     if (this.route.snapshot.paramMap.get('dn')) {
-       this.dn= atob(this.route.snapshot.paramMap.get('dn')!);
-      }
-      if (this.route.snapshot.paramMap.get('pi')) {
-        this.pi= atob(this.route.snapshot.paramMap.get('pi')!);
-       }
+   
    
   this.loadDropdowns();
   }
 
-  dnData(id: string) {
-    let req={
-  
-      p_delivery_note_id:id
-    }
-    this.loading=true;
-  
-    this.apiService.GetDeliveryNote(req).subscribe((data:any) => {
-      debugger
-      if(data.length>0){
-      const item = data[0][0];  // Assuming the response structure is correct
-  
- 
-      this.mainForm.patchValue({
-        p_invoice_id: 0,
-        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
-        p_branch_id:item.branch_id ,
-        p_billing_address_id: item.billing_address_id,
-        p_shipping_address_id: item.shipping_address_id,
-        p_payment_term_id: item.payment_term_id,
-        p_currency_id: item.currency_id,
-        p_person_id: '',
-        p_other_ref_no: item.other_ref_no,
-        p_purchase_order_no: item.purchase_order_no,
-        p_delivery_note_date: new Date(item.delivery_note_date),
-        p_purchase_order_date: new Date(item.purchase_order_date),
-        p_notes: item.notes,
-        p_invoice_date: new Date(),
-        p_invoice_due_date: '',
-        p_delivery_note_no: item.ref_no,
-        p_bill_type: '',
-        p_sub_total: item.sub_total,
-        p_tax: item.tax,
-        p_discount: item.discount,
-        p_total: item.total
-       });
-       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
-if(data.length>2){
-  const mappedData = data[1].map((item, index) => ({
-    id: index,                         // Use the index as the id (starting from 0)
-    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
-    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
-    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    discount: item.discount || '' ,
-    tax_amt: item.tax || '' ,
-    description: item.description || '' ,
-    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
-}));
-  
- 
-  this.rows = mappedData // Assuming p_item_stock is an array of rows
-}
-    }
-   
-      
-    });
-  }
-  
-  piData(id: string) {
-    let req={
-  
-      p_performa_invoice_id:id
-    }
-    this.loading=true;
-  
-    this.apiService.GetProformaInvoice(req).subscribe((data:any) => {
-      debugger
-      if(data.length>0){
-      const item = data[0][0];  // Assuming the response structure is correct
-  
- 
-      this.mainForm.patchValue({
-        p_invoice_id: 0,
-        p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
-        p_branch_id:item.branch_id ,
-        p_billing_address_id: item.billing_address_id,
-        p_shipping_address_id: item.shipping_address_id,
-        p_payment_term_id: item.payment_term_id,
-        p_currency_id: item.currency_id,
-      //  p_person_id: this.userList.find(x=>x.user_id==item.person_id),
-        p_other_ref_no: item.ref_no,
-        p_purchase_order_no: item.purchase_order_no,
-      //  p_delivery_note_date: new Date(item.delivery_note_date),
-        p_purchase_order_date: new Date(item.purchase_order_date),
-        p_notes: item.notes,
-        p_invoice_date: new Date(),
-        p_invoice_due_date: '',
-        p_delivery_note_no: '',
-        p_bill_type: '',
-        p_sub_total: item.sub_total,
-        p_tax: item.tax,
-        p_discount: item.discount,
-        p_total: item.total
-       });
-       this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
-if(data.length>2){
-  const mappedData = data[1].map((item, index) => ({
-    id: index,                         // Use the index as the id (starting from 0)
-    item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
-    qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
-    rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    discount: item.discount || '' ,
-    tax_amt: item.tax || '' ,
-    description: item.description || '' ,
-    amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
-    tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
-}));
-  
- 
-  this.rows = mappedData // Assuming p_item_stock is an array of rows
-}
-    }
-   
-      
-    });
-  }
   fetchData(id: string) {
     let req={
 
@@ -212,30 +81,25 @@ if(data.length>2){
     }
     this.loading=true;
 
-    this.apiService.GetInvoice(req).subscribe((data:any) => {
+    this.apiService.GetCreditNote(req).subscribe((data:any) => {
       debugger
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
   
  
       this.mainForm.patchValue({
-        p_invoice_id: item.invoice_id,
+        p_credit_note_id: item.credit_note_id,
         p_customer_id: this.customerList.find(x=>x.customer_id==item.customer_id),
         p_branch_id:item.branch_id ,
         p_billing_address_id: item.billing_address_id,
         p_shipping_address_id: item.shipping_address_id,
-        p_payment_term_id: item.payment_term_id,
+        p_invoice_id: item.invoice_id,
         p_currency_id: item.currency_id,
         p_person_id: this.userList.find(x=>x.user_id==item.person_id),
         p_other_ref_no: item.other_ref_no,
         p_purchase_order_no: item.purchase_order_no,
-        p_delivery_note_date: new Date(item.delivery_note_date),
-        p_purchase_order_date: new Date(item.purchase_order_date),
+        p_credit_note_date: new Date(item.credit_note_date),
         p_notes: item.notes,
-        p_invoice_date: new Date(item.invoice_date),
-        p_invoice_due_date: new Date(item.invoice_due_date),
-        p_delivery_note_no: item.delivery_note_no,
-        p_bill_type: item.bill_type,
         p_sub_total: item.sub_total,
         p_tax: item.tax,
         p_discount: item.discount,
@@ -269,24 +133,18 @@ if(data.length>2){
 loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
-    paymentTerms: this.apiService.GetPaymentTerm(),
+    invoices: this.apiService.GetInvoice({p_invoice_id:'0'}),
     taxes: this.apiService.GetTax(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
     users: this.apiService.GetUserList({p_company_id:'0',p_role_id:'2'}),
-  }).subscribe(({ companies, customers,paymentTerms,taxes,users }) => {
+  }).subscribe(({ companies, customers,invoices,taxes,users }) => {
     this.companyList = companies;
     this.customerList = customers;
-    this.paymentTermList = paymentTerms;
+    this.invoiceList = invoices;
     this.taxList = taxes;
     this.userList = users;
     if (this.Id!=0) {
       this.fetchData(this.Id);
-    }
-    if (this.dn!=0) {
-      this.dnData(this.dn);
-    }
-    if (this.pi!=0) {
-    this.piData(this.pi);
     }
   });
 }
@@ -404,8 +262,7 @@ SelectedCustomer(model:any){
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({
-    p_payment_term_id:this.paymentTermList.find(x=>x.payment_term_id==this.selectedCustomer.payment_term_id),
-    p_currency_id:model.currency_id
+     p_currency_id:model.currency_id
   })
   this.updateDueDate();
 }

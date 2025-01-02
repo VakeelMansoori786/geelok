@@ -1074,7 +1074,7 @@ app.post('/api/sales/GetCreditNote', authMiddleware, async function (req, res) {
   try {
     await connection.query(
       "CALL pr_get_credit_note(?)",
-      [p_invoice_id],
+      [p_credit_note_id],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
 
