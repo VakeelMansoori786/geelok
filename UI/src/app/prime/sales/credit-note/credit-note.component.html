@@ -10,7 +10,7 @@
                 <div class="grid p-fluid">
                     <div class="col-12 md:col-12 lg:col-12">
                 
-                        <input hidden  formControlName="p_invoice_id">
+                        <input hidden  formControlName="p_credit_note_id">
                 <label htmlFor="state">Customer Name<span style="color: red;">*</span></label>
                 <div class="flex align-items-center">
                 <p-dropdown 
@@ -68,7 +68,7 @@
     
 
 </div>
-<div class="col-12 md:col-6 lg:col-6">
+<div class="col-12 md:col-6 lg:col-4">
             
     <label htmlFor="state">Branch<span style="color: red;">*</span></label>
       
@@ -88,7 +88,20 @@ filterBy="company_name"
 
 
 </div>  
-<div class="col-12 md:col-6 lg:col-6">
+<div class="col-12 md:col-6 lg:col-4">
+            
+    <label htmlFor="state">Invoice no<span style="color: red;">*</span></label>
+          
+    <p-dropdown 
+    formControlName="p_invoice_id" 
+    [options]="invoiceList"
+    optionLabel="name"
+    placeholder="Select a invoice"
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_invoice_id.touched && mainForm.controls.p_invoice_id.invalid}" 
+    />
+</div> 
+   
+<div class="col-12 md:col-6 lg:col-4">
             
     <label htmlFor="state">Sales Person<span style="color: red;">*</span></label>
       
@@ -108,68 +121,28 @@ filterBy="name"
 
 
 </div>  
-   
+ 
     
-    <div class="col-12 md:col-6 lg:col-3">
+    <div class="col-12 md:col-6 lg:col-4">
         <label htmlFor="state">Order No.</label>
             <input type="text" pInputText formControlName="p_other_ref_no" />
     </div>   
-    <div class="col-12 md:col-6 lg:col-3">
-            
-        <label htmlFor="state">Invoice no<span style="color: red;">*</span></label>
-              
-        <p-dropdown 
-        formControlName="p_invoice_id" 
-        [options]="invoiceList"
-        optionLabel="name"
-        placeholder="Select a invoice"
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_invoice_id.touched && mainForm.controls.p_invoice_id.invalid}" 
-        />
-    </div>  
-    <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Invoice Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_invoice_date" (onSelect)="updateDueDate()"
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_invoice_date.touched && mainForm.controls.p_invoice_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+    
+ 
+    <div class="col-12 md:col-6 lg:col-4">
+        <label htmlFor="state">Credit Note Date<span style="color: red;">*</span></label>
+        <p-calendar formControlName="p_credit_note_date" 
+        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_credit_note_date.touched && mainForm.controls.p_credit_note_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div>       
-    <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Invoice Due Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_invoice_due_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_invoice_due_date.touched && mainForm.controls.p_invoice_due_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-    </div> 
-    <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Delivery Note No.</label>
-            <input type="text" pInputText formControlName="p_delivery_note_no" />
-    </div> 
-    <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Delivery Note Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_delivery_note_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_note_date.touched && mainForm.controls.p_delivery_note_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-    </div>
+
    
-    <div class="col-12 md:col-6 lg:col-3">
+    <div class="col-12 md:col-6 lg:col-4">
         <label htmlFor="state">PO Number<span style="color: red;">*</span></label>
             <input type="text" pInputText formControlName="p_purchase_order_no"  [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_no.touched && mainForm.controls.p_purchase_order_no.invalid}" />
     </div> 
-    <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">PO Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_purchase_order_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-    </div>
   
-    <div class="col-12 md:col-6 lg:col-6">
-            
-        <label htmlFor="state">Bill Type<span style="color: red;">*</span></label>
-              
-        <p-multiSelect  
-        formControlName="p_bill_type" 
-        [options]="billType"
-        optionLabel="name"
-        placeholder="Select Bill type"
-        display="chip" 
-        [showClear]="true" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_bill_type.touched && mainForm.controls.p_bill_type.invalid}" 
-        />
-    </div>
+  
+ 
             <div class="col-12 md:col-6 lg:col-6">
                 <label htmlFor="state">Notes</label>
                     <input type="text" pInputText formControlName="p_notes" />

@@ -32,11 +32,7 @@ rows:any[] = [];
 taxList: any;
 addressList: any;
 userList: any;
-billType: any[] = [
-    
-  { name: 'Credit', key: 'credit' },
-  { name: 'Cash', key: 'cash' }
-];
+
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -77,7 +73,7 @@ billType: any[] = [
   fetchData(id: string) {
     let req={
 
-      p_delivery_note_id:id
+      p_credit_note_id:id
     }
     this.loading=true;
 
@@ -133,15 +129,13 @@ if(data.length>2){
 loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
-    invoices: this.apiService.GetInvoice({p_invoice_id:'0'}),
-    taxes: this.apiService.GetTax(),
+    invoices: this.apiService.GetInvoiceByCustomer({p_invoice_id:this.mainForm.value.customer_id}),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
     users: this.apiService.GetUserList({p_company_id:'0',p_role_id:'2'}),
-  }).subscribe(({ companies, customers,invoices,taxes,users }) => {
+  }).subscribe(({ companies, customers,invoices,users }) => {
     this.companyList = companies;
     this.customerList = customers;
     this.invoiceList = invoices;
-    this.taxList = taxes;
     this.userList = users;
     if (this.Id!=0) {
       this.fetchData(this.Id);

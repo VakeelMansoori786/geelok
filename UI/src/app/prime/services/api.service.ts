@@ -177,6 +177,9 @@ SaveInvoice(model:any) {
  GetInvoice(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/sales/GetInvoice`,model)
  }
+ GetInvoiceByCustomer(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetInvoiceByCustomer`,model)
+ }
 
    //#endregion
 

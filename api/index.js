@@ -1000,6 +1000,29 @@ app.post('/api/sales/GetInvoice', authMiddleware, async function (req, res) {
     return res.status(500).send({ error: err.message });
   }
 });
+app.post('/api/sales/GetInvoiceByCustomer', authMiddleware, async function (req, res) {
+  let p_customer_id = req.body.p_customer_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_invoice_by_customer(?)",
+      [p_invoice_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+
+        // If a specific ID is passed, return all related records
+        if (p_invoice_id != '0') {
+          return res.status(200).send(results);
+        }
+
+        // If ID is 0, return the general list
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
 
 
 //#endregion
