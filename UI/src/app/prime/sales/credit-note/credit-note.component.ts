@@ -53,7 +53,7 @@ userList: any;
       p_currency_id: ['', Validators.required],
       p_person_id:  ['', Validators.required],
       p_other_ref_no: [''],
-      p_purchase_order_no: ['', Validators.required],
+      p_purchase_order_no: [''],
       p_credit_note_date: [new Date()],
       p_notes: [''],
       p_sub_total: [''],
@@ -129,13 +129,12 @@ if(data.length>2){
 loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
-    invoices: this.apiService.GetInvoiceByCustomer({p_invoice_id:this.mainForm.value.customer_id}),
+   
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
     users: this.apiService.GetUserList({p_company_id:'0',p_role_id:'2'}),
-  }).subscribe(({ companies, customers,invoices,users }) => {
+  }).subscribe(({ companies, customers,users }) => {
     this.companyList = companies;
     this.customerList = customers;
-    this.invoiceList = invoices;
     this.userList = users;
     if (this.Id!=0) {
       this.fetchData(this.Id);
@@ -253,6 +252,7 @@ SelectedCustomer(model:any){
   
  
   this.GetAddress(model.customer_id);
+  this.Getinvoice(model.customer_id);
   this.selectedCustomer=model;
 
   this.mainForm.patchValue({
@@ -269,6 +269,15 @@ GetAddress(customer_id:any){
    this.addressList=data.map(x=>({ code:x.customer_address_id,name:x.address_1+' '+x.address_2+' '+x.city+' '+x.country_state_name+' '+x.country_name   }));
   });
 }
+
+Getinvoice(customer_id:any){
+  let req={p_customer_id:customer_id};
+  
+  this.apiService.GetInvoiceByCustomer(req).subscribe((data:any) => {
+    this.invoiceList=data;
+  });
+}
+
 calculate(index: any) {
   // Safely parse rate and quantity, defaulting to 0 if invalid
   const rate = parseFloat(this.rows[index].rate) || 0;
