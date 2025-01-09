@@ -125,13 +125,9 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
        const rows = results;
        const payload = { user: rows[0] };
-       console.log(payload)
        const token = jwt.sign(payload, config.JWT_SERECT_KEY, config.JWT_OPTION);
       
-       console.log(token)
        const decoded = jwt.decode(token);
-       
-       console.log(decoded)
        res.json({ token: token, user: rows[0],menu:rows[1] });
        
      } else {
@@ -189,7 +185,6 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
   
  })
  app.post('/api/item/SaveItem', authMiddleware, upload.none(), async function (req, res) {
-  console.log(req.user);
   let p_item_id = req.body.p_item_id;
   let p_item_group_id = req.body.p_item_group_id;
   let p_brand_id = req.body.p_brand_id;
@@ -1010,8 +1005,10 @@ app.post('/api/sales/GetInvoiceByCustomer', authMiddleware, async function (req,
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
 
-
-        // If ID is 0, return the general list
+  // If a specific ID is passed, return all related records
+  if (p_customer_id != '0') {
+    return res.status(200).send(results);
+  }
         return res.status(200).send(results[0]);
       }
     );

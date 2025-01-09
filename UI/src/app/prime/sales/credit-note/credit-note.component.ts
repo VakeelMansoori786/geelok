@@ -388,5 +388,38 @@ const taxEntry = this.taxList.find(x => x.tax_treatment_id === row.tax);
     this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
   }
 }
-
+SelectedInvoice(id:any){
+  debugger
+  const data=this.invoiceList.filter(x=>x.invoice_id=id);
+  const item = data[0][0];
+  this.mainForm.patchValue({
+    p_branch_id:item.branch_id ,
+    p_billing_address_id: item.billing_address_id,
+    p_shipping_address_id: item.shipping_address_id,
+    p_currency_id: item.currency_id,
+    p_person_id: this.userList.find(x=>x.user_id==item.person_id),
+    p_other_ref_no: item.ref_no,
+    p_purchase_order_no: item.purchase_order_no,
+    p_credit_note_date: new Date(item.credit_note_date),
+    p_notes: item.notes,
+    p_sub_total: item.sub_total,
+    p_tax: item.tax,
+    p_discount: item.discount,
+    p_total: item.total
+   });
+if(data.length>2){
+const mappedData = data[1].map((item, index) => ({
+id: index,                         // Use the index as the id (starting from 0)
+item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
+item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
+qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
+rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
+discount: item.discount || '' ,
+tax_amt: item.tax || '' ,
+description: item.description || '' ,
+amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
+tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
+}));
+}
+}
 }

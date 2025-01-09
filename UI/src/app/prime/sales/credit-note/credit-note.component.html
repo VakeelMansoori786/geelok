@@ -96,7 +96,11 @@ filterBy="company_name"
     formControlName="p_invoice_id" 
     [options]="invoiceList"
     optionLabel="ref_no"
+    optionValue="invoice_id"
     placeholder="Select a invoice"
+    [filter]="true"
+filterBy="ref_no" 
+(onChange)="SelectedInvoice($event.value)"
     [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_invoice_id.touched && mainForm.controls.p_invoice_id.invalid}" 
     />
 </div> 
