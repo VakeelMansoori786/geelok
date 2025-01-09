@@ -1005,10 +1005,7 @@ app.post('/api/sales/GetInvoiceByCustomer', authMiddleware, async function (req,
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
 
-  // If a specific ID is passed, return all related records
-  if (p_customer_id != '0') {
-    return res.status(200).send(results);
-  }
+
         return res.status(200).send(results[0]);
       }
     );

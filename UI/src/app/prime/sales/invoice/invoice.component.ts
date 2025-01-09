@@ -208,7 +208,7 @@ if(data.length>2){
   fetchData(id: string) {
     let req={
 
-      p_delivery_note_id:id
+      p_invoice_id:id
     }
     this.loading=true;
 
