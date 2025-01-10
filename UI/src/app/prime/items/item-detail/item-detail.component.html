@@ -178,6 +178,7 @@
                         [(ngModel)]="rows[i].branch_id" [ngModelOptions]="{standalone: true}"
                         [options]="companyList"
                         optionLabel="company_name"
+                        [filter]="true"
                         placeholder="Select a branch" /></td>
                       <td>  <input type="text" pInputText [(ngModel)]="rows[i].stock"  [ngModelOptions]="{standalone: true}"/></td>
                       <td><input type="text" pInputText [(ngModel)]="rows[i].stock_value" [ngModelOptions]="{standalone: true}" /></td>

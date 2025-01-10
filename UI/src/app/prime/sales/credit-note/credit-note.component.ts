@@ -129,12 +129,13 @@ if(data.length>2){
 loadDropdowns() {
   forkJoin({
     companies: this.apiService.GetCompany(),
-   
+    taxes: this.apiService.GetTax(),
     customers: this.apiService.GetCustomer({p_customer_id:'0'}),
     users: this.apiService.GetUserList({p_company_id:'0',p_role_id:'2'}),
-  }).subscribe(({ companies, customers,users }) => {
+  }).subscribe(({ companies, customers,users,taxes }) => {
     this.companyList = companies;
     this.customerList = customers;
+    this.taxList = taxes;
     this.userList = users;
     if (this.Id!=0) {
       this.fetchData(this.Id);
