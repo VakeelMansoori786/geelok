@@ -59,7 +59,7 @@ billType: any[] = [
       p_currency_id: ['', Validators.required],
       p_person_id:  ['', Validators.required],
       p_other_ref_no: [''],
-      p_purchase_order_no: ['', Validators.required],
+      p_purchase_order_no: [''],
       p_delivery_note_date: [new Date()],
       p_purchase_order_date: [new Date()],
       p_invoice_date: [new Date(), Validators.required],
@@ -294,7 +294,7 @@ loadDropdowns() {
 
 
 Save(model: any) {
-  
+  debugger
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();

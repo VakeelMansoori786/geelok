@@ -142,19 +142,17 @@ filterBy="name"
             <input type="text" pInputText formControlName="p_delivery_note_no" />
     </div> 
     <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">Delivery Note Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_delivery_note_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_delivery_note_date.touched && mainForm.controls.p_delivery_note_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+        <label htmlFor="state">Delivery Note Date</label>
+        <p-calendar formControlName="p_delivery_note_date"  dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div>
    
     <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">PO Number<span style="color: red;">*</span></label>
-            <input type="text" pInputText formControlName="p_purchase_order_no"  [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_no.touched && mainForm.controls.p_purchase_order_no.invalid}" />
+        <label htmlFor="state">PO Number</label>
+            <input type="text" pInputText formControlName="p_purchase_order_no"  />
     </div> 
     <div class="col-12 md:col-6 lg:col-3">
-        <label htmlFor="state">PO Date<span style="color: red;">*</span></label>
-        <p-calendar formControlName="p_purchase_order_date" 
-        [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_purchase_order_date.touched && mainForm.controls.p_purchase_order_date.invalid}"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+        <label htmlFor="state">PO Date</label>
+        <p-calendar formControlName="p_purchase_order_date"    dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
     </div>
   
     <div class="col-12 md:col-6 lg:col-6">
