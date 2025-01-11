@@ -241,6 +241,7 @@ if(data.length>2){
         p_discount: item.discount,
         p_total: item.total
        });
+       debugger
        this.SelectedCustomer(this.customerList.find(x=>x.customer_id==item.customer_id));
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({

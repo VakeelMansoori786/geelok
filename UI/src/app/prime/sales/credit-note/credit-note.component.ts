@@ -220,9 +220,9 @@ addRow() {
 }
 
 removeRow(id: any,index:any) {
-  
-  this.rows = this.rows.filter(row => row.id !== id);
   this.calculate(index);
+  this.rows = this.rows.filter(row => row.id !== id);
+
 }
 
 search(event: AutoCompleteCompleteEvent) {
@@ -274,6 +274,7 @@ Getinvoice(customer_id:any){
   let req={p_customer_id:customer_id};
   
   this.apiService.GetInvoiceByCustomer(req).subscribe((data:any) => {
+    debugger
     this.invoiceList=data;
   });
 }
