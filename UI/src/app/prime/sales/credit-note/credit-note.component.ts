@@ -162,45 +162,41 @@ Save(model: any) {
 
   // Prepare the request object
   const req = {
-    p_invoice_id: model.p_invoice_id,
-    p_customer_id: model.p_customer_id.customer_id,
-    p_branch_id: model.p_branch_id,
-    p_billing_address_id: model.p_billing_address_id,
-    p_shipping_address_id: model.p_shipping_address_id,
-    p_currency_id: model.p_currency_id,
-    p_person_id: model.p_person_id,
-    p_other_ref_no: model.p_other_ref_no,
-    p_purchase_order_no: model.p_purchase_order_no,
-    p_delivery_note_date: model.p_delivery_note_date,
-    p_purchase_order_date:model.p_purchase_order_date,
-    p_delivery_note_no:model.p_delivery_note_no,
-    p_invoice_date:model.p_invoice_date,
-    p_invoice_due_date:model.p_invoice_due_date,
-    p_bill_type: model.p_bill_type.map(item => item.key).toString(),
-    p_notes: model.p_notes,
-    p_sub_total: model.p_sub_total,
-    p_tax: model.p_tax,
-    p_discount: model.p_discount,
-    p_total: model.p_total,
-    p_invoice_details: JSON.stringify(this.rows.map((item, index) => ({
-      id: index,
-      item_id: item.item_id || null,
-      item_name: item.item_name || null,
-      qty: item.qty || '',
-      rate: item.rate || '',
-      discount: item.discount || '',
-      tax_amt: item.tax || '',
-      description: item.description || '',
-      amt: item.amt || '',
-      tax: item.tax_amt || ''
-    })))
+    p_credit_note_id: model.credit_note_id,
+        p_customer_id: this.customerList.find(x=>x.customer_id==model.customer_id),
+        p_branch_id:model.branch_id ,
+        p_billing_address_id: model.billing_address_id,
+        p_shipping_address_id: model.shipping_address_id,
+        p_invoice_id: model.invoice_id,
+        p_currency_id: model.currency_id,
+        p_person_id: this.userList.find(x=>x.user_id==model.person_id),
+        p_other_ref_no: model.other_ref_no,
+        p_purchase_order_no: model.purchase_order_no,
+        p_credit_note_date: new Date(model.credit_note_date),
+        p_notes: model.notes,
+        p_sub_total: model.sub_total,
+        p_tax: model.tax,
+        p_discount: model.discount,
+        p_total: model.total,
+        p_credit_note_details: JSON.stringify(this.rows.map((item, index) => ({
+      id: index,                         // Use the index as the id (starting from 0)
+      item_id: item.item_id || null,    // branch_id will be set to item.branch_id or default to an empty string
+      item_name: item.item_name || null,    // branch_id will be set to item.branch_id or default to an empty string
+      qty: item.qty || '',            // stock will be set to item.stock or default to an empty string
+      rate: item.rate || '' ,// stock_value will be set to item.stock_value or default to an empty string
+      discount: item.discount || '' ,
+      tax_amt: item.tax || '' ,
+      description: item.description || '' ,
+      amt: item.amt || '' ,// stock_value will be set to item.stock_value or default to an empty string
+      tax: this.selectedCustomer.tax_treatment_id || '' // stock_value will be set to item.stock_value or default to an empty string
+      })))
   };
 
   // Call the API service to save the bill
-  this.apiService.SaveInvoice(req).subscribe((data:any) => {
+  this.apiService.SaveCreditNote(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/sales/invoice-list']);
+        this.router.navigate(['/sales/credit-note-list']);
       });
             }
   
@@ -220,8 +216,22 @@ addRow() {
 }
 
 removeRow(id: any,index:any) {
-  this.calculate(index);
-  this.rows = this.rows.filter(row => row.id !== id);
+ // Remove the row at the specified index
+ if (index > -1 && index < this.rows.length) {
+  this.rows.splice(index, 1);
+}
+
+// Recalculate subtotals, discounts, taxes, and total amount
+const subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.amt) || 0), 0);
+const totalDiscount = this.rows.reduce((sum, row) => sum + (parseFloat(row.discount) || 0), 0);
+const totalTax = this.rows.reduce((sum, row) => sum + (parseFloat(row.tax_amt) || 0), 0);
+const totalAmount = subTotal + totalTax;
+
+// Update form controls with recalculated values
+this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
+this.mainForm.controls.p_tax.setValue(totalTax.toFixed(2));
+this.mainForm.controls.p_discount.setValue(totalDiscount.toFixed(2));
+this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
 
 }
 

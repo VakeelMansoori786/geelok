@@ -216,11 +216,27 @@ addRow() {
  }
 }
 
+
 removeRow(id: any,index:any) {
-  
-  this.rows = this.rows.filter(row => row.id !== id);
-  this.calculate(index);
-}
+  // Remove the row at the specified index
+  if (index > -1 && index < this.rows.length) {
+   this.rows.splice(index, 1);
+ }
+ 
+ // Recalculate subtotals, discounts, taxes, and total amount
+ const subTotal = this.rows.reduce((sum, row) => sum + (parseFloat(row.amt) || 0), 0);
+ const totalDiscount = this.rows.reduce((sum, row) => sum + (parseFloat(row.discount) || 0), 0);
+ const totalTax = this.rows.reduce((sum, row) => sum + (parseFloat(row.tax_amt) || 0), 0);
+ const totalAmount = subTotal + totalTax;
+ 
+ // Update form controls with recalculated values
+ this.mainForm.controls.p_sub_total.setValue(subTotal.toFixed(2));
+ this.mainForm.controls.p_tax.setValue(totalTax.toFixed(2));
+ this.mainForm.controls.p_discount.setValue(totalDiscount.toFixed(2));
+ this.mainForm.controls.p_total.setValue(totalAmount.toFixed(2));
+ 
+ }
+ 
 
 
 onSelect(event: any, index: number) {
