@@ -1045,7 +1045,7 @@ app.post('/api/sales/SaveCreditNote', authMiddleware, async function (req, res) 
   try {
     // Call the stored procedure for saving the credit note
     await connection.query(
-      "CALL pr_save_credit_note(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "CALL pr_save_credit_note(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
         p_credit_note_id,
         p_customer_id,
