@@ -47,7 +47,7 @@
 				<ng-template pTemplate="body" let-mainList>
 					<tr>
 						<td>
-							{{mainList.delivery_note_date | date: 'dd/MM/yyyy' }}
+							{{mainList.credit_note_date | date: 'dd/MM/yyyy' }}
 						</td>
 						<td>
                             {{mainList.company_name}}
@@ -56,13 +56,13 @@
                             {{mainList.customer_name}}
 						</td>
 						<td>
-                            {{mainList.ref_no}}
+                            {{mainList.other_ref_no}}
 						</td>
 						<td>
                             {{mainList.purchase_order_no}}
 						</td>
 						<td>
-                            {{mainList.other_ref_no}}
+                            {{mainList.ref_no}}
 						</td>
 						<td>
 							{{mainList.currency_name}}
