@@ -318,7 +318,7 @@ Save(model: any) {
     p_shipping_address_id: model.p_shipping_address_id,
     p_payment_term_id: model.p_payment_term_id.payment_term_id,
     p_currency_id: model.p_currency_id,
-    p_person_id: model.p_person_id,
+    p_person_id:model.p_person_id.user_id? model.p_person_id.user_id:model.p_person_id,
     p_other_ref_no: model.p_other_ref_no,
     p_purchase_order_no: model.p_purchase_order_no,
     p_delivery_note_date: model.p_delivery_note_date,
