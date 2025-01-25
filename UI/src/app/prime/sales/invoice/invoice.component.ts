@@ -235,7 +235,7 @@ if(data.length>2){
         p_invoice_date: new Date(item.invoice_date),
         p_invoice_due_date: new Date(item.invoice_due_date),
         p_delivery_note_no: item.delivery_note_no,
-        p_bill_type: item.bill_type,
+        p_bill_type:this.billType.filter(x=>x.key==item.bill_type)  ,
         p_sub_total: item.sub_total,
         p_tax: item.tax,
         p_discount: item.discount,
