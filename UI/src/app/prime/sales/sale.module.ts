@@ -31,6 +31,8 @@ import { SaleRoutingModule } from './sale-routing.module';
 import { PerformaInvoiceListComponent } from './performa-invoice-list/performa-invoice-list.component';
 import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { PaymentReceivedListComponent } from './payment-received-list/payment-received-list.component';
+import { PaymentReceivedComponent } from './payment-received/payment-received.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { InvoiceComponent } from './invoice/invoice.component';
     InvoiceComponent,
     InvoiceListComponent,
     CreditNoteComponent,
-    CreditNoteListComponent
+    CreditNoteListComponent,
+    PaymentReceivedListComponent,
+    PaymentReceivedComponent
   ],
   imports: [
     CommonModule,

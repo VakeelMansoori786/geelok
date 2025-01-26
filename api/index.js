@@ -1111,7 +1111,82 @@ app.post('/api/sales/GetCreditNote', authMiddleware, async function (req, res) {
 
 
 
+//#region Receivable
+app.post('/api/sales/SaveReceiveable', authMiddleware, async function (req, res) {
+  let p_sales_receiveable_id = req.body.p_sales_receiveable_id || 0;
+  let p_customer_id = req.body.p_customer_id;
+  let p_branch_id = req.body.p_branch_id;
+  let p_payment_date = req.body.p_payment_date;
+  let p_cheque_date = req.body.p_cheque_date || null;
+  let p_other_ref_no = req.body.p_other_ref_no || null;
+  let p_payment_type_id = req.body.p_payment_type_id;
+  let p_currency_id = req.body.p_currency_id;
+  let p_total_amount = req.body.p_total_amount;
+  let p_create_by = req.user.user[0].user_id;
+  let p_sales_receiveable_details = req.body.p_sales_receiveable_details;
 
+  try {
+    await connection.query(
+      "CALL pr_save_sales_receiveable(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        p_sales_receiveable_id,
+        p_customer_id,
+        p_branch_id,
+        p_currency_id,
+        p_payment_type_id,
+        p_payment_date,
+        p_cheque_date,
+        p_other_ref_no,
+        p_total_amount,
+        p_create_by,
+        p_sales_receiveable_details
+      ],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+
+app.post('/api/sales/GetReceiveable', authMiddleware, async function (req, res) {
+  let p_sales_receiveable_id = req.body.p_sales_receiveable_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_SalesReceivable(?)",
+      [p_sales_receiveable_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        if (p_sales_receiveable_id != '0') return res.status(200).send(results);
+        return res.status(200).send(results[0]);
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+
+app.post('/api/purchase/GetCustomerReceiveable', authMiddleware, async function (req, res) {
+  let p_customer_id = req.body.p_customer_id;
+
+  try {
+    await connection.query(
+      "CALL pr_get_customerPayable(?)",
+      [p_customer_id],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+        return res.status(200).send(results[0]);
+        
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
+//#endregion
 
 
 

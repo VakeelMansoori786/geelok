@@ -159,6 +159,17 @@ SaveProformaInvoice(model:any) {
    //#endregion
 
    
+//#region Payable
+SaveReceiveable(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/SaveReceiveable`,model)
+ }
+ GetReceiveable(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/sales/GetReceiveable`,model)
+ }
+ GetCustomerReceiveable(model:any) {
+  return this.httpClient.post(`${baseApiUrl}/api/purchase/GetCustomerReceiveable`,model)
+ }
+
 
 //#region Delivery Note
 SaveDeliveryNote(model:any) {
