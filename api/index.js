@@ -1174,7 +1174,7 @@ app.post('/api/purchase/GetCustomerReceiveable', authMiddleware, async function 
 
   try {
     await connection.query(
-      "CALL pr_get_customerPayable(?)",
+      "CALL pr_get_customerReceivable(?)",
       [p_customer_id],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
