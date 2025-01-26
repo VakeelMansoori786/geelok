@@ -76,7 +76,7 @@ otherDetail:any={
     }
     this.loading=true;
 
-    this.apiService.GetPayable(req).subscribe((data:any) => {
+    this.apiService.GetReceiveable(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
       this.currencyName=item.currencyName;
@@ -96,7 +96,7 @@ otherDetail:any={
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
     id: index,
-    purchase_bill_id:item.purchase_bill_id,
+    invoice_id:item.invoice_id,
     due_date: item.due_date,
     bill_no: item.bill_no ,
     po_no: item.po_no ,
@@ -178,7 +178,7 @@ debugger
     p_total_amount: model.p_total_amount,
     p_sales_receiveable_details: JSON.stringify(this.rows.map((item, index) => ({
       id: index,
-      purchase_bill_id:item.purchase_bill_id,
+      invoice_id:item.invoice_id,
       due_date: item.due_date,
       bill_no: item.bill_no ,
       po_no: item.po_no ,
@@ -190,10 +190,10 @@ debugger
   };
 
   // Call the API service to save the bill
-  this.apiService.SavePayable(req).subscribe((data:any) => {
+  this.apiService.SaveReceiveable(req).subscribe((data:any) => {
         
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
-        this.router.navigate(['/purchase/payable-list']);
+        this.router.navigate(['/sales/payment-received-list']);
       });
             }
   
@@ -216,7 +216,7 @@ SelectedCustomer(model:any){
   this.apiService.GetCustomerReceiveable(req).subscribe((data:any) => {
     
     this.rows=data;
-    this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.due_amount), 0);
+    this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.pending_amount), 0);
 
     if(data.length>0){
     this.mainForm.patchValue({
@@ -254,7 +254,7 @@ else{
 }
 PayFullBill(i:any){
   
-    this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].due_amount);
+    this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].pending_amount);
 
     const totalAmt  = this.rows.reduce((sum, row) => {
       const amount = row.paid_amount ?? 0; // Use 0 if row.paid_amount is null or undefined

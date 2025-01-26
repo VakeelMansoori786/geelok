@@ -211,7 +211,7 @@ filterBy="company_name"
                             <div class="p-inputgroup">
                                 <!-- Text Input -->
                                 <p-inputNumber 
-                                  inputId="integeronly" 
+                                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
                                   [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
                                   placeholder="Enter discount"
                                   (onBlur)="getTotalDiscount()"

@@ -165,11 +165,11 @@ filterBy="company_name"
                 </div> 
                       </td>
                       <td style="width: 10%;"> <p-inputNumber 
-                                  inputId="integeronly" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;"> <p-inputNumber 
-                                  inputId="integeronly" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
+                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;"> <p-inputNumber 
-                                  inputId="integeronly" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
+                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <p-dropdown 
                         [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
@@ -196,7 +196,7 @@ filterBy="company_name"
                             <div class="p-inputgroup">
                                 <!-- Text Input -->
                                 <p-inputNumber 
-                                  inputId="integeronly" 
+                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" 
                                   [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
                                   placeholder="Enter discount"
                                   (onBlur)="getTotalDiscount()"

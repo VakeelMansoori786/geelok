@@ -90,7 +90,7 @@ filterBy="company_name"
     <label htmlFor="state">Amount</label>
 
         <p-inputNumber 
-        inputId="integeronly"  formControlName="p_total_amount" 
+        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"  formControlName="p_total_amount" 
         (onBlur)="calculatePayment()"
         /><p-checkbox 
         (onChange)="PayFull($event)"
@@ -131,15 +131,15 @@ filterBy="company_name"
                   </thead>
                   <tbody>
                     <tr *ngFor="let row of rows; let i = index">
-                      <td> {{rows[i].due_date  | date:'dd/MM/yyyy' }}</td>
-                      <td> {{rows[i].bill_no}}</td>
-                      <td> {{rows[i].order_no}}</td>
+                      <td> {{rows[i].invoice_date  | date:'dd/MM/yyyy' }}</td>
+                      <td> {{rows[i].ref_no}}</td>
+                      <td> {{rows[i].purchase_order_no}}</td>
                       <td> {{rows[i].company_name}}</td>
                       <td> {{rows[i].total}}</td>
-                      <td> {{rows[i].total-rows[i].due_amount}}</td>
+                      <td> {{rows[i].total-rows[i].pending_amount}}</td>
                        <td style="width: 10%;">
                         <p-inputNumber 
-                        inputId="integeronly" 
+                         mode="decimal" 
                         [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"
                         placeholder="Enter amount"
                         (onBlur)="calculate()"
