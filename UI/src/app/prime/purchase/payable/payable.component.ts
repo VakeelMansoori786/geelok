@@ -183,7 +183,7 @@ debugger
       po_no: item.po_no ,
       branch: item.company_name ,
       bill_amount: item.total,
-      due_amount: item.due_amount,
+      due_amount: item.pending_amount,
       paid_amount:item.paid_amount
     })))
   };

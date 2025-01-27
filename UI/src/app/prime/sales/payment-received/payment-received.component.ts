@@ -184,7 +184,7 @@ debugger
       po_no: item.po_no ,
       branch: item.company_name ,
       bill_amount: item.total,
-      due_amount: item.due_amount,
+      due_amount: parseFloat(item.total)-parseFloat(item.pending_amount),
       paid_amount:parseFloat(item.paid_amount) || 0
     })))
   };
@@ -253,7 +253,7 @@ else{
  
 }
 PayFullBill(i:any){
-  
+  debugger
     this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].pending_amount);
 
     const totalAmt  = this.rows.reduce((sum, row) => {
@@ -294,7 +294,7 @@ ClearPaidAmt(){
   });
 }
 calculatePayment() {
-  debugger;
+  debugger
   const totalPayment = parseFloat(this.mainForm.value.p_total_amount) || 0;
 
   if (totalPayment <= 0) {
@@ -317,7 +317,7 @@ calculatePayment() {
   this.rows.forEach((row) => {
     const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
     if (amountDue > 0) {
-      row.paid_amount = (amountDue / totalAmountDue) * totalPayment;
+      row.paid_amount = parseFloat(((amountDue / totalAmountDue) * totalPayment).toFixed(2));
     } else {
       row.paid_amount = 0; // Set to 0 if no valid amount due
     }

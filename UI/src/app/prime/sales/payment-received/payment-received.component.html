@@ -90,8 +90,7 @@ filterBy="company_name"
     <label htmlFor="state">Amount</label>
 
         <input type="number" pInputText  formControlName="p_total_amount" 
-        (onBlur)="calculatePayment()"
-        /><p-checkbox 
+        (blur)="calculatePayment()" /><p-checkbox 
         (onChange)="PayFull($event)"
         [(ngModel)]="otherDetail.is_full_payement"  [ngModelOptions]="{standalone: true}"
             [binary]="true" 
@@ -140,7 +139,7 @@ filterBy="company_name"
                         <input type="number" pInputText
                         [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"
                         placeholder="Enter amount"
-                        (onBlur)="calculate()"
+                        (blur)="calculate()"
                         />
                         <a href="javascript:void()" (click)="PayFullBill(i)">Pay in Full</a>
                     </td>
