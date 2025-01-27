@@ -103,7 +103,7 @@ if(data.length>2){
     branch: item.company_name ,
     bill_amount: item.total,
     due_amount: item.due_amount,
-    paid_amount:item.paid_amount
+    paid_amount:  parseFloat(item.paid_amount) || 0
   }));
   
  
@@ -185,7 +185,7 @@ debugger
       branch: item.company_name ,
       bill_amount: item.total,
       due_amount: item.due_amount,
-      paid_amount:item.paid_amount
+      paid_amount:parseFloat(item.paid_amount) || 0
     })))
   };
 
