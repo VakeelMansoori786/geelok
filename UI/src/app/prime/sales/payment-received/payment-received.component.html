@@ -134,7 +134,7 @@ filterBy="company_name"
                       <td> {{rows[i].purchase_order_no}}</td>
                       <td> {{rows[i].company_name}}</td>
                       <td> {{rows[i].total}}</td>
-                      <td> {{rows[i].total-rows[i].pending_amount}}</td>
+                      <td> {{rows[i].pending_amount | number: '1.2-2'}}</td>
                        <td style="width: 10%;">
                         <input type="number" pInputText
                         [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"

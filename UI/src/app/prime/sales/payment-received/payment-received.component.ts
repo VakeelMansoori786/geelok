@@ -294,34 +294,88 @@ ClearPaidAmt(){
   });
 }
 calculatePayment() {
-  debugger
   const totalPayment = parseFloat(this.mainForm.value.p_total_amount) || 0;
 
-  if (totalPayment <= 0) {
-    console.error("Total payment amount must be greater than zero.");
-    return;
-  }
-
-  // Calculate the total amount due for all rows
-  const totalAmountDue = this.rows.reduce((sum, row) => {
-    const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
-    return sum + (amountDue > 0 ? amountDue : 0); // Only sum positive amounts
+  // Calculate the total amount pending for all rows
+  const totalPendingAmount = this.rows.reduce((sum, row) => {
+    const pendingAmount = parseFloat(row.pending_amount || 0);
+    return sum + (pendingAmount > 0 ? pendingAmount : 0); // Only sum positive pending amounts
   }, 0);
 
-  if (totalAmountDue <= 0) {
-    console.error("No valid amount due to distribute.");
+  if (totalPendingAmount <= 0) {
+    console.error("No valid pending amount to distribute.");
     return;
   }
 
-  // Calculate the ratio of amount due for each row and assign the paid amount
+  let remainingPayment = totalPayment;
+
+  // First pass: Pay off the pending amounts for each row
   this.rows.forEach((row) => {
-    const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
-    if (amountDue > 0) {
-      row.paid_amount = parseFloat(((amountDue / totalAmountDue) * totalPayment).toFixed(2));
+    const pendingAmount = parseFloat(row.pending_amount || 0);
+
+    if (pendingAmount > 0) {
+      // If there is enough remaining payment, pay the full pending amount
+      if (remainingPayment >= pendingAmount) {
+        row.paid_amount = parseFloat(pendingAmount.toFixed(2));
+        remainingPayment -= pendingAmount;
+      } else {
+        // If not enough payment to cover the pending amount, pay whatever is remaining
+        row.paid_amount = parseFloat(remainingPayment.toFixed(2));
+        remainingPayment = 0; // All remaining payment has been used
+      }
     } else {
-      row.paid_amount = 0; // Set to 0 if no valid amount due
+      row.paid_amount = 0; // Set to 0 if no valid pending amount
     }
   });
+
+  // Second pass: If there is still remaining payment, distribute it to rows that have a pending amount
+  if (remainingPayment > 0) {
+    this.rows.forEach((row) => {
+      if (remainingPayment <= 0) return; // Stop if no remaining payment
+
+      const pendingAmount = parseFloat(row.pending_amount || 0);
+
+      if (pendingAmount > 0) {
+        // If the row still has pending amount, distribute the remaining payment
+        const amountToPay = Math.min(pendingAmount, remainingPayment);
+
+        row.paid_amount += parseFloat(amountToPay.toFixed(2)); // Add the remaining payment to this row
+        remainingPayment -= amountToPay; // Subtract the distributed amount from remaining payment
+      }
+    });
+  }
+
+  // If there's any remaining payment, log it
+  if (remainingPayment > 0) {
+    console.warn(`There is remaining payment of ${remainingPayment.toFixed(2)} that could not be fully distributed.`);
+  }
 }
+
+// calculatePayment() {
+  
+//   const totalPayment = parseFloat(this.mainForm.value.p_total_amount) || 0;
+
+
+//   // Calculate the total amount due for all rows
+//   const totalAmountDue = this.rows.reduce((sum, row) => {
+//     const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
+//     return sum + (amountDue > 0 ? amountDue : 0); // Only sum positive amounts
+//   }, 0);
+
+//   if (totalAmountDue <= 0) {
+//     console.error("No valid amount due to distribute.");
+//     return;
+//   }
+
+//   // Calculate the ratio of amount due for each row and assign the paid amount
+//   this.rows.forEach((row) => {
+//     const amountDue = parseFloat(row.total || 0) - parseFloat(row.due_amount || 0);
+//     if (amountDue > 0) {
+//       row.paid_amount = parseFloat(((amountDue / totalAmountDue) * totalPayment).toFixed(2));
+//     } else {
+//       row.paid_amount = 0; // Set to 0 if no valid amount due
+//     }
+//   });
+// }
 }
 
