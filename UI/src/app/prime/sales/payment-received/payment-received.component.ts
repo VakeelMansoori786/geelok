@@ -70,6 +70,7 @@ otherDetail:any={
     this.cdr.detectChanges();
   }
   fetchData(id: string) {
+      
     let req={
 
       p_sales_receiveable_id:id
@@ -77,6 +78,7 @@ otherDetail:any={
     this.loading=true;
 
     this.apiService.GetReceiveable(req).subscribe((data:any) => {
+      
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
       this.currencyName=item.currencyName;
@@ -98,8 +100,8 @@ if(data.length>2){
     id: index,
     invoice_id:item.invoice_id,
     due_date: item.due_date,
-    bill_no: item.bill_no ,
-    po_no: item.po_no ,
+    bill_no: item.ref_no ,
+    po_no: item.purchase_order_no ,
     branch: item.company_name ,
     bill_amount: item.total,
     due_amount: item.due_amount,
@@ -108,6 +110,8 @@ if(data.length>2){
   
  
   this.rows = mappedData // Assuming p_item_stock is an array of rows
+  
+this.SelectedCustomer(this.mainForm.value.p_customer_id,id);
 }
     }
    
@@ -150,7 +154,7 @@ groupByType(paymentMethods:any) {
 }
 
 Save(model: any) {
-  debugger
+  
   // Check if form is valid
   if (!this.mainForm.valid) {
     this.mainForm.markAllAsTouched();
@@ -164,7 +168,7 @@ Save(model: any) {
 
   // Mark loading state
   this.loading = true;
-debugger
+
   // Prepare the request object
   const req = {
     p_sales_receiveable_id: model.p_sales_receiveable_id,
@@ -205,11 +209,12 @@ debugger
 
 
 
-SelectedCustomer(model:any){
+SelectedCustomer(model:any,id:any){
   
  this.currencyName= model.currency_name;
   let req={
-    p_customer_id:model.customer_id
+    p_customer_id:model.customer_id,
+    p_sales_receiveable_id:id
 
   }
 
@@ -253,7 +258,7 @@ else{
  
 }
 PayFullBill(i:any){
-  debugger
+  
     this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].pending_amount);
 
     const totalAmt  = this.rows.reduce((sum, row) => {

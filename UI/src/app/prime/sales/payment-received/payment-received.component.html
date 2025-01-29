@@ -21,7 +21,7 @@
                     [filter]="true"
                     filterBy="customer_name" 
                     [showClear]="true"
-                    (onChange)="SelectedCustomer($event.value)"
+                    (onChange)="SelectedCustomer($event.value,0)"
                     [ngStyle]="{ 'flex': '1' }"
                     [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_customer_id.touched && mainForm.controls.p_customer_id.invalid}"
                     />
@@ -98,7 +98,7 @@ filterBy="company_name"
             inputId="is_full_payement" 
           
             />
-            <label for="is_full_payement">Pay full amount ({{currencyName}} {{otherDetail.full_amount}}) </label>
+            <label for="is_full_payement">Pay full amount ({{currencyName}} {{otherDetail.full_amount | number: '1.2-2'}}) </label>
         
            
         
