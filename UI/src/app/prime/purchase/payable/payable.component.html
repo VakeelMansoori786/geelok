@@ -89,8 +89,8 @@ filterBy="company_name"
 <div class="col-12 md:col-4 lg:col-4" *ngIf="mainForm.value.p_customer_id!=''">
     <label htmlFor="state">Amount</label>
 
-        <p-inputNumber 
-        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"  formControlName="p_total_amount" 
+        <input type="number"  
+        pInputText  formControlName="p_total_amount" 
         (onBlur)="calculatePayment()"
         /><p-checkbox 
         (onChange)="PayFull($event)"
@@ -138,8 +138,8 @@ filterBy="company_name"
                       <td> {{rows[i].total}}</td>
                       <td> {{rows[i].total-rows[i].due_amount}}</td>
                        <td style="width: 10%;">
-                        <p-inputNumber 
-                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                        <input type="number"  
+                        pInputText
                         [(ngModel)]="rows[i].paid_amount"  [ngModelOptions]="{standalone: true}"
                         placeholder="Enter amount"
                         (onBlur)="calculate()"

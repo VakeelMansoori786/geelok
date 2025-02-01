@@ -163,13 +163,12 @@
                         <td colspan="2">
                             <div class="p-inputgroup">
                                 <!-- Text Input -->
-                                <p-inputNumber 
-                                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                                <input type="number"  pInputText
+                               name="totalDiscount"
                                   [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
                                   placeholder="Enter discount"
                                   (onBlur)="getTotalDiscount()"
-                                  >
-                                </p-inputNumber>
+                                 />
                               <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
                              <span  *ngIf="discountType=='percentage'" style="cursor: pointer;" class="p-inputgroup-addon"  (click)="setDiscountType('amount')"><i class="pi pi-percentage"></i></span>
                                 

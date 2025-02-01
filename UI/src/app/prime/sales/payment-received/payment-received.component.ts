@@ -221,8 +221,8 @@ SelectedCustomer(model:any,id:any){
   this.apiService.GetCustomerReceiveable(req).subscribe((data:any) => {
     
     this.rows=data;
-    this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.pending_amount), 0);
-
+    this.otherDetail.full_amount = this.rows.reduce((sum, row) => sum + (row.total - row.paid_amount), 0);
+    this.otherDetail.full_amount=this.otherDetail.full_amount.toFixed(2);
     if(data.length>0){
     this.mainForm.patchValue({
 
@@ -248,6 +248,7 @@ PayFull(event:any){
     this.rows.forEach((row) => {
       const amountDue =parseFloat(row.total)  -parseFloat(row.due_amount);
       row.paid_amount = (amountDue / this.otherDetail.full_amount) * this.otherDetail.full_amount;
+      row.paid_amount =row.paid_amount.toFixed(2)
     });
   }
 else{
@@ -258,7 +259,7 @@ else{
  
 }
 PayFullBill(i:any){
-  
+  debugger
     this.rows[i].paid_amount=parseFloat(this.rows[i].total)  -parseFloat(this.rows[i].pending_amount);
 
     const totalAmt  = this.rows.reduce((sum, row) => {

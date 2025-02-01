@@ -160,11 +160,11 @@ filterBy="company_name"
                     </textarea>
                 </div> 
                       </td>
-                      <td style="width: 10%;"> <p-inputNumber 
+                      <td style="width: 10%;"> <input type="number"  
                                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"> <p-inputNumber 
+                      <td style="width: 10%;"> <input type="number"  
                                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"> <p-inputNumber 
+                      <td style="width: 10%;"> <input type="number"  
                                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
                       <td style="width: 10%;">
                         <p-dropdown 
@@ -191,13 +191,13 @@ filterBy="company_name"
                         <td colspan="2">
                             <div class="p-inputgroup">
                                 <!-- Text Input -->
-                                <p-inputNumber 
+                                <input type="number"  
                                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" 
                                   [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
                                   placeholder="Enter discount"
                                   (onBlur)="getTotalDiscount()"
-                                  >
-                                </p-inputNumber>
+                                  />
+                               
                               <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
                              <span  *ngIf="discountType=='percentage'" style="cursor: pointer;" class="p-inputgroup-addon"  (click)="setDiscountType('amount')"><i class="pi pi-percentage"></i></span>
                                 

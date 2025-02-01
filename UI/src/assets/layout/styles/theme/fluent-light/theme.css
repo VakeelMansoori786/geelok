@@ -1102,22 +1102,22 @@ p-inputmask.p-inputmask-clearable .p-inputmask-clear-icon {
   right: 0.5rem;
 }
 
-p-inputnumber.ng-dirty.ng-invalid > .p-inputnumber > .p-inputtext {
+<input type="number" .ng-dirty.ng-invalid > .<input type="number"  > .p-inputtext {
   border-color: #a4252c;
 }
 
-p-inputnumber.p-inputnumber-clearable .p-inputnumber-input {
+<input type="number" .<input type="number" -clearable .<input type="number" -input {
   padding-right: 2rem;
 }
-p-inputnumber.p-inputnumber-clearable .p-inputnumber-clear-icon {
+<input type="number" .<input type="number" -clearable .<input type="number" -clear-icon {
   color: #605e5c;
   right: 0.5rem;
 }
 
-p-inputnumber.p-inputnumber-clearable .p-inputnumber-buttons-stacked .p-inputnumber-clear-icon {
+<input type="number" .<input type="number" -clearable .<input type="number" -buttons-stacked .<input type="number" -clear-icon {
   right: 2.857rem;
 }
-p-inputnumber.p-inputnumber-clearable .p-inputnumber-buttons-horizontal .p-inputnumber-clear-icon {
+<input type="number" .<input type="number" -clearable .<input type="number" -buttons-horizontal .<input type="number" -clear-icon {
   right: 2.857rem;
 }
 

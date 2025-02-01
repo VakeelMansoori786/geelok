@@ -1171,11 +1171,12 @@ app.post('/api/sales/GetReceiveable', authMiddleware, async function (req, res) 
 
 app.post('/api/purchase/GetCustomerReceiveable', authMiddleware, async function (req, res) {
   let p_customer_id = req.body.p_customer_id;
+  let p_sales_receiveable_id = req.body.p_sales_receiveable_id;
 
   try {
     await connection.query(
-      "CALL pr_get_customerReceivable(?)",
-      [p_customer_id],
+      "CALL pr_get_customerReceivable(?,?)",
+      [p_customer_id,p_sales_receiveable_id],
       function (error, results, fields) {
         if (error) return res.status(500).send({ error: error.message });
         return res.status(200).send(results[0]);
