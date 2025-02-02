@@ -1,7 +1,7 @@
 <p-toast key="tst"></p-toast>
 <div class="col-12"  [formGroup]="mainForm">
     <div class="card">
-        <h5>Record Payment</h5>
+        <h5>Payment Received</h5>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12">
         
@@ -58,13 +58,18 @@ filterBy="company_name"
 </div> 
 <div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
     <label htmlFor="state">Payment Date<span style="color: red;">*</span></label>
-    <p-calendar formControlName="p_cheque_date" 
-    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_cheque_date.touched && mainForm.controls.p_cheque_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
-</div>  
+    <p-calendar formControlName="p_payment_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_payment_date.touched && mainForm.controls.p_payment_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div>   
 <div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
     <label htmlFor="state">Cheque No</label>
         <input type="text" pInputText formControlName="p_other_ref_no" />
-</div>  
+</div> 
+<div class="col-12 md:col-3 lg:col-3" *ngIf="mainForm.value.p_customer_id!=''">
+    <label htmlFor="state">Cheque Date</label>
+    <p-calendar formControlName="p_cheque_date" 
+    [ngClass]="{'ng-invalid ng-dirty': mainForm.controls.p_cheque_date.touched && mainForm.controls.p_cheque_date.invalid}"   dateFormat="dd/mm/yy" [showIcon]="true" [showOnFocus]="false"  />
+</div> 
 
 
 <div class="col-12 md:col-6 lg:col-6" *ngIf="mainForm.value.p_customer_id!=''">
