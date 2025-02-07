@@ -30,9 +30,11 @@ Id:any='0'
       ) { }
       ngOnInit() {
         if(this.route.snapshot.paramMap.get('id')){
+          debugger
           this.Id= atob(this.route.snapshot.paramMap.get('id')!);
+          this.itemsList=this.commonService.getItems();
          }
-this.itemsList=this.commonService.getItems();
+
       }
 
 }

@@ -25,6 +25,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ItemTransferListComponent } from './item-transfer-list/item-transfer-list.component';
 import { TabViewModule } from 'primeng/tabview';
 import { ItemPreviewComponent } from './item-preview/item-preview.component';
+import { OrderListModule } from 'primeng/orderlist';
 
 @NgModule({
 	imports: [
@@ -49,7 +50,8 @@ import { ItemPreviewComponent } from './item-preview/item-preview.component';
 		ConfirmDialogModule,
 		RadioButtonModule,
 		AutoCompleteModule,
-		TabViewModule 
+		TabViewModule,
+		OrderListModule  
 	],
 	declarations: [ItemDetailComponent,ItemListComponent,ItemTransferComponent, ItemTransferListComponent,ItemPreviewComponent]
 })

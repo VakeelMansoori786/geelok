@@ -6,6 +6,7 @@ import { LocalStoreService } from '../../services/local-store.service';
 import { SliderService } from '../../services/slider.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
+import { CommonService } from '../../services/common.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class ItemListComponent implements OnInit {
       private service: MessageService,
       private confirmationService: ConfirmationService,
       private apiService:APIService,
+       private commonService:CommonService
       ) { }
   ngOnInit() {
     this.GetItem('0'); 
@@ -100,6 +102,11 @@ Add(){
 }
 onImageError(event: any): void {
   event.target.src = 'assets/layout/images/not_found_img.png';  // Set the source to default image
+}
+Preview(id:any){
+  debugger
+this.commonService.setItems(this.mainList);
+  this.router.navigate(['/items/preview',{ id: btoa(id) },]);
 }
 }
 
