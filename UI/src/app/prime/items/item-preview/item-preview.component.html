@@ -11,10 +11,7 @@
             filterPlaceholder="Filter by name">
                 <ng-template let-mainList pTemplate="item">
                     <div class="flex flex-wrap p-2 align-items-center gap-3">
-                        <img 
-                        [src]="mainList.url"
-                            [alt]="mainList.name" 
-                            class="w-4rem shadow-2 flex-shrink-0 border-round" />
+                   
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{mainList.name}}</span>
                                 <div class="flex align-items-center gap-2">
