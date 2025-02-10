@@ -3,28 +3,15 @@
 <div class="grid">
 	<div class="col-3">
 		<div class="card">
-            <p-orderList 
-            [value]="itemsList" 
-            [listStyle]="{ 'max-height': '30rem' }" 
-            header="Items"
-            filterBy="name" 
-            filterPlaceholder="Filter by name">
-                <ng-template let-mainList pTemplate="item">
-                    <div class="flex flex-wrap p-2 align-items-center gap-3">
-                   
-                            <div class="flex-1 flex flex-column gap-2">
-                                <span class="font-bold">{{mainList.name}}</span>
-                                <div class="flex align-items-center gap-2">
-                                    <i class="pi pi-tag text-sm"></i>
-                                    <span>{{mainList.item_type}}</span>
-                                </div>
-                            </div>
-                        <span class="font-bold text-900">
-                            {{mainList.cost_price}}
-                        </span>
-                    </div>
-                </ng-template>
-        </p-orderList>
+
+            <p-listbox 
+    [options]="itemsList" 
+    [filter]="true" 
+    optionLabel="name"
+>
+  
+</p-listbox>
+          
         </div>
         </div>
         <div class="col-9">

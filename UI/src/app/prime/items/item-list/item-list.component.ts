@@ -44,18 +44,12 @@ export class ItemListComponent implements OnInit {
 
   GetItem(id:any) {
     let req={
-
       p_item_id:id
     }
     this.loading=true;
-
     this.apiService.GetItem(req).subscribe((data:any) => {
         this.mainList=data;
-       
-     
     this.loading=false;
-
-
     });
   }
 

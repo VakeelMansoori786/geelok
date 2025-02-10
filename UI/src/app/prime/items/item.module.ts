@@ -26,6 +26,7 @@ import { ItemTransferListComponent } from './item-transfer-list/item-transfer-li
 import { TabViewModule } from 'primeng/tabview';
 import { ItemPreviewComponent } from './item-preview/item-preview.component';
 import { OrderListModule } from 'primeng/orderlist';
+import { ListboxModule } from 'primeng/listbox';
 
 @NgModule({
 	imports: [
@@ -51,7 +52,8 @@ import { OrderListModule } from 'primeng/orderlist';
 		RadioButtonModule,
 		AutoCompleteModule,
 		TabViewModule,
-		OrderListModule  
+		OrderListModule,
+		ListboxModule   
 	],
 	declarations: [ItemDetailComponent,ItemListComponent,ItemTransferComponent, ItemTransferListComponent,ItemPreviewComponent]
 })

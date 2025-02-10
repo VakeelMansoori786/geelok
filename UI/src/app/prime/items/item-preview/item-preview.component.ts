@@ -19,6 +19,7 @@ export class ItemPreviewComponent {
   loading = false;
 itemsList:any;
 Id:any='0'
+SelectedItem='';
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -30,11 +31,27 @@ Id:any='0'
       ) { }
       ngOnInit() {
         if(this.route.snapshot.paramMap.get('id')){
-          debugger
+          
           this.Id= atob(this.route.snapshot.paramMap.get('id')!);
-          this.itemsList=this.commonService.getItems();
+        this.LoadItem();
+          
          }
 
+      }
+      LoadItem(){
+        
+        this.itemsList=this.commonService.getItems();
+        if (!this.itemsList || Object.keys(this.itemsList).length === 0) 
+        {
+          let req={
+            p_item_id:'0'
+          }
+          this.loading=true;
+          this.apiService.GetItem(req).subscribe((data:any) => {
+              this.itemsList=data;
+          this.loading=false;
+          });
+        }
       }
 
 }
