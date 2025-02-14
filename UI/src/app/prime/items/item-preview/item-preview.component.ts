@@ -7,6 +7,7 @@ import { APIService } from '../../services/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin } from 'rxjs';
 import { CommonService } from '../../services/common.service';
+import { ItemService } from '../../services/item.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ SelectedItem:any={};
       private commonService:CommonService,
       private service: MessageService,
       private confirmationService: ConfirmationService,
+            private itemService:ItemService,
       ) { }
       ngOnInit() {
         if(this.route.snapshot.paramMap.get('id')){
@@ -49,7 +51,7 @@ SelectedItem:any={};
             p_item_id:'0'
           }
           this.loading=true;
-          this.apiService.GetItem(req).subscribe((data:any) => {
+          this.itemService.GetItem(req).subscribe((data:any) => {
               this.itemsList=data;
               this.SelectedItem=this.itemsList.find(x=>x.item_id)
           this.loading=false;
@@ -59,7 +61,12 @@ SelectedItem:any={};
           this.SelectedItem=this.itemsList.find(x=>x.item_id)
         }
       }
-    
+      GetItem(model: any) {
+        this.SelectedItem=model
+        this.itemService.setItemId(model.item_id);
+
+      }
+      
 Delete(id:any){
   this.confirmationService.confirm({
     target: event.target as EventTarget,
@@ -72,7 +79,7 @@ Delete(id:any){
     accept: () => {
       this.loading=true;
 
-      this.apiService.DeleteItem(id).subscribe((data:any) => {
+      this.itemService.DeleteItem(id).subscribe((data:any) => {
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].Msg });
       
     this.ngOnInit();

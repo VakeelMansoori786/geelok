@@ -7,6 +7,7 @@ import { APIService } from '../../services/api.service';
 import { forkJoin } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { ItemService } from '../../services/item.service';
 @Component({
   selector: 'app-credit-note',
   templateUrl: './credit-note.component.html',
@@ -39,6 +40,7 @@ userList: any;
       private router: Router,
       private ls:LocalStoreService,
       private apiService:APIService,
+            private itemService:ItemService,
       private service: MessageService
       ) { }
   ngOnInit() {
@@ -241,7 +243,7 @@ search(event: AutoCompleteCompleteEvent) {
 let model={
 name:event.query
 }
-  this.apiService.GetItemByName(model).subscribe((data:any) => {
+  this.itemService.GetItemByName(model).subscribe((data:any) => {
     this.selectedItem=data;
     this.suggestions =data.map(row => row.name );;
     

@@ -7,6 +7,7 @@ import { SliderService } from '../../services/slider.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { CommonService } from '../../services/common.service';
+import { ItemService } from '../../services/item.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class ItemListComponent implements OnInit {
       private service: MessageService,
       private confirmationService: ConfirmationService,
       private apiService:APIService,
+            private itemService:ItemService,
        private commonService:CommonService
       ) { }
   ngOnInit() {
@@ -47,7 +49,7 @@ export class ItemListComponent implements OnInit {
       p_item_id:id
     }
     this.loading=true;
-    this.apiService.GetItem(req).subscribe((data:any) => {
+    this.itemService.GetItem(req).subscribe((data:any) => {
         this.mainList=data;
     this.loading=false;
     });
@@ -100,6 +102,7 @@ onImageError(event: any): void {
 Preview(id:any){
   debugger
 this.commonService.setItems(this.mainList);
+this.itemService.setItemId(id);
   this.router.navigate(['/items/preview',{ id: btoa(id) },]);
 }
 }

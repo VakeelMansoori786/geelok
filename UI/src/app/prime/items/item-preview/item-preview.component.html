@@ -9,6 +9,7 @@
     [options]="itemsList" 
     [filter]="true" 
     optionLabel="name"
+    (onClick)="GetItem($event.value)"
 >
   
 </p-listbox>
@@ -28,7 +29,7 @@
     <p-tabView>
         <p-tabPanel header="Edit">
             <p>
-               <app-item-detail [id]="SelectedItem.item_id"></app-item-detail>
+               <app-item-detail ></app-item-detail>
             </p>
         </p-tabPanel>
         <p-tabPanel header="Warehouses">

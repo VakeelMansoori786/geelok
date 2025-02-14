@@ -24,20 +24,6 @@ GetCustomer(model:any) {
 
 //#endregion
 
-   
-   GetItem(model:any) {
-    return this.httpClient.post(`${baseApiUrl}/api/item/GetItem`,model)
-   }
-
-   
-   
-   DeleteItem(model:any) {
-    return this.httpClient.get(`${baseApiUrl}/api/item/DeleteItem?id=`+model)
-   }
-   GetItemByName(model:any) {
-    return this.httpClient.post(`${baseApiUrl}/api/item/GetItemByName`,model)
-   }
-
    GetBrand() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetBrand`)
    }

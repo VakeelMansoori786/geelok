@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { baseApiUrl } from 'src/environments/environment';
 
 @Injectable({
@@ -7,15 +8,23 @@ import { baseApiUrl } from 'src/environments/environment';
 })
 export class ItemService {
   private ItemData:any;
+  private itemIdSubject = new BehaviorSubject<string | null>(null); // BehaviorSubject for item ID
+  
   constructor(private httpClient:HttpClient) { }
 
+ 
+   
   GetItem(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetItem`,model)
    }
-  
-   SaveItem(model:any) {
-    return this.httpClient.post(`${baseApiUrl}/api/item/SaveItem`,model)
+
+   DeleteItem(model:any) {
+    return this.httpClient.get(`${baseApiUrl}/api/item/DeleteItem?id=`+model)
    }
+   GetItemByName(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/GetItemByName`,model)
+   }
+
 
    GetItemData(){
 return this.ItemData;
@@ -23,5 +32,11 @@ return this.ItemData;
 
    SetItemData(model:any){
  this.ItemData=model;
+   }
+   setItemId(id:any){
+    this.itemIdSubject.next(id);
+   }
+   getItemId(){
+    return this.itemIdSubject.asObservable();
    }
 }

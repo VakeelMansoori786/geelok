@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin } from 'rxjs';
+import { ItemService } from '../../services/item.service';
 
 @Component({
   selector: 'app-item-transfer',
@@ -33,6 +34,7 @@ rows = [
       private router: Router,
       private ls:LocalStoreService,
       private apiService:APIService,
+            private itemService:ItemService,
       private service: MessageService
       ) { }
   ngOnInit() {
@@ -168,7 +170,7 @@ if(data.length>2){
 let model={
   p_item_id:id
 }
-    this.apiService.GetItem(model).subscribe((data:any) => {
+    this.itemService.GetItem(model).subscribe((data:any) => {
         this.companyList=data;
        
      
@@ -195,7 +197,7 @@ let model={
 let model={
   name:event.query
 }
-    this.apiService.GetItemByName(model).subscribe((data:any) => {
+    this.itemService.GetItemByName(model).subscribe((data:any) => {
       this.selectedItem=data;
       this.suggestions =data.map(row => row.name );;
       

@@ -5,6 +5,7 @@ import { LocalStoreService } from '../../services/local-store.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { APIService } from '../../services/api.service';
 import { forkJoin } from 'rxjs';
+import { ItemService } from '../../services/item.service';
 
 @Component({
   selector: 'app-item-detail',
@@ -30,7 +31,6 @@ taxList: any;
 files = [];
 Id:any='0'
 totalSize : number = 0;
-@Input() id: number=0;
 totalSizePercent : number = 0;
 rows = [
   {id:0, branch_id: null,stock: '', stock_value: '' }
@@ -41,9 +41,16 @@ rows = [
       private router: Router,
       private ls:LocalStoreService,
       private apiService:APIService,
+      private itemService:ItemService,
       private service: MessageService
       ) { }
   ngOnInit() {
+    this.itemService.getItemId().subscribe((itemId) => {
+      if (itemId) {
+        this.Id=itemId
+        this.fetchItemDetails(this.Id);
+      }
+    });
     this.mainForm=this.formBuilder.group({
   
       p_item_id:['0'],
@@ -66,10 +73,9 @@ rows = [
   
     if (this.route.snapshot.paramMap.get('id')) {
      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
+    
     }
-if(this.id!=0){
-  this.Id=this.id;
-}
+   
   this.loadDropdowns();
   }
   fetchItemDetails(id: string) {
@@ -79,7 +85,7 @@ if(this.id!=0){
     }
     this.loading=true;
 
-    this.apiService.GetItem(req).subscribe((data:any) => {
+    this.itemService.GetItem(req).subscribe((data:any) => {
       if(data.length>0){
       const item = data[0][0];  // Assuming the response structure is correct
       debugger
