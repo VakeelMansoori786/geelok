@@ -1,6 +1,7 @@
 <p-toast key="tst"></p-toast>
 <p-confirmDialog></p-confirmDialog>
 <div class="grid">
+  
 	<div class="col-3">
 		<div class="card">
 
@@ -16,28 +17,37 @@
         </div>
         <div class="col-9">
             <div class="card">
-                <p-tabView>
-                    <p-tabPanel header="Overview">
-                        <p>
-                            Lorem ipsum dolor sit amet...
-                        </p>
-                    </p-tabPanel>
-                    <p-tabPanel header="Warehouses">
-                        <p>
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
-                        </p>
-                    </p-tabPanel>
-                    <p-tabPanel header="Transactions">
-                        <p>
-                            At vero eos et accusamus et iusto odio dignissimos...
-                        </p>
-                    </p-tabPanel>
-                    <p-tabPanel header="History">
-                        <p>
-                            At vero eos et accusamus et iusto odio dignissimos...
-                        </p>
-                    </p-tabPanel>
-                </p-tabView>
+                <div class="col-12" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>{{SelectedItem.name}}</h2>
+                    <div>
+                        <button pButton pRipple type="button" label="Delete" (click)="Delete(SelectedItem.item_id)"></button>
+                    </div>
+                </div>
+                
+<div class="col-12">
+    <p-tabView>
+        <p-tabPanel header="Edit">
+            <p>
+               <app-item-detail [id]="SelectedItem.item_id"></app-item-detail>
+            </p>
+        </p-tabPanel>
+        <p-tabPanel header="Warehouses">
+            <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+            </p>
+        </p-tabPanel>
+        <p-tabPanel header="Transactions">
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos...
+            </p>
+        </p-tabPanel>
+        <p-tabPanel header="History">
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos...
+            </p>
+        </p-tabPanel>
+    </p-tabView>
+</div>
             </div>
         </div>
         

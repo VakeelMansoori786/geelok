@@ -19,7 +19,7 @@ export class ItemPreviewComponent {
   loading = false;
 itemsList:any;
 Id:any='0'
-SelectedItem='';
+SelectedItem:any={};
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -27,7 +27,8 @@ SelectedItem='';
       private ls:LocalStoreService,
       private apiService:APIService,
       private commonService:CommonService,
-      private service: MessageService
+      private service: MessageService,
+      private confirmationService: ConfirmationService,
       ) { }
       ngOnInit() {
         if(this.route.snapshot.paramMap.get('id')){
@@ -41,6 +42,7 @@ SelectedItem='';
       LoadItem(){
         
         this.itemsList=this.commonService.getItems();
+        
         if (!this.itemsList || Object.keys(this.itemsList).length === 0) 
         {
           let req={
@@ -49,9 +51,38 @@ SelectedItem='';
           this.loading=true;
           this.apiService.GetItem(req).subscribe((data:any) => {
               this.itemsList=data;
+              this.SelectedItem=this.itemsList.find(x=>x.item_id)
           this.loading=false;
           });
         }
+        else{
+          this.SelectedItem=this.itemsList.find(x=>x.item_id)
+        }
       }
+    
+Delete(id:any){
+  this.confirmationService.confirm({
+    target: event.target as EventTarget,
+    message: 'Are you sure that you want to delete?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    acceptIcon:"none",
+    rejectIcon:"none",
+    rejectButtonStyleClass:"p-button-text",
+    accept: () => {
+      this.loading=true;
 
+      this.apiService.DeleteItem(id).subscribe((data:any) => {
+        this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].Msg });
+      
+    this.ngOnInit();
+      });
+    },
+    reject: () => {
+        this.service.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    }
+});
+
+ 
+}
 }

@@ -30,6 +30,10 @@ GetCustomer(model:any) {
    }
 
    
+   
+   DeleteItem(model:any) {
+    return this.httpClient.get(`${baseApiUrl}/api/item/DeleteItem?id=`+model)
+   }
    GetItemByName(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetItemByName`,model)
    }

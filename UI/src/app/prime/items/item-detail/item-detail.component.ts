@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStoreService } from '../../services/local-store.service';
@@ -30,7 +30,7 @@ taxList: any;
 files = [];
 Id:any='0'
 totalSize : number = 0;
-
+@Input() id: number=0;
 totalSizePercent : number = 0;
 rows = [
   {id:0, branch_id: null,stock: '', stock_value: '' }
@@ -66,8 +66,10 @@ rows = [
   
     if (this.route.snapshot.paramMap.get('id')) {
      this.Id= atob(this.route.snapshot.paramMap.get('id')!);
-  
     }
+if(this.id!=0){
+  this.Id=this.id;
+}
   this.loadDropdowns();
   }
   fetchItemDetails(id: string) {
