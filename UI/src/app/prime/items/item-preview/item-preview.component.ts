@@ -19,6 +19,7 @@ import { ItemService } from '../../services/item.service';
 export class ItemPreviewComponent {
   loading = false;
 itemsList:any;
+warehousesList:any;
 Id:any='0'
 SelectedItem:any={};
   constructor(

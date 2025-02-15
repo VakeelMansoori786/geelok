@@ -34,7 +34,62 @@
         </p-tabPanel>
         <p-tabPanel header="Warehouses">
             <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+                <p-table #dt1 [value]="warehousesList"    dataKey="id"
+                [rows]="10"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="loading"
+                [paginator]="true" [globalFilterFields]="['name','item_type','model_no','cost_price','group']" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>	
+                                Name</th>
+                                <th>Stock On Hand</th>
+                            <th>Product Type</th>
+                            <th>Model No.</th>
+                            <th>Rate</th>
+                            <th>Group</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-mainList>
+                        <tr>
+                            <td (click)="Preview(mainList.item_id)">
+                                <img [src]="mainList.url" [alt]="mainList.name"  (error)="onImageError($event)"  width="25" class="shadow-4" />
+                                {{mainList.name}}
+                            </td>
+                            <td>
+                                {{mainList.stock_in_hand}}
+                            </td>
+                            <td>
+                                {{mainList.item_type}}
+                            </td>
+                            <td>
+                                {{mainList.model_no}}
+                            </td>
+                            <td>{{mainList.cost_price}}</td>
+                            <td>{{mainList.group}}</td>
+                            
+                        <td>	
+                            <div class="flex flex-wrap gap-2">
+                            <button pButton pRipple type="button" label="Edit" (click)="GetDetail(mainList.item_id)"></button>
+                            <button pButton pRipple type="button" label="Delete" (click)="Delete($event,mainList.item_id)"></button>
+                        </div>
+                        </td>
+                        
+                            
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="8">No data found.</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="loadingbody">
+                        <tr>
+                            <td colspan="8">Loading  data. Please wait.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p>
         </p-tabPanel>
         <p-tabPanel header="Transactions">

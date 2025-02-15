@@ -24,6 +24,10 @@ export class ItemService {
    GetItemByName(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetItemByName`,model)
    }
+   
+   GetCompanyItemStock(model:any) {
+     return this.httpClient.post(`${baseApiUrl}/api/item/GetCompanyItemStock`,model)
+    }
 
 
    GetItemData(){
