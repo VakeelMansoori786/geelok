@@ -17,7 +17,7 @@ import { ItemService } from '../../services/item.service';
     providers: [MessageService,ConfirmationService]
 })
 export class ItemPreviewComponent {
-  loading = false;
+  loading = [false,false,false,false];
 itemsList:any;
 warehousesList:any;
 Id:any='0'
@@ -38,7 +38,7 @@ SelectedItem:any={};
           
           this.Id= atob(this.route.snapshot.paramMap.get('id')!);
         this.LoadItem();
-          
+        this.GetCompanyItemStock(this.Id)
          }
 
       }
@@ -51,23 +51,34 @@ SelectedItem:any={};
           let req={
             p_item_id:'0'
           }
-          this.loading=true;
+          this.loading[0]=true;
           this.itemService.GetItem(req).subscribe((data:any) => {
               this.itemsList=data;
-              this.SelectedItem=this.itemsList.find(x=>x.item_id)
-          this.loading=false;
+              this.SelectedItem=this.itemsList.find(x=>x.item_id==this.Id)
+          this.loading[0]=false;
           });
         }
         else{
-          this.SelectedItem=this.itemsList.find(x=>x.item_id)
+          this.SelectedItem=this.itemsList.find(x=>x.item_id==this.Id);
+         
         }
+    
       }
       GetItem(model: any) {
         this.SelectedItem=model
         this.itemService.setItemId(model.item_id);
 
       }
-      
+      GetCompanyItemStock(item_id:any){
+        let req={
+          p_item_id:item_id
+        }
+        this.loading[1]=true;
+        this.itemService.GetCompanyItemStock(req).subscribe((data:any) => {
+           this.warehousesList=data;
+        this.loading[1]=false;
+        });
+      }
 Delete(id:any){
   this.confirmationService.confirm({
     target: event.target as EventTarget,
@@ -78,7 +89,7 @@ Delete(id:any){
     rejectIcon:"none",
     rejectButtonStyleClass:"p-button-text",
     accept: () => {
-      this.loading=true;
+      this.loading[0]=true;
 
       this.itemService.DeleteItem(id).subscribe((data:any) => {
         this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].Msg });

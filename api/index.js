@@ -285,7 +285,7 @@ app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res
               await connection.query("call pr_get_company_item_stock(?)", [p_item_id], function (error, results, fields) {
                
                  if (error) return res.send(error);
-                 if(p_item_id!='0') return res.send(results);
+              
                  return res.send(results[0]);
                  });
               
