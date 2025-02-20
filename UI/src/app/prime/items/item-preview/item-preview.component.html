@@ -75,15 +75,23 @@
             </p>
         </p-tabPanel>
         <p-tabPanel header="Transactions">
-            <p>
-                At vero eos et accusamus et iusto odio dignissimos...
-            </p>
+          
+              
+                    <div class="grid p-fluid">
+                      
+                <div class="col-12 md:col-6 lg:col-3">
+                    
+                    <p-dropdown 
+                    [options]="filterList"
+                    optionLabel="name"
+                    placeholder="Select a Filter" />
+                
+                </div> 
+            </div> 
+       
+           
         </p-tabPanel>
-        <p-tabPanel header="History">
-            <p>
-                At vero eos et accusamus et iusto odio dignissimos...
-            </p>
-        </p-tabPanel>
+       
     </p-tabView>
 </div>
             </div>

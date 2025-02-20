@@ -22,6 +22,13 @@ itemsList:any;
 warehousesList:any;
 Id:any='0'
 SelectedItem:any={};
+filterList: any[] = [
+  { name: 'Sales Orders', value: 'Sales Orders' },
+  { name: 'Invoices', value: 'Invoices' },
+  { name: 'Delivery Callans', value: 'Delivery Callans' },
+  { name: 'Credit Notes', value: 'Credit Notes' },
+  { name: 'Bills', value: 'Bills' }
+];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
