@@ -23,12 +23,13 @@ warehousesList:any;
 Id:any='0'
 SelectedItem:any={};
 filterList: any[] = [
-  { name: 'Sales Orders', value: 'Sales Orders' },
   { name: 'Invoices', value: 'Invoices' },
   { name: 'Delivery Callans', value: 'Delivery Callans' },
   { name: 'Credit Notes', value: 'Credit Notes' },
-  { name: 'Bills', value: 'Bills' }
+  { name: 'Bills', value: 'Bills' },
+  { name: 'Transfer Order', value: 'Transfer Order' }
 ];
+mainList=[];
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -110,5 +111,15 @@ Delete(id:any){
 });
 
  
+}
+
+GetTransaction(type:any){
+  debugger
+
+  if(type=='Invoices'){}
+  if(type=='Delivery Callans'){}
+  if(type=='Credit Notes'){}
+  if(type=='Bills'){}
+  if(type=='Transfer Order'){}
 }
 }
