@@ -230,7 +230,23 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
       }
   );
 });
-
+app.post('/api/item/GetItemTransaction', authMiddleware, upload.none(), async function (req, res) {
+  let p_type = req.body.p_type;
+  let p_item_id = req.body.p_item_id;
+  
+    
+  await connection.query(
+      "CALL pr_get_item_transaction(?,?)",
+      [
+        p_type,
+        p_item_id
+      ],
+      function (error, results, fields) {
+          if (error) return res.send(error);
+          return res.send(results[0]);
+      }
+  );
+});
 app.post('/api/item/SaveTransferOrder', authMiddleware, async function (req, res) {
   let p_transfer_order_id = req.body.p_transfer_order_id;
   let p_reason = req.body.p_reason;

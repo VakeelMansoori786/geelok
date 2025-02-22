@@ -29,6 +29,9 @@ export class ItemService {
      return this.httpClient.post(`${baseApiUrl}/api/item/GetCompanyItemStock`,model)
     }
 
+    GetItemTransaction(model:any) {
+      return this.httpClient.post(`${baseApiUrl}/api/item/GetItemTransaction`,model)
+     }
 
    GetItemData(){
 return this.ItemData;

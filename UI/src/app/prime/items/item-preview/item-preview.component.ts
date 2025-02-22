@@ -115,11 +115,13 @@ Delete(id:any){
 
 GetTransaction(type:any){
   debugger
+  const model={
+    p_type:type,
+    p_item_id:this.Id
+  }
 
-  if(type=='Invoices'){}
-  if(type=='Delivery Callans'){}
-  if(type=='Credit Notes'){}
-  if(type=='Bills'){}
-  if(type=='Transfer Order'){}
+  this.itemService.GetItemTransaction(model).subscribe((data:any) => {
+
+  })
 }
 }
