@@ -29,7 +29,8 @@ filterList: any[] = [
   { name: 'Bills', value: 'Bills' },
   { name: 'Transfer Order', value: 'Transfer Order' }
 ];
-mainList=[];
+transactionList:any={};
+
   constructor(
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
@@ -73,9 +74,12 @@ mainList=[];
     
       }
       GetItem(model: any) {
-        this.SelectedItem=model
+        this.SelectedItem=model;
+        this.Id=model.item_id;
         this.itemService.setItemId(model.item_id);
-
+   
+          this.router.navigate(['/items/preview',{ id: btoa(model.item_id) },]);
+       
       }
       GetCompanyItemStock(item_id:any){
         let req={
@@ -114,14 +118,23 @@ Delete(id:any){
 }
 
 GetTransaction(type:any){
+  this.loading[2]=true;
   debugger
   const model={
     p_type:type,
     p_item_id:this.Id
   }
-
+  this.transactionList={};
   this.itemService.GetItemTransaction(model).subscribe((data:any) => {
-
-  })
+    if (data && data.length > 0) {
+      this.transactionList.columns = Object.keys(data[0]); // Extract column names dynamically
+      this.transactionList.list = data;
+    }
+    else{
+      this.transactionList.error='No '+type+' created yet'
+    }
+    
+    this.loading[2] = false;
+  });
 }
 }
