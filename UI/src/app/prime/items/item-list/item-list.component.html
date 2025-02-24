@@ -43,7 +43,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-mainList>
 					<tr>
-						<td (click)="Preview(mainList.item_id)">
+						<td (click)="Preview(mainList.item_id)" style="cursor: pointer;">
 							<img [src]="mainList.url" [alt]="mainList.name"  (error)="onImageError($event)"  width="25" class="shadow-4" />
 							{{mainList.name}}
 						</td>

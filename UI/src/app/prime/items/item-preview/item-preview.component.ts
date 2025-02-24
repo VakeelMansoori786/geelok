@@ -35,6 +35,7 @@ transactionList:any={};
     private formBuilder:FormBuilder,
       private route: ActivatedRoute,
       private router: Router,
+  private activatedRoute: ActivatedRoute,
       private ls:LocalStoreService,
       private apiService:APIService,
       private commonService:CommonService,
@@ -74,12 +75,12 @@ transactionList:any={};
     
       }
       GetItem(model: any) {
-        this.SelectedItem=model;
-        this.Id=model.item_id;
+        this.SelectedItem = model;
+        this.Id = model.item_id;
         this.itemService.setItemId(model.item_id);
-   
-          this.router.navigate(['/items/preview',{ id: btoa(model.item_id) },]);
-       
+      
+        // Navigate to the same page but with updated ID
+        this.router.navigate(['/items/preview',{ id: btoa(model.item_id) },]);
       }
       GetCompanyItemStock(item_id:any){
         let req={
