@@ -80,7 +80,9 @@ transactionList:any={};
         this.itemService.setItemId(model.item_id);
       
         // Navigate to the same page but with updated ID
-        this.router.navigate(['/items/preview',{ id: btoa(model.item_id) },]);
+        this.router.navigate(['/items/preview', { id: btoa(model.item_id) }]).then(() => {
+          window.location.reload(); // Force reload
+        });
       }
       GetCompanyItemStock(item_id:any){
         let req={

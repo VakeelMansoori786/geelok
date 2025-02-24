@@ -9,6 +9,7 @@
     [options]="itemsList" 
     [filter]="true" 
     optionLabel="name"
+    [(ngModel)]="SelectedItem"
     (onClick)="GetItem($event.value)"
 >
   
