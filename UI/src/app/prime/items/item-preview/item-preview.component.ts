@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStoreService } from '../../services/local-store.service';
@@ -8,6 +8,7 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin } from 'rxjs';
 import { CommonService } from '../../services/common.service';
 import { ItemService } from '../../services/item.service';
+import { Table } from 'primeng/table';
 
 
 @Component({
@@ -17,6 +18,10 @@ import { ItemService } from '../../services/item.service';
     providers: [MessageService,ConfirmationService]
 })
 export class ItemPreviewComponent {
+  
+  
+    @ViewChild('filter1') filter1!: ElementRef;
+    @ViewChild('filter2') filter2!: ElementRef;
   loading = [false,false,false,false];
 itemsList:any;
 warehousesList:any;
@@ -139,5 +144,9 @@ GetTransaction(type:any){
     
     this.loading[2] = false;
   });
+}
+onGlobalFilter(table: Table, event: Event) {
+  
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
 }
 }
