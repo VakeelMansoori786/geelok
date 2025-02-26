@@ -164,9 +164,11 @@ app.get('/api/Location/GetLocationImage/:location_id',  async function (req, res
 
 
  app.post('/api/item/GetItem', authMiddleware , async function (req, res) {
+  console.log(req.user.user[0])
   let p_item_id = req.body.p_item_id;
   let p_user_id = req.user.user[0].user_id;
-  await connection.query("call pr_get_item(?,?)", [p_item_id,p_user_id], function (error, results, fields) {
+  let p_company_id = req.user.user[0].company_id;
+  await connection.query("call pr_get_item(?,?,?)", [p_item_id,p_user_id,p_company_id], function (error, results, fields) {
    
      if (error) return res.send(error);
      if(p_item_id!='0') return res.send(results);
