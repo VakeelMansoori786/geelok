@@ -168,7 +168,7 @@
                     <tr>
                       <th>Branch</th>
                       <th>Opening Stock</th>
-                      <th>Opening Stock Value</th>
+                      <!-- <th>Opening Stock Value</th> -->
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -180,8 +180,8 @@
                         optionLabel="company_name"
                         [filter]="true"
                         placeholder="Select a branch" /></td>
-                      <td>  <input type="text" pInputText [(ngModel)]="rows[i].opening_stock"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td><input type="text" pInputText [(ngModel)]="rows[i].stock_value" [ngModelOptions]="{standalone: true}" /></td>
+                      <td>  <input type="text" pInputText [(ngModel)]="rows[i].stock"  [ngModelOptions]="{standalone: true}"/></td>
+                      <!-- <td><input type="text" pInputText [(ngModel)]="rows[i].stock_value" [ngModelOptions]="{standalone: true}" /></td> -->
                       <td>
                         <button class="icon-button action" (click)="removeRow(row.id)">
                          X

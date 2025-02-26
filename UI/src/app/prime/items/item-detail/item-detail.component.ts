@@ -112,8 +112,8 @@ rows = [
 if(data.length>2){
   const mappedData = data[1].map((item, index) => ({
     id: index,                         // Use the index as the id (starting from 0)
-    branch_id: item.branch_id || null,    // branch_id will be set to item.branch_id or default to an empty string
-    stock: item.stock || '',            // stock will be set to item.stock or default to an empty string
+    branch_id:this.companyList.find(x=>x.company_id== item.branch_id) || null,    // branch_id will be set to item.branch_id or default to an empty string
+    stock: item.opening_stock || '',            // stock will be set to item.stock or default to an empty string
     stock_value: item.stock_value || '' // stock_value will be set to item.stock_value or default to an empty string
 }));
   
