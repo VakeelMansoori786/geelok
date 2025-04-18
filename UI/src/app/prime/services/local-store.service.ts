@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalStoreService {
-  private ls=window.sessionStorage;
+  private ls=window.localStorage;
   constructor() { }
 
   public setItem(key:any,value:any){
