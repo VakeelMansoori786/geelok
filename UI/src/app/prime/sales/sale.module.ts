@@ -33,6 +33,7 @@ import { ProformaInvoiceComponent } from './proforma-Invoice/proforma-Invoice.co
 import { InvoiceComponent } from './invoice/invoice.component';
 import { PaymentReceivedListComponent } from './payment-received-list/payment-received-list.component';
 import { PaymentReceivedComponent } from './payment-received/payment-received.component';
+import { InvoicePreviewComponent } from './invoice-preview/invoice-preview.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PaymentReceivedComponent } from './payment-received/payment-received.co
     CreditNoteComponent,
     CreditNoteListComponent,
     PaymentReceivedListComponent,
-    PaymentReceivedComponent
+    PaymentReceivedComponent,
+    InvoicePreviewComponent
   ],
   imports: [
     CommonModule,

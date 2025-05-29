@@ -135,7 +135,7 @@
     <div style="display: flex; align-items: center; flex: 1;">
       <img src="{{this.mainList?.main?.company_logo}}" alt="Company Logo">
       <div class="company-text">
-        <strong style="color: #0B969D;">{{this.mainList?.main?.company_name}}</strong><br>
+        <strong style="color: #0B969D;font-size: 2rem;">{{this.mainList?.main?.company_name}}</strong><br>
         {{this.mainList?.main?.company_address}}<br>
         Phone: {{this.mainList?.main?.company_phone}} | Cell: {{this.mainList?.main?.company_mobile}} | Email: {{this.mainList?.main?.company_email}}<br>
         TRN: {{this.mainList?.main?.TRN}} | Website: {{this.mainList?.main?.company_website}}
@@ -154,13 +154,13 @@
   <div class="company-info">
     <p><strong>Invoice Date:</strong> {{this.mainList?.main?.invoice_date | date: 'dd MMM yyyy'}}</p>
     <p><strong>Due Date:</strong> {{this.mainList?.main?.invoice_due_date | date: 'dd MMM yyyy'}}</p>
-    <p><strong>Salesperson:</strong> {{this.mainList?.main?.salesperson_name}}</p>
+    <p><strong>Payment Terms:</strong>{{this.mainList?.main?.payment_term}}</p>
    
   </div>
   <div class="invoice-info">
 
 
-    <p><strong>Payment Terms:</strong>{{this.mainList?.main?.payment_term}}</p>
+    <p><strong>Salesperson:</strong> {{this.mainList?.main?.salesperson_name}}</p>
     <p><strong>PO_Number:</strong> {{this.mainList?.main?.purchase_order_no}}</p>
     <p><strong>Delivery Note # :</strong>{{this.mainList?.main?.delivery_note_no}}</p>
     <p><strong>PO Date:</strong>{{this.mainList?.main?.purchase_order_date | date: 'dd MMM yyyy'}}</p>
@@ -187,6 +187,7 @@
       <tr>
          <th>#</th>
          <th>Item & Description</th>
+         <th>Brand</th>
          <th>HS Code</th>
          <th>Qty</th>
          <th>Rate</th>
@@ -198,6 +199,7 @@
       <tr *ngFor="let row of mainList?.detail; let i = index">
          <td>{{i+1}}</td>
          <td>{{row.item_name}}</td>
+         <td>{{row.brand_name}}</td>
          <td>{{row.hs_code}}</td>
          <td>{{row.qty}}</td>
          <td>{{row.rate}}</td>
@@ -214,7 +216,8 @@
   <!-- ===== SUMMARY ===== -->
   <table class="summary-table">
     <tr><td>Sub Total:</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.sub_total}}</td></tr>
-    <tr><td>Standard Rate (5%):</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.tax}}</td></tr>
+    <tr><td>Standard Rate ({{this.mainList?.main?.tax_percent}}%):</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.tax}}</td></tr>
+    <tr><td>Discount :</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.discount}}</td></tr>
     <tr><td><strong>Total:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
     <tr><td><strong>Balance Due:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
   </table>
