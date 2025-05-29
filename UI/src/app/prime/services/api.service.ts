@@ -14,6 +14,9 @@ export class APIService {
     return this.httpClient.post(`${baseApiUrl}/api/global/GetUserList`,model)
    }
   
+  GetPreview(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/GetPreview`,model)
+   }
 //#region Customer
 GetCustomer(model:any) {
   return this.httpClient.post(`${baseApiUrl}/api/Customer/GetCustomer`,model)

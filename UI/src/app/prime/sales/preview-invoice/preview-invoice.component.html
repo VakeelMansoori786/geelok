@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      color: #000;
+      background: #fff;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .header img {
+      max-height: 80px;
+      margin-right: 20px;
+    }
+
+    .company-text {
+      line-height: 1.4;
+    }
+
+    .invoice-type {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .invoice-type h1 {
+      margin: 0;
+      color: #004085;
+    }
+
+    /* TOP SECTION */
+  .top-section {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.company-info,
+.invoice-info {
+  flex: 1 1 300px;
+}
+
+
+   
+    .invoice-info div {
+      flex: 1 1 200px;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #343a40;
+      color: white;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f1f1f1;
+    }
+
+    /* SUMMARY TABLE */
+    .summary-table {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .summary-table td {
+      border: none;
+      text-align: right;
+      padding: 5px;
+    }
+
+    /* SIGNATURES */
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      gap: 40px;
+    }
+
+    .signatures p {
+      flex: 1;
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top: 2px solid #000;
+      font-size: 13px;
+      margin-top: 40px;
+      padding-top: 10px;
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      text-align: left;
+    }
+
+    .footer-col {
+      flex: 1;
+      min-width: 240px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER WITH LOGO AND INVOICE TYPE ===== -->
+  <div class="header">
+    <div style="display: flex; align-items: center; flex: 1;">
+      <img src="{{this.mainList?.main?.company_logo}}" alt="Company Logo">
+      <div class="company-text">
+        <strong style="color: #0B969D;">{{this.mainList?.main?.company_name}}</strong><br>
+        {{this.mainList?.main?.company_address}}<br>
+        Phone: {{this.mainList?.main?.company_phone}} | Cell: {{this.mainList?.main?.company_mobile}} | Email: {{this.mainList?.main?.company_email}}<br>
+        TRN: {{this.mainList?.main?.TRN}} | Website: {{this.mainList?.main?.company_website}}
+      </div>
+    </div>
+    <div class="invoice-type">
+      <h1>{{type}}</h1>
+      
+        <p>Invoice #:<strong>{{this.mainList?.main?.ref_no}}</strong> </p>
+        <p><strong>{{this.mainList?.main?.status_name}}</strong> </p>
+    </div>
+  </div>
+
+  <!-- ===== BILL TO AND INVOICE INFO ===== -->
+  <div class="top-section">
+  <div class="company-info">
+    <p><strong>Invoice Date:</strong> {{this.mainList?.main?.invoice_date | date: 'dd MMM yyyy'}}</p>
+    <p><strong>Due Date:</strong> {{this.mainList?.main?.invoice_due_date | date: 'dd MMM yyyy'}}</p>
+    <p><strong>Salesperson:</strong> {{this.mainList?.main?.salesperson_name}}</p>
+   
+  </div>
+  <div class="invoice-info">
+
+
+    <p><strong>Payment Terms:</strong>{{this.mainList?.main?.payment_term}}</p>
+    <p><strong>PO_Number:</strong> {{this.mainList?.main?.purchase_order_no}}</p>
+    <p><strong>Delivery Note # :</strong>{{this.mainList?.main?.delivery_note_no}}</p>
+    <p><strong>PO Date:</strong>{{this.mainList?.main?.purchase_order_date | date: 'dd MMM yyyy'}}</p>
+    <p><strong>Total Weight :</strong>{{this.mainList?.main?.total_weight}} </p>
+    <p><strong>Total Box:</strong> {{this.mainList?.main?.total_box}}</p>
+  </div>
+</div>
+  <div class="top-section">
+  <div class="company-info">
+    <h4>Bill To</h4>
+       <p><strong> {{this.mainList?.main?.customer_name}}</strong></p>
+    <p> {{this.mainList?.main?.billing_address}}</p>
+   
+  </div>
+  <div class="invoice-info">
+  <h4>Ship To</h4>
+ <!-- <p><strong> {{this.mainList?.main?.customer_name}}</strong></p> -->
+    <p> {{this.mainList?.main?.shipping_address}}</p>
+  </div>
+</div>
+  <!-- ===== ITEM TABLE ===== -->
+  <table>
+   <thead>
+      <tr>
+         <th>#</th>
+         <th>Item & Description</th>
+         <th>HS Code</th>
+         <th>Qty</th>
+         <th>Rate</th>
+         <th>Discount</th>
+         <th>Amount</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr *ngFor="let row of mainList?.detail; let i = index">
+         <td>{{i+1}}</td>
+         <td>{{row.item_name}}</td>
+         <td>{{row.hs_code}}</td>
+         <td>{{row.qty}}</td>
+         <td>{{row.rate}}</td>
+         <td>{{row.discount}}</td>
+         <td>{{row.amt}}</td>
+      </tr>
+     
+   </tbody>
+</table>
+
+  <!-- ===== TOTAL IN WORDS ===== -->
+  <p><strong>Total In Words:</strong> {{numberToWordsCurrency(this.mainList?.main?.total,this.mainList?.main?.currency_name)}}</p>
+
+  <!-- ===== SUMMARY ===== -->
+  <table class="summary-table">
+    <tr><td>Sub Total:</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.sub_total}}</td></tr>
+    <tr><td>Standard Rate (5%):</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.tax}}</td></tr>
+    <tr><td><strong>Total:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
+    <tr><td><strong>Balance Due:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
+  </table>
+
+  <!-- ===== SIGNATURES ===== -->
+  <div class="signatures">
+    <p>Receiver's Signature: ____________________________</p>
+    <p>Authorized Signature: ____________________________</p>
+  </div>
+
+  <!-- ===== FOOTER WITH BRANCHES ===== -->
+  <div class="footer">
+    <div class="footer-flex">
+      <div class="footer-col">
+        <strong>HEAD OFFICE – DUBAI</strong><br>
+        Shop No.4, Al Nakheel Road, Deira Dubai, UAE<br>
+        Tel: +971-4-458-1391 | Mob: +971 524534877
+      </div>
+      <div class="footer-col">
+        <strong>ABU DHABI BRANCH</strong><br>
+        Office No: 7, Mussafah-9, Abu Dhabi, UAE<br>
+        Tel: +971 2 582 4227 | Cell: +971-52-4534877
+      </div>
+      <div class="footer-col">
+        <strong>AJMAN WAREHOUSE</strong><br>
+        Warehouse No I1-40, Ajman Free Zone, Gate 1, Ajman, UAE<br>
+        Tel: +971 2 582 4227 | Cell: +971-52-4534877
+      </div>
+    </div>
+    Emails: info@geelok.com | sales@geelok.com | sales1@geelok.com
+  </div>
+
+</body>
+</html>

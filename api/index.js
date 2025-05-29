@@ -1003,7 +1003,26 @@ app.post('/api/sales/SaveInvoice', authMiddleware, async function (req, res) {
     return res.status(500).send({ error: err.message });
   }
 });
+app.post('/api/GetPreview', async function (req, res) {
+  let p_id = req.body.p_id;
+  let p_type = req.body.p_type;
 
+  try {
+    await connection.query(
+      "CALL pr_get_preview(?,?)",
+      [p_id,p_type],
+      function (error, results, fields) {
+        if (error) return res.status(500).send({ error: error.message });
+
+          return res.status(200).send(results);
+       
+
+      }
+    );
+  } catch (err) {
+    return res.status(500).send({ error: err.message });
+  }
+});
 app.post('/api/sales/GetInvoice', authMiddleware, async function (req, res) {
   let p_invoice_id = req.body.p_invoice_id;
 

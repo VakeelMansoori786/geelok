@@ -70,5 +70,7 @@ GetDetail(id:any){
 Add(){
   this.router.navigate(['/sales/invoice']);
 }
-
+GetPreview(id:any){
+  this.router.navigate(['/invoice',{ id: btoa(id),type: btoa('TAX INVOICE')},]);
+}
 }

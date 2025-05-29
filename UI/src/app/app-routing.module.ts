@@ -5,6 +5,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './prime/shared/guard/auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './prime/shared/interceptor/auth.interceptor';
+import { PreviewInvoiceComponent } from './prime/sales/preview-invoice/preview-invoice.component';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import { AuthInterceptor } from './prime/shared/interceptor/auth.interceptor';
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'notfound', component: NotfoundComponent },
+            { path: 'invoice', component: PreviewInvoiceComponent },
             { path: '**', redirectTo: '/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
     ],
