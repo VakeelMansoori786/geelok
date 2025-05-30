@@ -9,12 +9,12 @@ import { forkJoin } from 'rxjs';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ItemService } from '../../services/item.service';
 import { CommonService } from '../../services/common.service';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-preview-invoice',
   templateUrl: './preview-invoice.component.html',
-  styleUrls: ['./preview-invoice.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./preview-invoice.component.scss']
 })
 export class PreviewInvoiceComponent {
     loading = false;
@@ -58,5 +58,25 @@ constructor(
   }
   numberToWordsCurrency(num:any,currency:any){
     return this.commonService.numberToWordsCurrency(num,currency);
+  }
+
+printInvoice() {
+    window.print();
+  }
+
+  downloadPDF() {
+    const DATA: any = document.querySelector('.print-area');
+    if (!DATA) return;
+
+    html2canvas(DATA).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = (pdf as any).getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`invoice_${this.mainList?.main?.ref_no || 'preview'}.pdf`);
+    });
   }
 }

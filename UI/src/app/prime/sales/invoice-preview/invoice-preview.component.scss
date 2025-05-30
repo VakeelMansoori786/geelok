@@ -1,0 +1,31 @@
+.listbox-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.customer-name {
+  color: #333;
+}
+
+.item-total {
+  color: #2e8b57;
+}
+
+.item-details {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.item-status {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #007bff;
+}

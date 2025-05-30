@@ -5,15 +5,29 @@
 	<div class="col-3">
 	
 
-            <p-listbox 
-    [options]="itemsList" 
-    [filter]="true" 
-    optionLabel="ref_no"
-    [(ngModel)]="SelectedItem"
-    (onClick)="GetItem($event.value)"
+<p-listbox 
+  [options]="itemsList" 
+  [(ngModel)]="SelectedItem" 
+  optionLabel="ref_no"
+  [filter]="true"
+  (onChange)="GetItem($event.value)"
 >
-  
+  <ng-template let-item pTemplate="item">
+    <div class="listbox-item">
+      <div class="item-header">
+        <div class="customer-name">{{ item.customer_name }}</div>
+        <div class="item-total">AED {{ item.total }}</div>
+      </div>
+      <div class="item-details">
+        {{ item.ref_no }} - {{ item.invoice_date | date: 'dd MMM yyyy' }}
+      </div>
+      <div class="item-status text-open">
+        {{ item.status_name }}
+      </div>
+    </div>
+  </ng-template>
 </p-listbox>
+
           
        
         </div>
