@@ -34,6 +34,11 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { PaymentReceivedListComponent } from './payment-received-list/payment-received-list.component';
 import { PaymentReceivedComponent } from './payment-received/payment-received.component';
 import { InvoicePreviewComponent } from './invoice-preview/invoice-preview.component';
+import { TabViewModule } from 'primeng/tabview';
+import { OrderListModule } from 'primeng/orderlist';
+import { ListboxModule } from 'primeng/listbox';
+import { PreviewInvoiceComponent } from './preview-invoice/preview-invoice.component';
+import { PurchaseModule } from '../purchase/purchase.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +52,8 @@ import { InvoicePreviewComponent } from './invoice-preview/invoice-preview.compo
     CreditNoteListComponent,
     PaymentReceivedListComponent,
     PaymentReceivedComponent,
-    InvoicePreviewComponent
+    InvoicePreviewComponent,
+	PreviewInvoiceComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +77,10 @@ import { InvoicePreviewComponent } from './invoice-preview/invoice-preview.compo
 		ConfirmDialogModule,
 		RadioButtonModule,
 		AutoCompleteModule ,AvatarModule,
-		CalendarModule ,AvatarGroupModule,InputNumberModule   
+		CalendarModule ,AvatarGroupModule,InputNumberModule,
+				TabViewModule,
+				OrderListModule,
+				ListboxModule, PurchaseModule     
   ]
 })
 export class SaleModule { }

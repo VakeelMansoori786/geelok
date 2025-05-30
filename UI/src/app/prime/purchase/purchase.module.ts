@@ -66,6 +66,7 @@ import { PayableListComponent } from './payable-list/payable-list.component';
 		RadioButtonModule,
 		AutoCompleteModule ,AvatarModule,
 		CalendarModule ,AvatarGroupModule,InputNumberModule 
-  ]
+  ],
+  exports: [PayableComponent]
 })
 export class PurchaseModule { }

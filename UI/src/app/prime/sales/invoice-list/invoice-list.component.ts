@@ -8,6 +8,7 @@ import { forkJoin } from 'rxjs';
 import { SliderService } from '../../services/slider.service';
 import { APIService } from '../../services/api.service';
 import { Table } from 'primeng/table';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-invoice-list',
@@ -33,6 +34,7 @@ export class InvoiceListComponent    implements OnInit {
       private service: MessageService,
       private confirmationService: ConfirmationService,
       private apiService:APIService,
+      private commonService:CommonService,
       ) { }
   ngOnInit() {
     this.GetData('0'); 
@@ -72,5 +74,11 @@ Add(){
 }
 GetPreview(id:any){
   this.router.navigate(['/invoice',{ id: btoa(id),type: btoa('TAX INVOICE')},]);
+}
+
+Preview(id:any){
+  
+this.commonService.setInvoices(this.mainList);
+  this.router.navigate(['/sales/invoice-preview',{ id: btoa(id),type: btoa('TAX INVOICE') },]);
 }
 }

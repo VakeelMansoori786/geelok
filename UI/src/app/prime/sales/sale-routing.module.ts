@@ -10,6 +10,7 @@ import { CreditNoteListComponent } from './credit-note-list/credit-note-list.com
 import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { PaymentReceivedListComponent } from './payment-received-list/payment-received-list.component';
 import { PaymentReceivedComponent } from './payment-received/payment-received.component';
+import { InvoicePreviewComponent } from './invoice-preview/invoice-preview.component';
 
 @NgModule({
 	imports: [RouterModule.forChild([
@@ -18,6 +19,7 @@ import { PaymentReceivedComponent } from './payment-received/payment-received.co
 		{ path: 'performa-invoice', component: ProformaInvoiceComponent },
 		{ path: 'performa-invoice-list', component: PerformaInvoiceListComponent },
 		{ path: 'invoice', component: InvoiceComponent },
+		{ path: 'invoice-preview', component: InvoicePreviewComponent },
 		{ path: 'invoice-list', component: InvoiceListComponent },
 		{ path: 'credit-note-list', component: CreditNoteListComponent },
 		{ path: 'credit-note', component: CreditNoteComponent },

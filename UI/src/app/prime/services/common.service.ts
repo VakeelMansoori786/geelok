@@ -7,6 +7,7 @@ import { baseApiUrl } from 'src/environments/environment';
 })
 export class CommonService {
   private items:any={};
+  private invoices:any={};
   constructor(private httpClient:HttpClient) { }
 
   getItems(){
@@ -14,6 +15,13 @@ export class CommonService {
   }
   setItems(model:any){
     return this.items=model;
+  }
+  
+  getInvoices(){
+    return this.invoices;
+  }
+  setInvoices(model:any){
+    return this.invoices=model;
   }
   numberToWordsCurrency(amount: number, currency: string): string {
   const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six',

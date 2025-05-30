@@ -12,8 +12,6 @@ import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-preview-invoice',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './preview-invoice.component.html',
   styleUrls: ['./preview-invoice.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -29,8 +27,7 @@ constructor(
       private router: Router,
       private ls:LocalStoreService,
       private apiService:APIService,
-      private commonService:CommonService,
-                  private itemService:ItemService
+      private commonService:CommonService
    
       ) { }
  ngOnInit() {
