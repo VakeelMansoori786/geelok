@@ -1,102 +1,98 @@
-<div style="background-color: white;color: #000;padding: 20px;">
-  <div style="margin-bottom: 10px;">
-  <button pButton type="button" label="Print" icon="pi pi-print" (click)="printInvoice()"></button>
-  <button pButton type="button" label="Download PDF" icon="pi pi-download" class="ml-1" (click)="downloadPDF()"></button>
-</div>
 <div class="print-area invoice-container" style="background-color: white;color: #000;padding: 20px;">
-  <!-- ===== HEADER WITH LOGO AND INVOICE TYPE ===== -->
+  <div style="margin-bottom: 10px;">
+    <button pButton type="button" label="Print" icon="pi pi-print" (click)="printInvoice()"></button>
+    <button pButton type="button" label="Download PDF" icon="pi pi-download" class="ml-2" (click)="downloadPDF()"></button>
+  </div>
+
+  <!-- HEADER -->
   <div class="header">
     <div style="display: flex; align-items: center; flex: 1;">
-      <img src="{{this.mainList?.main?.company_logo}}" alt="Company Logo">
+      <img [src]="mainList?.main?.company_logo" alt="Company Logo">
       <div class="company-text">
-        <strong style="color: #0B969D;font-size: 2rem;">{{this.mainList?.main?.company_name}}</strong><br>
-        {{this.mainList?.main?.company_address}}<br>
-        Phone: {{this.mainList?.main?.company_phone}} | Cell: {{this.mainList?.main?.company_mobile}} | Email: {{this.mainList?.main?.company_email}}<br>
-        TRN: {{this.mainList?.main?.TRN}} | Website: {{this.mainList?.main?.company_website}}
+        <strong style="color: #0B969D; font-size: 2rem;">{{ mainList?.main?.company_name }}</strong><br>
+        {{ mainList?.main?.company_address }}<br>
+        Phone: {{ mainList?.main?.company_phone }} | Cell: {{ mainList?.main?.company_mobile }} | Email: {{ mainList?.main?.company_email }}<br>
+        TRN: {{ mainList?.main?.TRN }} | Website: {{ mainList?.main?.company_website }}
       </div>
     </div>
     <div class="invoice-type">
-      <h1>{{type}}</h1>
-      
-        <p>Invoice #:<strong>{{this.mainList?.main?.ref_no}}</strong> </p>
-        <p><strong>{{this.mainList?.main?.status_name}}</strong> </p>
+      <h1>{{ type }}</h1>
+      <p>Invoice #: <strong>{{ mainList?.main?.ref_no }}</strong></p>
+      <p><strong>{{ mainList?.main?.status_name }}</strong></p>
     </div>
   </div>
 
-  <!-- ===== BILL TO AND INVOICE INFO ===== -->
+  <!-- TOP SECTION -->
   <div class="top-section">
-  <div class="company-info">
-    <p><strong>Invoice Date:</strong> {{this.mainList?.main?.invoice_date | date: 'dd MMM yyyy'}}</p>
-    <p><strong>Due Date:</strong> {{this.mainList?.main?.invoice_due_date | date: 'dd MMM yyyy'}}</p>
-    <p><strong>Payment Terms:</strong>{{this.mainList?.main?.payment_term}}</p>
-   
+    <div class="company-info">
+      <p><strong>Invoice Date:</strong> {{ mainList?.main?.invoice_date | date: 'dd MMM yyyy' }}</p>
+      <p><strong>Due Date:</strong> {{ mainList?.main?.invoice_due_date | date: 'dd MMM yyyy' }}</p>
+      <p><strong>Payment Terms:</strong> {{ mainList?.main?.payment_term }}</p>
+    </div>
+    <div class="invoice-info">
+      <p><strong>Salesperson:</strong> {{ mainList?.main?.salesperson_name }}</p>
+      <p><strong>PO Number:</strong> {{ mainList?.main?.purchase_order_no }}</p>
+      <p><strong>Delivery Note #:</strong> {{ mainList?.main?.delivery_note_no }}</p>
+      <p><strong>PO Date:</strong> {{ mainList?.main?.purchase_order_date | date: 'dd MMM yyyy' }}</p>
+      <p><strong>Total Weight:</strong> {{ mainList?.main?.total_weight }}</p>
+      <p><strong>Total Box:</strong> {{ mainList?.main?.total_box }}</p>
+    </div>
   </div>
-  <div class="invoice-info">
 
-
-    <p><strong>Salesperson:</strong> {{this.mainList?.main?.salesperson_name}}</p>
-    <p><strong>PO_Number:</strong> {{this.mainList?.main?.purchase_order_no}}</p>
-    <p><strong>Delivery Note # :</strong>{{this.mainList?.main?.delivery_note_no}}</p>
-    <p><strong>PO Date:</strong>{{this.mainList?.main?.purchase_order_date | date: 'dd MMM yyyy'}}</p>
-    <p><strong>Total Weight :</strong>{{this.mainList?.main?.total_weight}} </p>
-    <p><strong>Total Box:</strong> {{this.mainList?.main?.total_box}}</p>
-  </div>
-</div>
+  <!-- BILL TO / SHIP TO -->
   <div class="top-section">
-  <div class="company-info">
-    <h4>Bill To</h4>
-       <p><strong> {{this.mainList?.main?.customer_name}}</strong></p>
-    <p> {{this.mainList?.main?.billing_address}}</p>
-   
+    <div class="company-info">
+      <h5>Bill To</h5>
+      <p><strong>{{ mainList?.main?.customer_name }}</strong></p>
+      <p>{{ mainList?.main?.billing_address }}</p>
+    </div>
+    <div class="invoice-info">
+      <h5>Ship To</h5>
+      <p>{{ mainList?.main?.shipping_address }}</p>
+    </div>
   </div>
-  <div class="invoice-info">
-  <h4>Ship To</h4>
- <!-- <p><strong> {{this.mainList?.main?.customer_name}}</strong></p> -->
-    <p> {{this.mainList?.main?.shipping_address}}</p>
-  </div>
-</div>
-  <!-- ===== ITEM TABLE ===== -->
+
+  <!-- ITEM TABLE -->
   <table>
-   <thead>
+    <thead>
       <tr>
-         <th>#</th>
-         <th>Item & Description</th>
-         <th>Brand</th>
-         <th>HS Code</th>
-         <th>Qty</th>
-         <th>Rate</th>
-         <th>Discount</th>
-         <th>Amount</th>
+        <th>#</th>
+        <th>Item & Description</th>
+        <th>Brand</th>
+        <th>HS Code</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Discount</th>
+        <th>Amount</th>
       </tr>
-   </thead>
-   <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let row of mainList?.detail; let i = index">
-         <td>{{i+1}}</td>
-         <td>{{row.item_name}}</td>
-         <td>{{row.brand_name}}</td>
-         <td>{{row.hs_code}}</td>
-         <td>{{row.qty}}</td>
-         <td>{{row.rate}}</td>
-         <td>{{row.discount}}</td>
-         <td>{{row.amt}}</td>
+        <td>{{ i + 1 }}</td>
+        <td>{{ row.item_name }}</td>
+        <td>{{ row.brand_name }}</td>
+        <td>{{ row.hs_code }}</td>
+        <td>{{ row.qty }}</td>
+        <td>{{ row.rate }}</td>
+        <td>{{ row.discount }}</td>
+        <td>{{ row.amt }}</td>
       </tr>
-     
-   </tbody>
-</table>
-
-  <!-- ===== TOTAL IN WORDS ===== -->
-  <p><strong>Total In Words:</strong> {{numberToWordsCurrency(this.mainList?.main?.total,this.mainList?.main?.currency_name)}}</p>
-
-  <!-- ===== SUMMARY ===== -->
-  <table class="summary-table">
-    <tr><td>Sub Total:</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.sub_total}}</td></tr>
-    <tr><td>Standard Rate ({{this.mainList?.main?.tax_percent}}%):</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.tax}}</td></tr>
-    <tr><td>Discount :</td><td>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.discount}}</td></tr>
-    <tr><td><strong>Total:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
-    <tr><td><strong>Balance Due:</strong></td><td><strong>{{this.mainList?.main?.currency_name}} {{this.mainList?.main?.total}}</strong></td></tr>
+    </tbody>
   </table>
 
-  <!-- ===== SIGNATURES ===== -->
+  <!-- TOTAL IN WORDS -->
+  <p><strong>Total In Words:</strong> {{ numberToWordsCurrency(mainList?.main?.total, mainList?.main?.currency_name) }}</p>
+
+  <!-- SUMMARY -->
+  <table class="summary-table">
+    <tr><td>Sub Total:</td><td>{{ mainList?.main?.currency_name }} {{ mainList?.main?.sub_total }}</td></tr>
+    <tr><td>Standard Rate ({{ mainList?.main?.tax_percent }}%):</td><td>{{ mainList?.main?.currency_name }} {{ mainList?.main?.tax }}</td></tr>
+    <tr><td>Discount:</td><td>{{ mainList?.main?.currency_name }} {{ mainList?.main?.discount }}</td></tr>
+    <tr><td><strong>Total:</strong></td><td><strong>{{ mainList?.main?.currency_name }} {{ mainList?.main?.total }}</strong></td></tr>
+    <tr><td><strong>Balance Due:</strong></td><td><strong>{{ mainList?.main?.currency_name }} {{ mainList?.main?.balance_due }}</strong></td></tr>
+  </table>
+
+  <!-- SIGNATURES -->
   <div class="signatures">
     <p>Receiver's Signature: ____________________________</p>
     <p>Authorized Signature: ____________________________</p>
@@ -124,4 +120,4 @@
     Emails: info@geelok.com | sales@geelok.com | sales1@geelok.com
   </div>
 </div>
-</div>
+

@@ -1,34 +1,111 @@
- @media print {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;  /* align top */
+
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.header > div:first-child {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 20px;
+}
+
+.header img {
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.company-text {
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.company-text strong {
+  color: #0B969D;
+  font-size: 1.8rem;
+}
+
+.invoice-type {
+  text-align: right;
+  min-width: 200px;
+  font-size: 1rem;
+}
+
+.invoice-type h1 {
+  margin: 0 0 5px 0;
+  font-size: 2rem;
+  color: #0B969D;
+}
+
+.invoice-type p {
+  margin: 3px 0;
+}
+
+
+@media print {
+  
   button, .p-button {
     display: none !important;
   }
-}
+  p{
+    margin: 0px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;  /* smaller font to fit more data */
+  }
 
+  th, td {
+    border: 1px solid #333;
+    padding: 4px 6px;
+    word-wrap: break-word;
+    max-width: 100px; /* optional: limit column width to keep table narrow */
+  }
+th{
+      background-color: #000;
+    color: white;
+}
+  thead {
+    display: table-header-group; /* repeat header on each print page */
+  }
+
+  tr {
+    page-break-inside: avoid; /* prevent row breaking across pages */
+  }
+
+  /* Optional: reduce margins on print to fit more */
+  @page {
+    margin: 10mm;
+  }
+
+  body {
+    margin: 0;
+  }
+}
+.print-area {
+  background-color: white;
+  color: black;
+  padding: 20px;
+}
 /* HEADER */
-::ng-deep .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 2px solid #000;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
 ::ng-deep .header img {
   max-height: 80px;
   margin-right: 20px;
 }
-
 ::ng-deep .company-text {
   line-height: 1.4;
 }
-
 ::ng-deep .invoice-type {
   text-align: right;
   flex-shrink: 0;
 }
-
 ::ng-deep .invoice-type h1 {
   margin: 0;
   color: #004085;
@@ -40,16 +117,23 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  border: 1px solid;
+}
+::ng-deep .company-info{
+
+  flex: 1 1 300px;
+border-right: 1px solid;
+padding-left: 5px;
 }
 
-::ng-deep .company-info,
 ::ng-deep .invoice-info {
   flex: 1 1 300px;
-}
 
+}
 ::ng-deep .invoice-info div {
   flex: 1 1 200px;
+    border:1px solid;
 }
 
 /* TABLE */
@@ -58,18 +142,15 @@
   border-collapse: collapse;
   margin-top: 10px;
 }
-
 ::ng-deep th,
 ::ng-deep td {
   border: 1px solid #000;
   padding: 8px;
 }
-
 ::ng-deep th {
   background-color: #343a40;
   color: white;
 }
-
 ::ng-deep tbody tr:nth-child(even) {
   background-color: #f1f1f1;
 }
@@ -79,7 +160,6 @@
   width: 100%;
   margin-top: 20px;
 }
-
 ::ng-deep .summary-table td {
   border: none;
   text-align: right;
@@ -93,7 +173,6 @@
   margin-top: 40px;
   gap: 40px;
 }
-
 ::ng-deep .signatures p {
   flex: 1;
 }
@@ -105,7 +184,6 @@
   margin-top: 40px;
   padding-top: 10px;
 }
-
 ::ng-deep .footer-flex {
   display: flex;
   justify-content: space-between;
@@ -113,7 +191,6 @@
   flex-wrap: wrap;
   text-align: left;
 }
-
 ::ng-deep .footer-col {
   flex: 1;
   min-width: 240px;
