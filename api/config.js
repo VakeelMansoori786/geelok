@@ -33,10 +33,10 @@ config.connectionStrings = {
   acquireTimeout: 30000,
   waitForConnections: true,
   multipleStatements: true,
-    host: "193.203.184.54",
+    host: "in-mum-web1558.main-hosting.eu",
     port:"3306",
     user: "u816834887_salim",
-    password: "2*zG2vLJN3",
+    password: "|Q3W~xH6",
     database: "u816834887_globalvalves"
   };
   
