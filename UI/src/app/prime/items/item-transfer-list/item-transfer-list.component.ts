@@ -78,15 +78,23 @@ Delete(event:any,id:any){
     rejectButtonStyleClass:"p-button-text",
     accept: () => {
       this.loading=true;
+const model={
+  p_transfer_order_id:id
+}
+      this.apiService.DeleteTransferOrder(model).subscribe((data:any) => {
 
-      this.sliderService.DeleteHealthTipDetails(id).subscribe((data:any) => {
-        this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data['carousel'][0].Msg });
+        if(data[0].is_error==0){
+        this.service.add({ key: 'tst', severity: 'success', summary: 'Success Message', detail:data[0].msg });
+        }
+        else{
+            this.service.add({ key: 'tst', severity: 'error', summary: 'Error Message', detail:data[0].msg });
+        }
       
     this.ngOnInit();
       });
     },
     reject: () => {
-        this.service.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        this.service.add({ key: 'tst',severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
     }
 });
 

@@ -86,6 +86,10 @@ GetCustomer(model:any) {
     return this.httpClient.post(`${baseApiUrl}/api/item/GetTransferOrder`,model)
    }
 
+   DeleteTransferOrder(model:any) {
+    return this.httpClient.post(`${baseApiUrl}/api/item/DeleteTransferOrder`,model)
+   }
+
 
    GetCompany() {
     return this.httpClient.get(`${baseApiUrl}/api/global/GetCompany`)

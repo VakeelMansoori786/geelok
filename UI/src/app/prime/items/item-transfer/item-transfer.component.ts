@@ -139,9 +139,9 @@ if(data.length>2){
             key: 'tst',
             severity: 'success',
             summary: 'Success Message',
-            detail: data['msg'], // Adjust based on the API response structure
+            detail: data[0]['msg'], // Adjust based on the API response structure
           });
-          this.router.navigate(['/item/transfer']); // Adjust route as needed
+          this.router.navigate(['/items/transfer-list']); // Adjust route as needed
           this.loading = false; // Reset loading state
         });
       

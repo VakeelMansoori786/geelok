@@ -284,6 +284,7 @@ GetAddress(customer_id:any){
   });
 }
 calculate(index: any) {
+  
   // Safely parse rate and quantity, defaulting to 0 if invalid
   const rate = parseFloat(this.rows[index].rate) || 0;
   const qty = parseFloat(this.rows[index].qty) || 0;

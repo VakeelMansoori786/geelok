@@ -127,99 +127,171 @@ filterBy="company_name"
 
         </div>
               <!-- table.component.html -->
-              <div class="col-12">
-                <table *ngIf="rows.length>0">
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Qty</th>
-                      <th>Rate</th>
-                      <th>Discount</th>
-                      <th>Tax</th>
-                      <th>Amount</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let row of rows; let i = index">
-                      <td>
-                        <p-autoComplete 
-                        [(ngModel)]="rows[i].item_name"  
-                        [ngModelOptions]="{standalone: true}"
-                        [dropdown]="true"
-                        [showClear]="true"
-                        [forceSelection]="true"
-                    [suggestions]="suggestions" 
-                    (completeMethod)="search($event)" 
-                    (onSelect)="onSelect($event, i)"
-                    optionLabel="name"></p-autoComplete>
+             <div class="col-12">
+  <table *ngIf="rows.length > 0">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Discount</th>
+        <th>Tax</th>
+        <th>Amount</th>
+        <th></th>
+      </tr>
+    </thead>
 
-                    
-                   <div *ngIf="rows[i].item_name!=''" style="padding: 10px;"><textarea pInputTextarea rows="2"  [(ngModel)]="rows[i].description" placeholder="Add a description to your item" style="width: 100%;" [ngModelOptions]="{standalone: true}">
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        
+        <!-- Item Column -->
+        <td>
+          <p-autoComplete 
+            [(ngModel)]="rows[i].item_name"
+            [ngModelOptions]="{standalone: true}"
+            [dropdown]="true"
+            [showClear]="true"
+            [forceSelection]="true"
+            [suggestions]="suggestions"
+            (completeMethod)="search($event)"
+            (onSelect)="onSelect($event, i)"
+            optionLabel="name">
+          </p-autoComplete>
 
-                    </textarea>
-                </div> 
-                      </td>
-                      <td style="width: 10%;"> <input type="number"  
-                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].qty"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"> <input type="number"  
-                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].rate"  (onBlur)="calculate(i)"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;"> <input type="number"  
-                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [(ngModel)]="rows[i].discount"  (onBlur)="calculate(i)" [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;">
-                        <p-dropdown 
-                        [(ngModel)]="rows[i].tax"  [ngModelOptions]="{standalone: true}"
-                        [options]="taxList"
-                        optionLabel="name"
-                        optionValue="tax_treatment_id"
-                        (onChange)="calculate(i)"
-                        placeholder="Select a tax" >
-                    </p-dropdown>
-                       <td style="width: 10%;"><input type="number" width="10%" pInputText [(ngModel)]="rows[i].amt"  [ngModelOptions]="{standalone: true}"/></td>
-                      <td style="width: 10%;">
-                        <button class="icon-button action" (click)="removeRow(row.id,i)">
-                         X
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5"><strong style="float: right;">Sub Total</strong></td>
-                        <td colspan="2"> <strong>{{this.mainForm.value.p_sub_total}} </strong></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"><strong style="float: right;">Discount</strong></td>
-                        <td colspan="2">
-                            <div class="p-inputgroup">
-                                <!-- Text Input -->
-                                <input type="number"  
-                                   mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" 
-                                  [(ngModel)]="totalDiscount"  [ngModelOptions]="{standalone: true}"
-                                  placeholder="Enter discount"
-                                  (onBlur)="getTotalDiscount()"
-                                  />
-                               
-                              <span *ngIf="discountType=='amount'" style="cursor: pointer;" class="p-inputgroup-addon" (click)="setDiscountType('percentage')">{{selectedCustomer.currency_name}}</span> 
-                             <span  *ngIf="discountType=='percentage'" style="cursor: pointer;" class="p-inputgroup-addon"  (click)="setDiscountType('amount')"><i class="pi pi-percentage"></i></span>
-                                
-                              </div>
-                              
-                        </td>
-                        <td colspan="2"> <strong>{{this.mainForm.value.p_discount}} </strong></td>
-                      </tr>
-                      
-                    <tr>
-                        <td colspan="5"><strong style="float: right;">{{selectedCustomer.tax_treatment_name}}</strong></td>
-                        <td colspan="2"> <strong>{{this.mainForm.value.p_tax}} </strong></td>
-                    </tr>
-                      <tr>
-                          <td colspan="5"><strong  style="float: right;">Total ({{selectedCustomer.currency_name}})</strong></td>
-                          <td colspan="2"> <strong>{{this.mainForm.value.p_total}}  </strong></td>
-                      </tr>
-                      
-                  </tbody>
-                </table>
-                <button (click)="addRow()">&#43; Add Row</button>
-              </div>
+          <div *ngIf="rows[i].item_name != ''" style="padding: 10px;">
+            <textarea 
+              pInputTextarea
+              rows="2"
+              [(ngModel)]="rows[i].description"
+              placeholder="Add a description to your item"
+              style="width: 100%;"
+              [ngModelOptions]="{standalone: true}">
+            </textarea>
+          </div>
+        </td>
+
+        <!-- Qty -->
+        <td style="width: 10%;">
+          <input type="number"
+            pInputText
+            [(ngModel)]="rows[i].qty"
+            (blur)="calculate(i)"
+            [ngModelOptions]="{standalone: true}" />
+        </td>
+
+        <!-- Rate -->
+        <td style="width: 10%;">
+          <input type="number"
+            pInputText
+            [(ngModel)]="rows[i].rate"
+            (blur)="calculate(i)"
+            [ngModelOptions]="{standalone: true}" />
+        </td>
+
+        <!-- Discount -->
+        <td style="width: 10%;">
+          <input type="number"
+            pInputText
+            [(ngModel)]="rows[i].discount"
+            (blur)="calculate(i)"
+            [ngModelOptions]="{standalone: true}" />
+        </td>
+
+        <!-- Tax -->
+        <td style="width: 10%;">
+          <p-dropdown 
+            [(ngModel)]="rows[i].tax"
+            [ngModelOptions]="{standalone: true}"
+            [options]="taxList"
+            optionLabel="name"
+            optionValue="tax_treatment_id"
+            (onChange)="calculate(i)"
+            placeholder="Select a tax">
+          </p-dropdown>
+        </td>
+
+        <!-- Amount -->
+        <td style="width: 10%;">
+          <input type="number"
+            pInputText
+            [(ngModel)]="rows[i].amt"
+            [ngModelOptions]="{standalone: true}" />
+        </td>
+
+        <!-- Delete -->
+        <td style="width: 10%;">
+          <button class="icon-button action" (click)="removeRow(row.id, i)">
+            X
+          </button>
+        </td>
+      </tr>
+
+      <!-- Sub Total -->
+      <tr>
+        <td colspan="5"><strong style="float: right;">Sub Total</strong></td>
+        <td colspan="2"><strong>{{ mainForm.value.p_sub_total }}</strong></td>
+      </tr>
+
+      <!-- Total Discount -->
+      <tr>
+        <td colspan="3"><strong style="float: right;">Discount</strong></td>
+        <td colspan="2">
+          <div class="p-inputgroup">
+            <input type="number"
+            pInputText
+              [(ngModel)]="totalDiscount"
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Enter discount"
+              (blur)="getTotalDiscount()" />
+
+            <span *ngIf="discountType == 'amount'"
+              class="p-inputgroup-addon"
+              style="cursor: pointer;"
+              (click)="setDiscountType('percentage')">
+              {{ selectedCustomer.currency_name }}
+            </span>
+
+            <span *ngIf="discountType == 'percentage'"
+              class="p-inputgroup-addon"
+              style="cursor: pointer;"
+              (click)="setDiscountType('amount')">
+              <i class="pi pi-percentage"></i>
+            </span>
+          </div>
+        </td>
+        <td colspan="2"><strong>{{ mainForm.value.p_discount }}</strong></td>
+      </tr>
+
+      <!-- Tax -->
+      <tr>
+        <td colspan="5">
+          <strong style="float: right;">
+            {{ selectedCustomer.tax_treatment_name }}
+          </strong>
+        </td>
+        <td colspan="2">
+          <strong>{{ mainForm.value.p_tax }}</strong>
+        </td>
+      </tr>
+
+      <!-- Total -->
+      <tr>
+        <td colspan="5">
+          <strong style="float: right;">
+            Total ({{ selectedCustomer.currency_name }})
+          </strong>
+        </td>
+        <td colspan="2">
+          <strong>{{ mainForm.value.p_total }}</strong>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <button (click)="addRow()">+ Add Row</button>
+</div>
+
         
         
             
